@@ -106,23 +106,6 @@ def fetch_or_load_cities(path: Path) -> dict[str, int]:
     save_cities_cache(path, mapping)
     return mapping
 
-def _start_details(self):
-    """Choisit un fichier doors_*.json/csv et lance ClicDetailScraper."""
-    fp = filedialog.askopenfilename(
-        title="Choose a doors file",
-        initialdir=DATA_DIR,
-        filetypes=[("Doors exports", "doors_*.json doors_*.csv"),
-                   ("All files", "*.*")]
-    )
-    if not fp:
-        return
-
-    self._log(f"▶ Specifics : {fp}")
-    self.detail_scraper = ClicDetailScraper(
-        Path(fp), self.gui_q, self.pause_evt
-    )
-    self.detail_scraper.start()
-
 # ── Utilitaires Overpass ────────────────────────────────────────────────
 def fetch_all_cities() -> Dict[str, int]:
     """Renvoie {nom_ville → id_relation OSM} (admin_level=8) pour le Québec."""
@@ -718,9 +701,9 @@ class ScraperGUI:
         self.pause_btn = ctk.CTkButton(btn_f, text="Pause", width=160, state="disabled", command=self._toggle_pause)
         self.stop_btn  = ctk.CTkButton(btn_f, text="■ Stop",  width=160, state="disabled", command=self._stop_worker)
         self.start_btn.grid(row=0, column=0, padx=6)
-        self.detail_btn.grid(row=0, column=3, padx=6)
-        self.pause_btn.grid(row=0, column=1, padx=6)
-        self.stop_btn .grid(row=0, column=2, padx=6)
+        self.detail_btn.grid(row=0, column=1, padx=6)
+        self.pause_btn.grid(row=0, column=2, padx=6)
+        self.stop_btn .grid(row=0, column=3, padx=6)
 
         # — Progression & stats —
         self.prog      = ctk.CTkProgressBar(self.root, width=780)
@@ -792,6 +775,23 @@ class ScraperGUI:
         txt = self.street_var.get().lower()
         vals = [s for s in all_sts if txt in s.lower()]
         self.street_cb.configure(values=sorted(vals))
+
+    def _start_details(self):
+        """Choisit un fichier doors_*.json/csv et lance ClicDetailScraper."""
+        fp = filedialog.askopenfilename(
+            title="Choose a doors file",
+            initialdir=DATA_DIR,
+            filetypes=[("Doors exports", "doors_*.json doors_*.csv"),
+                    ("All files", "*.*")]
+        )
+        if not fp:
+            return
+
+        self._log(f"▶ Specifics : {fp}")
+        self.detail_scraper = ClicDetailScraper(
+            Path(fp), self.gui_q, self.pause_evt
+        )
+        self.detail_scraper.start()
 
     def _log(self, txt: str):
         ts = datetime.now().strftime("[%H:%M:%S] ")
