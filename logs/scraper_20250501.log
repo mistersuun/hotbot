@@ -1,0 +1,65 @@
+[17:33:10] FATAL ERROR Message: session not created: cannot connect to chrome at 127.0.0.1:57842
+from session not created: This version of ChromeDriver only supports Chrome version 136
+Current browser version is 135.0.7049.115
+Stacktrace:
+	GetHandleVerifier [0x007DFBD3+61635]
+	GetHandleVerifier [0x007DFC14+61700]
+	(No symbol) [0x006005D3]
+	(No symbol) [0x0063A04B]
+	(No symbol) [0x00639069]
+	(No symbol) [0x0062F7AF]
+	(No symbol) [0x0062F5E6]
+	(No symbol) [0x00678DF3]
+	(No symbol) [0x0067880A]
+	(No symbol) [0x0066D096]
+	(No symbol) [0x0063C840]
+	(No symbol) [0x0063D6A4]
+	GetHandleVerifier [0x00A27043+2450739]
+	GetHandleVerifier [0x00A227C6+2432182]
+	GetHandleVerifier [0x00A3D50E+2542078]
+	GetHandleVerifier [0x007F6895+155013]
+	GetHandleVerifier [0x007FCF7D+181357]
+	GetHandleVerifier [0x007E7428+92440]
+	GetHandleVerifier [0x007E75D0+92864]
+	GetHandleVerifier [0x007D1FC0+5296]
+	BaseThreadInitThunk [0x76055D49+25]
+	RtlInitializeExceptionChain [0x77B6CF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x77B6CE91+561]
+
+[17:34:06] Nav → login page
+[17:34:07] ⇒ find #username…
+[17:34:07] ✔ find #username OK
+[17:34:08] ⇒ find name='pw'…
+[17:34:08] ✔ find name='pw' OK
+[17:34:08] ⇒ click #Login…
+[17:34:08] ✔ click #Login OK
+[17:34:10] ⏳ wait phSearchInput
+[17:35:11] MFA timeout – pause
+[17:39:30] ⏳ resuming after MFA
+[17:39:30] FATAL ERROR Message: invalid session id: session deleted as the browser has closed the connection
+from disconnected: not connected to DevTools
+  (Session info: chrome=136.0.7103.49)
+Stacktrace:
+	GetHandleVerifier [0x0052FBD3+61635]
+	GetHandleVerifier [0x0052FC14+61700]
+	(No symbol) [0x003505D3]
+	(No symbol) [0x0033FE20]
+	(No symbol) [0x0035DD1F]
+	(No symbol) [0x003C3E8C]
+	(No symbol) [0x003DDF19]
+	(No symbol) [0x003BD096]
+	(No symbol) [0x0038C840]
+	(No symbol) [0x0038D6A4]
+	GetHandleVerifier [0x00777043+2450739]
+	GetHandleVerifier [0x007727C6+2432182]
+	GetHandleVerifier [0x0078D50E+2542078]
+	GetHandleVerifier [0x00546895+155013]
+	GetHandleVerifier [0x0054CF7D+181357]
+	GetHandleVerifier [0x00537428+92440]
+	GetHandleVerifier [0x005375D0+92864]
+	GetHandleVerifier [0x00521FC0+5296]
+	BaseThreadInitThunk [0x76055D49+25]
+	RtlInitializeExceptionChain [0x77B6CF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x77B6CE91+561]
+
+[17:39:30] Quitting Chrome

@@ -1,0 +1,6 @@
+{
+  "max_parallel_tabs": 5,
+  "mfa_timeout_sec": 60,
+  "overpass_timeout": 120,
+  "selenium_headless": false
+}

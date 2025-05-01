@@ -1,0 +1,4 @@
+customtkinter 
+undetected-chromedriver 
+selenium 
+requests

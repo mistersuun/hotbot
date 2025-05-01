@@ -1,0 +1,97 @@
+city,street,Client,Résidence,Compte client,Municipalité,Date débranchement,Base payée,Google Map URL,Cote de crédit,Dernière visite,Dernier commentaire,Services actuels,Raison débranchement,Dernier statut 12 mois (filtre),Date de dernière visite (1),Dernier statut,Détail du dernier statut,Dernière visite par,Rappel,Date de fin du rabais consenti TSF,Nb de services câblés,Services avant débranchement,Code postal,Validation de la porte,Date de disponibilité du câble,Disponibilité câble 30 jours et moins,ILM,Bâtiment,Date de branchement,RTA_MUNICIPALITE,Date début Ne Pas Cogner,Offre ciblée,Extension réseau,Territoire équipe
+Beauceville,,EGLISE BEAUCEVILLE,LAMBERT AV 226 A,75261762,BEAUCEVILLE,,Non,https://www.google.ca/maps/place/226+AV+LAMBERT...,0,,,TVN,,À visiter,,À visiter,,,,,1,,G5X1S3,,2013-11-21,,001,LAMBERT AV 226,2013-11-26,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,Beauceville Tdl,9E AV 595 APP E,1001256461,BEAUCEVILLE,,Non,,-1,,,TVX INX,,À visiter,,À visiter,,,,,2,,G5X1J3,,2022-09-10,,001,9E AV 595,2023-01-23,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,RAYMONDE GALLANT,42E AV 208,77451723,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/208+42E+AV,+BE...",0,,,TVX INX TSF,,À visiter,,À visiter,,,,20250410_MTP,2,,G5X1W1,,2013-01-25,,001,42E AV 208,2021-06-16,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,Guillaume Dallaire,9E AV 574,1000525075,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/574+9E+AV,+BEA...",-1,,,INX,,À visiter,,À visiter,,,,,1,,G5X3P9,,2013-01-25,,001,9E AV 574,2021-01-22,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,COLETTE RENAUD,107E RUE 192 B,75204476,BEAUCEVILLE,2013-12-01,Non,"https://www.google.ca/maps/place/192+107E+RUE,+...",0,2021-10-29 14 h 39,,,,À visiter,,Absent,,Abdel Karim Addeche,,,0,TVA_TVN_TPC,G5X2P3,,2013-02-13,,001,107E RUE 192,2001-08-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,6E AV 192 A,,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/192+6E+AV,+BEA...",-1,,,,,À visiter,,À visiter,,,,,0,,G5X1Y4,,2013-02-13,,001,6E AV 192,2023-07-30,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,JEAN-PIERRE FECTEAU,LAMBERT AV 235 A,77419131,BEAUCEVILLE,2024-05-14,Non,https://www.google.ca/maps/place/235+AV+LAMBERT...,17,,,,NON PAIEMENT,À visiter,,À visiter,,,,,0,TVX_INX_TPC_TSF,G5X1R8,,2013-02-13,,001,LAMBERT AV 235,2021-03-31,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,STEPHANIE TURGEON,FRASER RTE 187 APP 1,77112613,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-07,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,YOHANN DELMAS,FRASER RTE 187 APP 2,78139758,BEAUCEVILLE,,Oui,,0,,,INC,,À visiter,,À visiter,,,,,1,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-14,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,EMILIE DEMERS,FRASER RTE 187 APP 3,75653632,BEAUCEVILLE,,Oui,,0,,,INC,,À visiter,,À visiter,,,,,1,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,DANIELLE RODRIGUE,FRASER RTE 187 APP 4,78139586,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,ANDREE-ANNE DUGUAY,FRASER RTE 187 APP 5,78143535,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-18,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 187 APP 6,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 1,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 2,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 3,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 4,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 5,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 6,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 1,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 2,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 3,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 4,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 5,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 6,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,EGLISE BEAUCEVILLE,LAMBERT AV 226 A,75261762,BEAUCEVILLE,,Non,https://www.google.ca/maps/place/226+AV+LAMBERT...,0,,,TVN,,À visiter,,À visiter,,,,,1,,G5X1S3,,2013-11-21,,001,LAMBERT AV 226,2013-11-26,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,Beauceville Tdl,9E AV 595 APP E,1001256461,BEAUCEVILLE,,Non,,-1,,,TVX INX,,À visiter,,À visiter,,,,,2,,G5X1J3,,2022-09-10,,001,9E AV 595,2023-01-23,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,RAYMONDE GALLANT,42E AV 208,77451723,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/208+42E+AV,+BE...",0,,,TVX INX TSF,,À visiter,,À visiter,,,,20250410_MTP,2,,G5X1W1,,2013-01-25,,001,42E AV 208,2021-06-16,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,Guillaume Dallaire,9E AV 574,1000525075,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/574+9E+AV,+BEA...",-1,,,INX,,À visiter,,À visiter,,,,,1,,G5X3P9,,2013-01-25,,001,9E AV 574,2021-01-22,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,COLETTE RENAUD,107E RUE 192 B,75204476,BEAUCEVILLE,2013-12-01,Non,"https://www.google.ca/maps/place/192+107E+RUE,+...",0,2021-10-29 14 h 39,,,,À visiter,,Absent,,Abdel Karim Addeche,,,0,TVA_TVN_TPC,G5X2P3,,2013-02-13,,001,107E RUE 192,2001-08-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,6E AV 192 A,,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/192+6E+AV,+BEA...",-1,,,,,À visiter,,À visiter,,,,,0,,G5X1Y4,,2013-02-13,,001,6E AV 192,2023-07-30,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,JEAN-PIERRE FECTEAU,LAMBERT AV 235 A,77419131,BEAUCEVILLE,2024-05-14,Non,https://www.google.ca/maps/place/235+AV+LAMBERT...,17,,,,NON PAIEMENT,À visiter,,À visiter,,,,,0,TVX_INX_TPC_TSF,G5X1R8,,2013-02-13,,001,LAMBERT AV 235,2021-03-31,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 1,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 2,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 3,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 4,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 5,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 6,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,GUILLAUME COTE,118E RUE 200 C,77908411,BEAUCEVILLE,,Non,,7,,,INX TSF,,À visiter,,À visiter,,,,,1,,G5X3N7,,2024-01-25,,001,118E RUE 200,2023-07-20,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,46314566 CLIENT FIZZ,84E RUE 190 ***NE PAS COGNER***,102461154,BEAUCEVILLE,,Non,,-1,,,INZ,,À visiter,,À visiter,,,,,0,,G5X2W5,,2024-07-10,,001,84E RUE 190,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,93E RUE 185,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0H7,,2024-03-07,,001,93E RUE 185,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,STEPHANIE TURGEON,FRASER RTE 187 APP 1,77112613,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-07,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,YOHANN DELMAS,FRASER RTE 187 APP 2,78139758,BEAUCEVILLE,,Oui,,0,,,INC,,À visiter,,À visiter,,,,,1,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-14,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,EMILIE DEMERS,FRASER RTE 187 APP 3,75653632,BEAUCEVILLE,,Oui,,0,,,INC,,À visiter,,À visiter,,,,,1,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,DANIELLE RODRIGUE,FRASER RTE 187 APP 4,78139586,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,ANDREE-ANNE DUGUAY,FRASER RTE 187 APP 5,78143535,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-18,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 187 APP 6,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 1,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 2,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 3,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,EGLISE BEAUCEVILLE,LAMBERT AV 226 A,75261762,BEAUCEVILLE,,Non,https://www.google.ca/maps/place/226+AV+LAMBERT...,0,,,TVN,,À visiter,,À visiter,,,,,1,,G5X1S3,,2013-11-21,,001,LAMBERT AV 226,2013-11-26,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,Beauceville Tdl,9E AV 595 APP E,1001256461,BEAUCEVILLE,,Non,,-1,,,TVX INX,,À visiter,,À visiter,,,,,2,,G5X1J3,,2022-09-10,,001,9E AV 595,2023-01-23,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,RAYMONDE GALLANT,42E AV 208,77451723,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/208+42E+AV,+BE...",0,,,TVX INX TSF,,À visiter,,À visiter,,,,20250410_MTP,2,,G5X1W1,,2013-01-25,,001,42E AV 208,2021-06-16,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,Guillaume Dallaire,9E AV 574,1000525075,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/574+9E+AV,+BEA...",-1,,,INX,,À visiter,,À visiter,,,,,1,,G5X3P9,,2013-01-25,,001,9E AV 574,2021-01-22,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,COLETTE RENAUD,107E RUE 192 B,75204476,BEAUCEVILLE,2013-12-01,Non,"https://www.google.ca/maps/place/192+107E+RUE,+...",0,2021-10-29 14 h 39,,,,À visiter,,Absent,,Abdel Karim Addeche,,,0,TVA_TVN_TPC,G5X2P3,,2013-02-13,,001,107E RUE 192,2001-08-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,6E AV 192 A,,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/192+6E+AV,+BEA...",-1,,,,,À visiter,,À visiter,,,,,0,,G5X1Y4,,2013-02-13,,001,6E AV 192,2023-07-30,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,JEAN-PIERRE FECTEAU,LAMBERT AV 235 A,77419131,BEAUCEVILLE,2024-05-14,Non,https://www.google.ca/maps/place/235+AV+LAMBERT...,17,,,,NON PAIEMENT,À visiter,,À visiter,,,,,0,TVX_INX_TPC_TSF,G5X1R8,,2013-02-13,,001,LAMBERT AV 235,2021-03-31,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,STEPHANIE TURGEON,FRASER RTE 187 APP 1,77112613,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-07,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,YOHANN DELMAS,FRASER RTE 187 APP 2,78139758,BEAUCEVILLE,,Oui,,0,,,INC,,À visiter,,À visiter,,,,,1,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-14,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,EMILIE DEMERS,FRASER RTE 187 APP 3,75653632,BEAUCEVILLE,,Oui,,0,,,INC,,À visiter,,À visiter,,,,,1,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,DANIELLE RODRIGUE,FRASER RTE 187 APP 4,78139586,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,ANDREE-ANNE DUGUAY,FRASER RTE 187 APP 5,78143535,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-18,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 187 APP 6,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 1,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 2,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 3,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 4,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 5,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 6,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 1,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 2,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 3,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 4,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 5,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 6,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,EGLISE BEAUCEVILLE,LAMBERT AV 226 A,75261762,BEAUCEVILLE,,Non,https://www.google.ca/maps/place/226+AV+LAMBERT...,0,,,TVN,,À visiter,,À visiter,,,,,1,,G5X1S3,,2013-11-21,,001,LAMBERT AV 226,2013-11-26,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,Beauceville Tdl,9E AV 595 APP E,1001256461,BEAUCEVILLE,,Non,,-1,,,TVX INX,,À visiter,,À visiter,,,,,2,,G5X1J3,,2022-09-10,,001,9E AV 595,2023-01-23,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,RAYMONDE GALLANT,42E AV 208,77451723,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/208+42E+AV,+BE...",0,,,TVX INX TSF,,À visiter,,À visiter,,,,20250410_MTP,2,,G5X1W1,,2013-01-25,,001,42E AV 208,2021-06-16,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,Guillaume Dallaire,9E AV 574,1000525075,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/574+9E+AV,+BEA...",-1,,,INX,,À visiter,,À visiter,,,,,1,,G5X3P9,,2013-01-25,,001,9E AV 574,2021-01-22,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,COLETTE RENAUD,107E RUE 192 B,75204476,BEAUCEVILLE,2013-12-01,Non,"https://www.google.ca/maps/place/192+107E+RUE,+...",0,2021-10-29 14 h 39,,,,À visiter,,Absent,,Abdel Karim Addeche,,,0,TVA_TVN_TPC,G5X2P3,,2013-02-13,,001,107E RUE 192,2001-08-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,6E AV 192 A,,BEAUCEVILLE,,Non,"https://www.google.ca/maps/place/192+6E+AV,+BEA...",-1,,,,,À visiter,,À visiter,,,,,0,,G5X1Y4,,2013-02-13,,001,6E AV 192,2023-07-30,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,JEAN-PIERRE FECTEAU,LAMBERT AV 235 A,77419131,BEAUCEVILLE,2024-05-14,Non,https://www.google.ca/maps/place/235+AV+LAMBERT...,17,,,,NON PAIEMENT,À visiter,,À visiter,,,,,0,TVX_INX_TPC_TSF,G5X1R8,,2013-02-13,,001,LAMBERT AV 235,2021-03-31,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,STEPHANIE TURGEON,FRASER RTE 187 APP 1,77112613,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-07,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,YOHANN DELMAS,FRASER RTE 187 APP 2,78139758,BEAUCEVILLE,,Oui,,0,,,INC,,À visiter,,À visiter,,,,,1,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-14,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,EMILIE DEMERS,FRASER RTE 187 APP 3,75653632,BEAUCEVILLE,,Oui,,0,,,INC,,À visiter,,À visiter,,,,,1,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,DANIELLE RODRIGUE,FRASER RTE 187 APP 4,78139586,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-11,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,ANDREE-ANNE DUGUAY,FRASER RTE 187 APP 5,78143535,BEAUCEVILLE,,Oui,,0,,,TVN INC,,À visiter,,À visiter,,,,,2,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,2024-12-18,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 187 APP 6,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 187,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 1,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 2,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 3,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 4,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 5,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 193 APP 6,,BEAUCEVILLE,,Oui,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-11-29,,006-011,FRASER RTE 193,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 1,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec
+Beauceville,,,FRASER RTE 199 APP 2,,BEAUCEVILLE,,Non,,-1,,,,,À visiter,,À visiter,,,,,0,,G5X0J5,,2024-12-03,,006-011,FRASER RTE 199,,G5X_BEAUCEVILLE,,,,Québec

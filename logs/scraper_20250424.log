@@ -1,0 +1,1574 @@
+[07:52:26] Launching Chrome
+[07:52:29] Nav → login page
+[07:52:29] ⇒ find #username…
+[07:52:29] ✔ find #username OK
+[07:52:29] ⇒ find name='pw'…
+[07:52:29] ✔ find name='pw' OK
+[07:52:30] ⇒ click #Login…
+[07:52:30] ✔ click #Login OK
+[07:52:30] ⏳ wait phSearchInput
+[07:52:45] login complete
+[07:52:45] ⇒ find phSearchInput…
+[07:52:45] ✔ find phSearchInput OK
+[07:52:45] ⇒ click search…
+[07:52:46] ✔ click search OK
+[07:52:47] ⇒ click showFiltersId-Residences__c-a0r…
+[07:52:48] ✔ click showFiltersId-Residences__c-a0r OK
+[07:52:48] ⇒ click showFiltersIdResidences__c…
+[07:52:48] ❌ click showFiltersIdResidences__c FAILED → Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="showFiltersIdResidences__c"]"}
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x0069D363+60275]
+	GetHandleVerifier [0x0069D3A4+60340]
+	(No symbol) [0x004D06F3]
+	(No symbol) [0x00518690]
+	(No symbol) [0x00518A2B]
+	(No symbol) [0x00560EE2]
+	(No symbol) [0x0053D0D4]
+	(No symbol) [0x0055E6EB]
+	(No symbol) [0x0053CE86]
+	(No symbol) [0x0050C623]
+	(No symbol) [0x0050D474]
+	GetHandleVerifier [0x008E8FE3+2467827]
+	GetHandleVerifier [0x008E45E6+2448886]
+	GetHandleVerifier [0x008FF80C+2560028]
+	GetHandleVerifier [0x006B3DF5+153093]
+	GetHandleVerifier [0x006BA3BD+179149]
+	GetHandleVerifier [0x006A4BB8+91080]
+	GetHandleVerifier [0x006A4D60+91504]
+	GetHandleVerifier [0x0068FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+
+[07:52:48] ⇒ find filter select…
+[07:52:48] ✔ find filter select OK
+[07:52:48] ⇒ click save_filter…
+[07:52:48] ✔ click save_filter OK
+[07:52:48] ⇒ wait table.list…
+[07:52:48] ✔ wait table.list OK
+[07:52:48] === PAGE 1 ===
+[07:52:49] → tab https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[07:52:49] → tab https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[07:52:49] → tab https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[07:52:49] → tab https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[07:52:49] → tab https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[07:52:54] ✓ parsed 33 fields
+[07:52:54] ✓ parsed 33 fields
+[07:52:55] ✓ parsed 33 fields
+[07:52:55] ✓ parsed 33 fields
+[07:52:55] ✓ parsed 33 fields
+[07:52:55] → tab https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[07:52:55] → tab https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[07:52:55] → tab https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[07:52:55] → tab https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[07:52:55] → tab https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[07:53:10] ❌ fail tab https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r (Message: 
+Stacktrace:
+	GetHandleVerifier [0x0069D363+60275]
+	GetHandleVerifier [0x0069D3A4+60340]
+	(No symbol) [0x004D06F3]
+	(No symbol) [0x00518690]
+	(No symbol) [0x00518A2B]
+	(No symbol) [0x00560EE2]
+	(No symbol) [0x0053D0D4]
+	(No symbol) [0x0055E6EB]
+	(No symbol) [0x0053CE86]
+	(No symbol) [0x0050C623]
+	(No symbol) [0x0050D474]
+	GetHandleVerifier [0x008E8FE3+2467827]
+	GetHandleVerifier [0x008E45E6+2448886]
+	GetHandleVerifier [0x008FF80C+2560028]
+	GetHandleVerifier [0x006B3DF5+153093]
+	GetHandleVerifier [0x006BA3BD+179149]
+	GetHandleVerifier [0x006A4BB8+91080]
+	GetHandleVerifier [0x006A4D60+91504]
+	GetHandleVerifier [0x0068FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[07:53:10] ❌ fail tab https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r (Message: invalid session id
+Stacktrace:
+	GetHandleVerifier [0x0069D363+60275]
+	GetHandleVerifier [0x0069D3A4+60340]
+	(No symbol) [0x004D056E]
+	(No symbol) [0x0050C25C]
+	(No symbol) [0x0050D474]
+	GetHandleVerifier [0x008E8FE3+2467827]
+	GetHandleVerifier [0x008E45E6+2448886]
+	GetHandleVerifier [0x008FF80C+2560028]
+	GetHandleVerifier [0x006B3DF5+153093]
+	GetHandleVerifier [0x006BA3BD+179149]
+	GetHandleVerifier [0x006A4BB8+91080]
+	GetHandleVerifier [0x006A4D60+91504]
+	GetHandleVerifier [0x0068FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[07:53:10] ❌ fail tab https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r (Message: invalid session id
+Stacktrace:
+	GetHandleVerifier [0x0069D363+60275]
+	GetHandleVerifier [0x0069D3A4+60340]
+	(No symbol) [0x004D056E]
+	(No symbol) [0x0050C25C]
+	(No symbol) [0x0050D474]
+	GetHandleVerifier [0x008E8FE3+2467827]
+	GetHandleVerifier [0x008E45E6+2448886]
+	GetHandleVerifier [0x008FF80C+2560028]
+	GetHandleVerifier [0x006B3DF5+153093]
+	GetHandleVerifier [0x006BA3BD+179149]
+	GetHandleVerifier [0x006A4BB8+91080]
+	GetHandleVerifier [0x006A4D60+91504]
+	GetHandleVerifier [0x0068FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[07:53:10] ❌ fail tab https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r (Message: invalid session id
+Stacktrace:
+	GetHandleVerifier [0x0069D363+60275]
+	GetHandleVerifier [0x0069D3A4+60340]
+	(No symbol) [0x004D056E]
+	(No symbol) [0x0050C25C]
+	(No symbol) [0x0050D474]
+	GetHandleVerifier [0x008E8FE3+2467827]
+	GetHandleVerifier [0x008E45E6+2448886]
+	GetHandleVerifier [0x008FF80C+2560028]
+	GetHandleVerifier [0x006B3DF5+153093]
+	GetHandleVerifier [0x006BA3BD+179149]
+	GetHandleVerifier [0x006A4BB8+91080]
+	GetHandleVerifier [0x006A4D60+91504]
+	GetHandleVerifier [0x0068FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[07:53:10] ❌ fail tab https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r (Message: invalid session id
+Stacktrace:
+	GetHandleVerifier [0x0069D363+60275]
+	GetHandleVerifier [0x0069D3A4+60340]
+	(No symbol) [0x004D056E]
+	(No symbol) [0x0050C25C]
+	(No symbol) [0x0050D474]
+	GetHandleVerifier [0x008E8FE3+2467827]
+	GetHandleVerifier [0x008E45E6+2448886]
+	GetHandleVerifier [0x008FF80C+2560028]
+	GetHandleVerifier [0x006B3DF5+153093]
+	GetHandleVerifier [0x006BA3BD+179149]
+	GetHandleVerifier [0x006A4BB8+91080]
+	GetHandleVerifier [0x006A4D60+91504]
+	GetHandleVerifier [0x0068FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[07:53:10] FATAL ERROR Message: no such window: target window already closed
+from unknown error: web view not found
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x0069D363+60275]
+	GetHandleVerifier [0x0069D3A4+60340]
+	(No symbol) [0x004D06F3]
+	(No symbol) [0x004AFBEE]
+	(No symbol) [0x00543BDE]
+	(No symbol) [0x0054B7CB]
+	(No symbol) [0x0053D053]
+	(No symbol) [0x0050C623]
+	(No symbol) [0x0050D474]
+	GetHandleVerifier [0x008E8FE3+2467827]
+	GetHandleVerifier [0x008E45E6+2448886]
+	GetHandleVerifier [0x008FF80C+2560028]
+	GetHandleVerifier [0x006B3DF5+153093]
+	GetHandleVerifier [0x006BA3BD+179149]
+	GetHandleVerifier [0x006A4BB8+91080]
+	GetHandleVerifier [0x006A4D60+91504]
+	GetHandleVerifier [0x0068FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+
+[07:53:10] Quitting Chrome
+[08:02:34] Nav → login page
+[08:02:35] ⇒ find #username…
+[08:02:35] ✔ find #username OK
+[08:02:35] ⇒ find name='pw'…
+[08:02:35] ✔ find name='pw' OK
+[08:02:35] ⇒ click #Login…
+[08:02:35] ✔ click #Login OK
+[08:02:37] ⏳ wait phSearchInput
+[08:02:51] login complete
+[08:02:51] ⇒ find phSearchInput…
+[08:02:51] ✔ find phSearchInput OK
+[08:02:51] ⇒ click search…
+[08:02:51] ✔ click search OK
+[08:02:54] ⇒ click showFiltersId-Residences__c-a0r…
+[08:02:54] ✔ click showFiltersId-Residences__c-a0r OK
+[08:02:54] ⇒ click showFiltersIdResidences__c…
+[08:02:54] ❌ click showFiltersIdResidences__c FAILED → Message: no such element: Unable to locate element: {"method":"css selector","selector":"[id="showFiltersIdResidences__c"]"}
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x0057D363+60275]
+	GetHandleVerifier [0x0057D3A4+60340]
+	(No symbol) [0x003B06F3]
+	(No symbol) [0x003F8690]
+	(No symbol) [0x003F8A2B]
+	(No symbol) [0x00440EE2]
+	(No symbol) [0x0041D0D4]
+	(No symbol) [0x0043E6EB]
+	(No symbol) [0x0041CE86]
+	(No symbol) [0x003EC623]
+	(No symbol) [0x003ED474]
+	GetHandleVerifier [0x007C8FE3+2467827]
+	GetHandleVerifier [0x007C45E6+2448886]
+	GetHandleVerifier [0x007DF80C+2560028]
+	GetHandleVerifier [0x00593DF5+153093]
+	GetHandleVerifier [0x0059A3BD+179149]
+	GetHandleVerifier [0x00584BB8+91080]
+	GetHandleVerifier [0x00584D60+91504]
+	GetHandleVerifier [0x0056FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+
+[08:02:54] ⇒ find filter select…
+[08:02:54] ✔ find filter select OK
+[08:02:55] ⇒ click save_filter…
+[08:02:55] ✔ click save_filter OK
+[08:02:55] ⇒ wait table.list…
+[08:02:55] ✔ wait table.list OK
+[08:02:55] === PAGE 1 ===
+[08:02:55] → tab https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[08:02:58] ✓ parsed 33 fields
+[08:02:58] → tab https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[08:03:13] ❌ fail tab https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r (Message: 
+Stacktrace:
+	GetHandleVerifier [0x0057D363+60275]
+	GetHandleVerifier [0x0057D3A4+60340]
+	(No symbol) [0x003B06F3]
+	(No symbol) [0x003F8690]
+	(No symbol) [0x003F8A2B]
+	(No symbol) [0x00440EE2]
+	(No symbol) [0x0041D0D4]
+	(No symbol) [0x0043E6EB]
+	(No symbol) [0x0041CE86]
+	(No symbol) [0x003EC623]
+	(No symbol) [0x003ED474]
+	GetHandleVerifier [0x007C8FE3+2467827]
+	GetHandleVerifier [0x007C45E6+2448886]
+	GetHandleVerifier [0x007DF80C+2560028]
+	GetHandleVerifier [0x00593DF5+153093]
+	GetHandleVerifier [0x0059A3BD+179149]
+	GetHandleVerifier [0x00584BB8+91080]
+	GetHandleVerifier [0x00584D60+91504]
+	GetHandleVerifier [0x0056FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[08:03:13] FATAL ERROR Message: invalid session id
+Stacktrace:
+	GetHandleVerifier [0x0057D363+60275]
+	GetHandleVerifier [0x0057D3A4+60340]
+	(No symbol) [0x003B056E]
+	(No symbol) [0x003EB8E8]
+	(No symbol) [0x0041CF46]
+	(No symbol) [0x00418A18]
+	(No symbol) [0x00417F96]
+	(No symbol) [0x003836E5]
+	(No symbol) [0x00383C3E]
+	(No symbol) [0x003840CD]
+	GetHandleVerifier [0x007C8FE3+2467827]
+	GetHandleVerifier [0x007C45E6+2448886]
+	GetHandleVerifier [0x007DF80C+2560028]
+	GetHandleVerifier [0x00593DF5+153093]
+	GetHandleVerifier [0x0059A3BD+179149]
+	(No symbol) [0x003833B0]
+	(No symbol) [0x00382BC3]
+	GetHandleVerifier [0x008EDFBC+3667916]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+
+[08:03:13] Quitting Chrome
+[08:11:12] Nav → login page
+[08:11:13] ⇒ find #username…
+[08:11:13] ✔ find #username OK
+[08:11:13] ⇒ find name='pw'…
+[08:11:13] ✔ find name='pw' OK
+[08:11:13] ⇒ click #Login…
+[08:11:13] ✔ click #Login OK
+[08:11:16] ⏳ wait phSearchInput
+[08:11:29] login complete
+[08:11:29] search → Beauceville
+[08:11:33] ⚠ filtre Oui/Appliquer absent (Message: element not interactable
+  (Session info: chrome=135.0.7049.96)
+Stacktrace:
+	GetHandleVerifier [0x00F0D363+60275]
+	GetHandleVerifier [0x00F0D3A4+60340]
+	(No symbol) [0x00D4056E]
+	(No symbol) [0x00D8980B]
+	(No symbol) [0x00D7E265]
+	(No symbol) [0x00DAD08C]
+	(No symbol) [0x00D7DCF4]
+	(No symbol) [0x00DAD304]
+	(No symbol) [0x00DCE6EB]
+	(No symbol) [0x00DACE86]
+	(No symbol) [0x00D7C623]
+	(No symbol) [0x00D7D474]
+	GetHandleVerifier [0x01158FE3+2467827]
+	GetHandleVerifier [0x011545E6+2448886]
+	GetHandleVerifier [0x0116F80C+2560028]
+	GetHandleVerifier [0x00F23DF5+153093]
+	GetHandleVerifier [0x00F2A3BD+179149]
+	GetHandleVerifier [0x00F14BB8+91080]
+	GetHandleVerifier [0x00F14D60+91504]
+	GetHandleVerifier [0x00EFFA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[08:11:33] === PAGE 1 ===
+[08:11:33] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[08:11:35] ✓ parsed 33 fields
+[08:11:35] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[08:11:36] ✓ parsed 33 fields
+[08:11:36] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[08:11:38] ✓ parsed 33 fields
+[08:11:38] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[08:11:39] ✓ parsed 33 fields
+[08:11:40] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[08:11:41] ✓ parsed 33 fields
+[08:11:41] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[08:11:43] ✓ parsed 33 fields
+[08:11:43] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[08:11:44] ✓ parsed 33 fields
+[08:11:45] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[08:11:46] ✓ parsed 33 fields
+[08:11:46] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[08:11:48] ✓ parsed 33 fields
+[08:11:48] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[08:11:49] ✓ parsed 33 fields
+[08:11:49] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[08:11:51] ✓ parsed 33 fields
+[08:11:51] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[08:11:53] ✓ parsed 33 fields
+[08:11:53] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[08:11:55] ✓ parsed 33 fields
+[08:11:55] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[08:11:57] ✓ parsed 33 fields
+[08:11:57] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[08:11:59] ✓ parsed 33 fields
+[08:11:59] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[08:12:01] ✓ parsed 33 fields
+[08:12:01] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[08:12:02] ✓ parsed 33 fields
+[08:12:03] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[08:12:05] ✓ parsed 33 fields
+[08:12:05] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[08:12:07] ✓ parsed 33 fields
+[08:12:07] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[08:12:09] ✓ parsed 33 fields
+[08:12:09] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[08:12:11] ✓ parsed 33 fields
+[08:12:11] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[08:12:13] ✓ parsed 33 fields
+[08:12:13] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[08:12:15] ✓ parsed 33 fields
+[08:12:15] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[08:12:17] ✓ parsed 33 fields
+[08:12:17] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[08:12:19] ✓ parsed 33 fields
+[08:12:19] no next page (Message: no such element: Unable to locate element: {"method":"css selector","selector":".pSearchShowMore .nextArrow"}
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00F0D363+60275]
+	GetHandleVerifier [0x00F0D3A4+60340]
+	(No symbol) [0x00D406F3]
+	(No symbol) [0x00D88690]
+	(No symbol) [0x00D88A2B]
+	(No symbol) [0x00DD0EE2]
+	(No symbol) [0x00DAD0D4]
+	(No symbol) [0x00DCE6EB]
+	(No symbol) [0x00DACE86]
+	(No symbol) [0x00D7C623]
+	(No symbol) [0x00D7D474]
+	GetHandleVerifier [0x01158FE3+2467827]
+	GetHandleVerifier [0x011545E6+2448886]
+	GetHandleVerifier [0x0116F80C+2560028]
+	GetHandleVerifier [0x00F23DF5+153093]
+	GetHandleVerifier [0x00F2A3BD+179149]
+	GetHandleVerifier [0x00F14BB8+91080]
+	GetHandleVerifier [0x00F14D60+91504]
+	GetHandleVerifier [0x00EFFA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[08:12:19] Quitting Chrome
+[10:30:03] Nav → login page
+[10:30:04] ⇒ find #username…
+[10:30:04] ✔ find #username OK
+[10:30:04] ⇒ find name='pw'…
+[10:30:04] ✔ find name='pw' OK
+[10:30:04] ⇒ click #Login…
+[10:30:04] ✔ click #Login OK
+[10:30:04] ⏳ wait phSearchInput
+[10:30:21] login complete
+[10:30:21] search → Beauceville
+[10:30:25] ✔ filtre panel ouvert
+[10:30:25] FATAL ERROR Message: invalid selector: An invalid or illegal selector was specified
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#invalid-selector-exception
+Stacktrace:
+	GetHandleVerifier [0x00FED363+60275]
+	GetHandleVerifier [0x00FED3A4+60340]
+	(No symbol) [0x00E206F3]
+	(No symbol) [0x00E26E47]
+	(No symbol) [0x00E2913A]
+	(No symbol) [0x00E291B7]
+	(No symbol) [0x00E67F24]
+	(No symbol) [0x00E68A2B]
+	(No symbol) [0x00EB0EE2]
+	(No symbol) [0x00E8D0D4]
+	(No symbol) [0x00EAE6EB]
+	(No symbol) [0x00E8CE86]
+	(No symbol) [0x00E5C623]
+	(No symbol) [0x00E5D474]
+	GetHandleVerifier [0x01238FE3+2467827]
+	GetHandleVerifier [0x012345E6+2448886]
+	GetHandleVerifier [0x0124F80C+2560028]
+	GetHandleVerifier [0x01003DF5+153093]
+	GetHandleVerifier [0x0100A3BD+179149]
+	GetHandleVerifier [0x00FF4BB8+91080]
+	GetHandleVerifier [0x00FF4D60+91504]
+	GetHandleVerifier [0x00FDFA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+
+[10:30:25] Quitting Chrome
+[10:35:39] Nav → login page
+[10:35:40] ⇒ find #username…
+[10:35:40] ✔ find #username OK
+[10:35:40] ⇒ find name='pw'…
+[10:35:40] ✔ find name='pw' OK
+[10:35:40] ⇒ click #Login…
+[10:35:40] ✔ click #Login OK
+[10:35:43] ⏳ wait phSearchInput
+[10:35:57] login complete
+[10:35:57] search → Beauceville
+[10:35:59] ✔ filtre panel ouvert
+[10:36:00] ✔ Actif=Oui sélectionné
+[10:36:09] ❌ bouton Appliquer les filtres introuvable
+[10:36:09] ✔ table.list visible, prêt à parser
+[10:36:09] === PAGE 1 ===
+[10:36:09] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[10:36:11] ✓ parsed 33 fields
+[10:36:11] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[10:36:12] ✓ parsed 33 fields
+[10:36:12] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[10:36:14] ✓ parsed 33 fields
+[10:36:14] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[10:36:16] ✓ parsed 33 fields
+[10:36:16] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[10:36:17] ✓ parsed 33 fields
+[10:36:17] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[10:36:19] ✓ parsed 33 fields
+[10:36:19] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[10:36:20] ✓ parsed 33 fields
+[10:36:20] → open https://v.my.site.com/resi/a0rJQ000014wtwG?srPos=7&srKp=a0r
+[10:36:22] ✓ parsed 33 fields
+[10:36:22] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=8&srKp=a0r
+[10:36:24] ✓ parsed 33 fields
+[10:36:24] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=9&srKp=a0r
+[10:36:25] ✓ parsed 33 fields
+[10:36:26] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=10&srKp=a0r
+[10:36:28] ✓ parsed 33 fields
+[10:36:28] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=11&srKp=a0r
+[10:36:30] ✓ parsed 33 fields
+[10:36:30] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=12&srKp=a0r
+[10:36:32] ✓ parsed 33 fields
+[10:36:32] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=13&srKp=a0r
+[10:36:34] ✓ parsed 33 fields
+[10:36:34] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=14&srKp=a0r
+[10:36:36] ✓ parsed 33 fields
+[10:36:36] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=15&srKp=a0r
+[10:36:38] ✓ parsed 33 fields
+[10:36:38] no next page (Message: no such element: Unable to locate element: {"method":"css selector","selector":".pSearchShowMore .nextArrow"}
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x006CD363+60275]
+	GetHandleVerifier [0x006CD3A4+60340]
+	(No symbol) [0x005006F3]
+	(No symbol) [0x00548690]
+	(No symbol) [0x00548A2B]
+	(No symbol) [0x00590EE2]
+	(No symbol) [0x0056D0D4]
+	(No symbol) [0x0058E6EB]
+	(No symbol) [0x0056CE86]
+	(No symbol) [0x0053C623]
+	(No symbol) [0x0053D474]
+	GetHandleVerifier [0x00918FE3+2467827]
+	GetHandleVerifier [0x009145E6+2448886]
+	GetHandleVerifier [0x0092F80C+2560028]
+	GetHandleVerifier [0x006E3DF5+153093]
+	GetHandleVerifier [0x006EA3BD+179149]
+	GetHandleVerifier [0x006D4BB8+91080]
+	GetHandleVerifier [0x006D4D60+91504]
+	GetHandleVerifier [0x006BFA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[10:36:38] Quitting Chrome
+[10:38:17] Nav → login page
+[10:38:18] ⇒ find #username…
+[10:38:18] ✔ find #username OK
+[10:38:18] ⇒ find name='pw'…
+[10:38:18] ✔ find name='pw' OK
+[10:38:18] ⇒ click #Login…
+[10:38:18] ✔ click #Login OK
+[10:38:18] ⏳ wait phSearchInput
+[10:38:37] login complete
+[10:38:37] search → Beauceville
+[10:38:40] ✔ filtre panel ouvert
+[10:38:41] ✔ Actif=Oui sélectionné
+[10:38:41] ✔ filtres appliqués (ID)
+[10:38:41] ✔ table.list visible, prêt à parser
+[10:38:41] === PAGE 1 ===
+[10:38:41] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[10:38:43] ✓ parsed 33 fields
+[10:38:43] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[10:38:45] ✓ parsed 33 fields
+[10:38:45] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[10:38:47] ✓ parsed 33 fields
+[10:38:47] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[10:38:49] ✓ parsed 33 fields
+[10:38:49] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[10:38:51] ✓ parsed 33 fields
+[10:38:52] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[10:38:53] ✓ parsed 33 fields
+[10:38:53] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[10:38:55] ✓ parsed 33 fields
+[10:38:55] → open https://v.my.site.com/resi/a0rJQ00000tTi2o?srPos=7&srKp=a0r
+[10:38:56] ✓ parsed 33 fields
+[10:38:56] → open https://v.my.site.com/resi/a0rJQ000014wtwG?srPos=8&srKp=a0r
+[10:38:58] ✓ parsed 33 fields
+[10:38:58] → open https://v.my.site.com/resi/a0rJQ00000tTjoU?srPos=9&srKp=a0r
+[10:39:00] ✓ parsed 33 fields
+[10:39:00] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=10&srKp=a0r
+[10:39:01] ✓ parsed 33 fields
+[10:39:02] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=11&srKp=a0r
+[10:39:04] ✓ parsed 33 fields
+[10:39:04] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=12&srKp=a0r
+[10:39:05] ✓ parsed 33 fields
+[10:39:05] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=13&srKp=a0r
+[10:39:07] ✓ parsed 33 fields
+[10:39:07] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=14&srKp=a0r
+[10:39:09] ✓ parsed 33 fields
+[10:39:09] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=15&srKp=a0r
+[10:39:11] ✓ parsed 33 fields
+[10:39:11] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=16&srKp=a0r
+[10:39:13] ✓ parsed 33 fields
+[10:39:14] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=17&srKp=a0r
+[10:39:15] ✓ parsed 33 fields
+[10:39:15] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=18&srKp=a0r
+[10:39:18] ✓ parsed 33 fields
+[10:39:18] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=19&srKp=a0r
+[10:39:19] ✓ parsed 33 fields
+[10:39:19] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=20&srKp=a0r
+[10:39:22] ✓ parsed 33 fields
+[10:39:22] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=21&srKp=a0r
+[10:39:23] ✓ parsed 33 fields
+[10:39:24] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=22&srKp=a0r
+[10:39:25] ✓ parsed 33 fields
+[10:39:25] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=23&srKp=a0r
+[10:39:27] ✓ parsed 33 fields
+[10:39:27] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=24&srKp=a0r
+[10:39:29] ✓ parsed 33 fields
+[10:39:29] no next page (Message: no such element: Unable to locate element: {"method":"css selector","selector":".pSearchShowMore .nextArrow"}
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x00CCD363+60275]
+	GetHandleVerifier [0x00CCD3A4+60340]
+	(No symbol) [0x00B006F3]
+	(No symbol) [0x00B48690]
+	(No symbol) [0x00B48A2B]
+	(No symbol) [0x00B90EE2]
+	(No symbol) [0x00B6D0D4]
+	(No symbol) [0x00B8E6EB]
+	(No symbol) [0x00B6CE86]
+	(No symbol) [0x00B3C623]
+	(No symbol) [0x00B3D474]
+	GetHandleVerifier [0x00F18FE3+2467827]
+	GetHandleVerifier [0x00F145E6+2448886]
+	GetHandleVerifier [0x00F2F80C+2560028]
+	GetHandleVerifier [0x00CE3DF5+153093]
+	GetHandleVerifier [0x00CEA3BD+179149]
+	GetHandleVerifier [0x00CD4BB8+91080]
+	GetHandleVerifier [0x00CD4D60+91504]
+	GetHandleVerifier [0x00CBFA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[10:39:29] Quitting Chrome
+[10:54:30] Nav → login page
+[10:54:30] ⇒ find #username…
+[10:54:30] ✔ find #username OK
+[10:54:30] ⇒ find name='pw'…
+[10:54:30] ✔ find name='pw' OK
+[10:54:31] ⇒ click #Login…
+[10:54:31] ✔ click #Login OK
+[10:54:32] ⏳ wait phSearchInput
+[10:54:46] login complete
+[10:54:46] search → Beauceville
+[10:54:48] ✔ filtre panel ouvert
+[10:54:49] ✔ Actif=Oui sélectionné
+[10:54:49] ✔ filtres appliqués (ID)
+[10:54:49] ✔ table.list visible, prêt à parser
+[10:54:49] === PAGE 1 ===
+[10:54:49] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[10:54:51] ✓ parsed 33 fields
+[10:54:51] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[10:54:53] ✓ parsed 33 fields
+[10:54:53] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[10:54:55] ✓ parsed 33 fields
+[10:54:55] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[10:54:56] ✓ parsed 33 fields
+[10:54:56] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[10:54:58] ✓ parsed 33 fields
+[10:54:58] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[10:54:59] ✓ parsed 33 fields
+[10:55:00] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[10:55:01] ✓ parsed 33 fields
+[10:55:01] → open https://v.my.site.com/resi/a0rJQ000014wtwG?srPos=7&srKp=a0r
+[10:55:03] ✓ parsed 33 fields
+[10:55:03] → open https://v.my.site.com/resi/a0rJQ00000tTjoU?srPos=8&srKp=a0r
+[10:55:04] ✓ parsed 33 fields
+[10:55:04] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=9&srKp=a0r
+[10:55:06] ✓ parsed 33 fields
+[10:55:06] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=10&srKp=a0r
+[10:55:07] ✓ parsed 33 fields
+[10:55:08] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=11&srKp=a0r
+[10:55:09] ✓ parsed 33 fields
+[10:55:09] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=12&srKp=a0r
+[10:55:12] ✓ parsed 33 fields
+[10:55:12] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=13&srKp=a0r
+[10:55:14] ✓ parsed 33 fields
+[10:55:14] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=14&srKp=a0r
+[10:55:16] ✓ parsed 33 fields
+[10:55:16] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=15&srKp=a0r
+[10:55:17] ✓ parsed 33 fields
+[10:55:18] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=16&srKp=a0r
+[10:55:20] ✓ parsed 33 fields
+[10:55:20] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=17&srKp=a0r
+[10:55:22] ✓ parsed 33 fields
+[10:55:22] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=18&srKp=a0r
+[10:55:24] ✓ parsed 33 fields
+[10:55:24] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=19&srKp=a0r
+[10:55:26] ✓ parsed 33 fields
+[10:55:26] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=20&srKp=a0r
+[10:55:27] ✓ parsed 33 fields
+[10:55:28] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=21&srKp=a0r
+[10:55:29] ✓ parsed 33 fields
+[10:55:30] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=22&srKp=a0r
+[10:55:31] ✓ parsed 33 fields
+[10:55:31] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=23&srKp=a0r
+[10:55:33] ✓ parsed 33 fields
+[10:55:33] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=24&srKp=a0r
+[10:55:35] ✓ parsed 33 fields
+[10:55:35] no next page (Message: no such element: Unable to locate element: {"method":"css selector","selector":".pSearchShowMore .nextArrow"}
+  (Session info: chrome=135.0.7049.96); For documentation on this error, please visit: https://www.selenium.dev/documentation/webdriver/troubleshooting/errors#no-such-element-exception
+Stacktrace:
+	GetHandleVerifier [0x0086D363+60275]
+	GetHandleVerifier [0x0086D3A4+60340]
+	(No symbol) [0x006A06F3]
+	(No symbol) [0x006E8690]
+	(No symbol) [0x006E8A2B]
+	(No symbol) [0x00730EE2]
+	(No symbol) [0x0070D0D4]
+	(No symbol) [0x0072E6EB]
+	(No symbol) [0x0070CE86]
+	(No symbol) [0x006DC623]
+	(No symbol) [0x006DD474]
+	GetHandleVerifier [0x00AB8FE3+2467827]
+	GetHandleVerifier [0x00AB45E6+2448886]
+	GetHandleVerifier [0x00ACF80C+2560028]
+	GetHandleVerifier [0x00883DF5+153093]
+	GetHandleVerifier [0x0088A3BD+179149]
+	GetHandleVerifier [0x00874BB8+91080]
+	GetHandleVerifier [0x00874D60+91504]
+	GetHandleVerifier [0x0085FA10+4640]
+	BaseThreadInitThunk [0x75555D49+25]
+	RtlInitializeExceptionChain [0x771DCF0B+107]
+	RtlGetAppContainerNamedObjectPath [0x771DCE91+561]
+)
+[10:55:35] Quitting Chrome
+[11:08:26] Nav → login page
+[11:08:27] ⇒ find #username…
+[11:08:27] ✔ find #username OK
+[11:08:27] ⇒ find name='pw'…
+[11:08:27] ✔ find name='pw' OK
+[11:08:27] ⇒ click #Login…
+[11:08:27] ✔ click #Login OK
+[11:08:27] ⏳ wait phSearchInput
+[11:08:44] login complete
+[11:08:44] search → Beauceville
+[11:08:48] ✔ filtre panel ouvert
+[11:08:49] ✔ Actif=Oui sélectionné
+[11:08:49] ✔ filtres appliqués (ID)
+[11:08:49] ✔ table.list visible, prêt à parser
+[11:08:49] === PAGE 1 (1-25) ===
+[11:08:49] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:08:51] ✓ parsed 33 fields
+[11:08:52] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:08:53] ✓ parsed 33 fields
+[11:08:53] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:08:55] ✓ parsed 33 fields
+[11:08:55] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:08:57] ✓ parsed 33 fields
+[11:08:57] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:08:58] ✓ parsed 33 fields
+[11:08:58] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:09:00] ✓ parsed 33 fields
+[11:09:00] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:09:02] ✓ parsed 33 fields
+[11:09:02] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:09:03] ✓ parsed 33 fields
+[11:09:04] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:09:05] ✓ parsed 33 fields
+[11:09:05] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:09:07] ✓ parsed 33 fields
+[11:09:07] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:09:08] ✓ parsed 33 fields
+[11:09:08] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:09:10] ✓ parsed 33 fields
+[11:09:10] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:09:12] ✓ parsed 33 fields
+[11:09:12] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:09:13] ✓ parsed 33 fields
+[11:09:14] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:09:16] ✓ parsed 33 fields
+[11:09:16] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:09:18] ✓ parsed 33 fields
+[11:09:18] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:09:20] ✓ parsed 33 fields
+[11:09:20] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:09:22] ✓ parsed 33 fields
+[11:09:22] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:09:23] ✓ parsed 33 fields
+[11:09:24] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:09:25] ✓ parsed 33 fields
+[11:09:25] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:09:28] ✓ parsed 33 fields
+[11:09:28] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:09:30] ✓ parsed 33 fields
+[11:09:30] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:09:33] ✓ parsed 33 fields
+[11:09:33] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:09:35] ✓ parsed 33 fields
+[11:09:35] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:09:37] ✓ parsed 33 fields
+[11:09:38] click Page suivante
+[11:09:38] === PAGE 2 (1-25) ===
+[11:09:39] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:09:40] ✓ parsed 33 fields
+[11:09:40] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:09:42] ✓ parsed 33 fields
+[11:09:42] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:09:43] ✓ parsed 33 fields
+[11:09:43] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:09:45] ✓ parsed 33 fields
+[11:09:45] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:09:47] ✓ parsed 33 fields
+[11:09:47] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:09:49] ✓ parsed 33 fields
+[11:09:49] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:09:51] ✓ parsed 33 fields
+[11:09:51] → open https://v.my.site.com/resi/a0rJQ000014wtwG?srPos=7&srKp=a0r
+[11:09:53] ✓ parsed 33 fields
+[11:09:53] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=8&srKp=a0r
+[11:09:54] ✓ parsed 33 fields
+[11:09:55] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=9&srKp=a0r
+[11:09:56] ✓ parsed 33 fields
+[11:09:56] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=10&srKp=a0r
+[11:09:58] ✓ parsed 33 fields
+[11:09:58] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=11&srKp=a0r
+[11:10:00] ✓ parsed 33 fields
+[11:10:00] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=12&srKp=a0r
+[11:10:01] ✓ parsed 33 fields
+[11:10:01] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=13&srKp=a0r
+[11:10:03] ✓ parsed 33 fields
+[11:10:03] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=14&srKp=a0r
+[11:10:05] ✓ parsed 33 fields
+[11:10:05] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=15&srKp=a0r
+[11:10:06] ✓ parsed 33 fields
+[11:10:07] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=16&srKp=a0r
+[11:10:08] ✓ parsed 33 fields
+[11:10:09] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=17&srKp=a0r
+[11:10:11] ✓ parsed 33 fields
+[11:10:11] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=18&srKp=a0r
+[11:10:13] ✓ parsed 33 fields
+[11:10:13] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=19&srKp=a0r
+[11:10:15] ✓ parsed 33 fields
+[11:10:15] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=20&srKp=a0r
+[11:10:17] ✓ parsed 33 fields
+[11:10:17] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=21&srKp=a0r
+[11:10:19] ✓ parsed 33 fields
+[11:10:19] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=22&srKp=a0r
+[11:10:21] ✓ parsed 33 fields
+[11:10:21] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=23&srKp=a0r
+[11:10:22] ✓ parsed 33 fields
+[11:10:23] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=24&srKp=a0r
+[11:10:24] ✓ parsed 33 fields
+[11:10:25] click Page suivante
+[11:10:25] === PAGE 3 (1-25) ===
+[11:10:25] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:10:27] ✓ parsed 33 fields
+[11:10:27] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:10:29] ✓ parsed 33 fields
+[11:10:29] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:10:31] ✓ parsed 33 fields
+[11:10:31] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:10:32] ✓ parsed 33 fields
+[11:10:32] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:10:34] ✓ parsed 33 fields
+[11:10:34] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:10:36] ✓ parsed 33 fields
+[11:10:36] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:10:38] ✓ parsed 33 fields
+[11:10:38] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:10:39] ✓ parsed 33 fields
+[11:10:39] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:10:41] ✓ parsed 33 fields
+[11:10:41] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:10:43] ✓ parsed 33 fields
+[11:10:43] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:10:44] ✓ parsed 33 fields
+[11:10:45] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:10:46] ✓ parsed 33 fields
+[11:10:46] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:10:48] ✓ parsed 33 fields
+[11:10:48] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:10:50] ✓ parsed 33 fields
+[11:10:50] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:10:51] ✓ parsed 33 fields
+[11:10:52] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:10:53] ✓ parsed 33 fields
+[11:10:53] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:10:55] ✓ parsed 33 fields
+[11:10:55] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:10:57] ✓ parsed 33 fields
+[11:10:57] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:10:58] ✓ parsed 33 fields
+[11:10:58] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:11:00] ✓ parsed 33 fields
+[11:11:00] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:11:02] ✓ parsed 33 fields
+[11:11:02] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:11:03] ✓ parsed 33 fields
+[11:11:04] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:11:05] ✓ parsed 33 fields
+[11:11:05] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:11:07] ✓ parsed 33 fields
+[11:11:07] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:11:09] ✓ parsed 33 fields
+[11:11:10] click Page suivante
+[11:11:10] === PAGE 4 (1-25) ===
+[11:11:10] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:11:12] ✓ parsed 33 fields
+[11:11:12] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:11:14] ✓ parsed 33 fields
+[11:11:14] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:11:15] ✓ parsed 33 fields
+[11:11:15] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:11:17] ✓ parsed 33 fields
+[11:11:17] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:11:18] ✓ parsed 33 fields
+[11:11:19] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:11:20] ✓ parsed 33 fields
+[11:11:20] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:11:22] ✓ parsed 33 fields
+[11:11:22] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:11:25] ✓ parsed 33 fields
+[11:11:25] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:11:27] ✓ parsed 33 fields
+[11:11:27] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:11:29] ✓ parsed 33 fields
+[11:11:29] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:11:31] ✓ parsed 33 fields
+[11:11:31] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:11:33] ✓ parsed 33 fields
+[11:11:33] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:11:35] ✓ parsed 33 fields
+[11:11:35] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:11:37] ✓ parsed 33 fields
+[11:11:37] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:11:39] ✓ parsed 33 fields
+[11:11:39] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:11:41] ✓ parsed 33 fields
+[11:11:41] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:11:43] ✓ parsed 33 fields
+[11:11:43] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:11:44] ✓ parsed 33 fields
+[11:11:45] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:11:46] ✓ parsed 33 fields
+[11:11:47] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:11:48] ✓ parsed 33 fields
+[11:11:49] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:11:50] ✓ parsed 33 fields
+[11:11:50] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:11:52] ✓ parsed 33 fields
+[11:11:52] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:11:54] ✓ parsed 33 fields
+[11:11:54] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:11:55] ✓ parsed 33 fields
+[11:11:55] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:11:57] ✓ parsed 33 fields
+[11:11:58] click Page suivante
+[11:11:58] === PAGE 5 (1-25) ===
+[11:11:58] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:12:00] ✓ parsed 33 fields
+[11:12:01] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:12:02] ✓ parsed 33 fields
+[11:12:03] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:12:05] ✓ parsed 33 fields
+[11:12:05] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:12:07] ✓ parsed 33 fields
+[11:12:07] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:12:09] ✓ parsed 33 fields
+[11:12:09] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:12:11] ✓ parsed 33 fields
+[11:12:12] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:12:14] ✓ parsed 33 fields
+[11:12:14] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:12:16] ✓ parsed 33 fields
+[11:12:16] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:12:18] ✓ parsed 33 fields
+[11:12:18] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:12:20] ✓ parsed 33 fields
+[11:12:20] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:12:22] ✓ parsed 33 fields
+[11:12:22] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:12:24] ✓ parsed 33 fields
+[11:12:24] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:12:26] ✓ parsed 33 fields
+[11:12:26] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:12:28] ✓ parsed 33 fields
+[11:12:28] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:12:30] ✓ parsed 33 fields
+[11:12:30] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:12:32] ✓ parsed 33 fields
+[11:12:32] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:12:35] ✓ parsed 33 fields
+[11:12:35] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:12:36] ✓ parsed 33 fields
+[11:12:37] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:12:38] ✓ parsed 33 fields
+[11:12:38] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:12:40] ✓ parsed 33 fields
+[11:12:40] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:12:42] ✓ parsed 33 fields
+[11:12:42] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:12:43] ✓ parsed 33 fields
+[11:12:44] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:12:45] ✓ parsed 33 fields
+[11:12:45] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:12:47] ✓ parsed 33 fields
+[11:12:47] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:12:49] ✓ parsed 33 fields
+[11:12:49] click Page suivante
+[11:12:49] === PAGE 6 (1-25) ===
+[11:12:50] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:12:51] ✓ parsed 33 fields
+[11:12:51] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:12:53] ✓ parsed 33 fields
+[11:12:53] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:12:55] ✓ parsed 33 fields
+[11:12:55] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:12:57] ✓ parsed 33 fields
+[11:12:57] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:12:59] ✓ parsed 33 fields
+[11:12:59] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:13:00] ✓ parsed 33 fields
+[11:13:01] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:13:02] ✓ parsed 33 fields
+[11:13:02] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:13:04] ✓ parsed 33 fields
+[11:13:04] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:13:06] ✓ parsed 33 fields
+[11:13:06] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:13:09] ✓ parsed 33 fields
+[11:13:09] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:13:13] ✓ parsed 33 fields
+[11:13:13] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:13:16] ✓ parsed 33 fields
+[11:13:16] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:13:18] ✓ parsed 33 fields
+[11:13:18] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:13:20] ✓ parsed 33 fields
+[11:13:20] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:13:22] ✓ parsed 33 fields
+[11:13:22] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:13:24] ✓ parsed 33 fields
+[11:13:24] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:13:27] ✓ parsed 33 fields
+[11:13:27] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:13:28] ✓ parsed 33 fields
+[11:13:29] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:13:30] ✓ parsed 33 fields
+[11:13:30] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:13:32] ✓ parsed 33 fields
+[11:13:32] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:13:34] ✓ parsed 33 fields
+[11:13:34] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:13:36] ✓ parsed 33 fields
+[11:13:36] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:13:37] ✓ parsed 33 fields
+[11:13:37] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:13:39] ✓ parsed 33 fields
+[11:13:39] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:13:41] ✓ parsed 33 fields
+[11:13:42] click Page suivante
+[11:13:42] === PAGE 7 (1-25) ===
+[11:13:42] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:13:44] ✓ parsed 33 fields
+[11:13:44] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:13:45] ✓ parsed 33 fields
+[11:13:46] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:13:47] ✓ parsed 33 fields
+[11:13:47] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:13:48] ✓ parsed 33 fields
+[11:13:49] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:13:50] ✓ parsed 33 fields
+[11:13:50] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:13:52] ✓ parsed 33 fields
+[11:13:52] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:13:54] ✓ parsed 33 fields
+[11:13:54] → open https://v.my.site.com/resi/a0rJQ000014wtwG?srPos=7&srKp=a0r
+[11:13:55] ✓ parsed 33 fields
+[11:13:56] → open https://v.my.site.com/resi/a0rJQ00000tTjoU?srPos=8&srKp=a0r
+[11:13:57] ✓ parsed 33 fields
+[11:13:57] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=9&srKp=a0r
+[11:13:59] ✓ parsed 33 fields
+[11:13:59] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=10&srKp=a0r
+[11:14:01] ✓ parsed 33 fields
+[11:14:01] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=11&srKp=a0r
+[11:14:03] ✓ parsed 33 fields
+[11:14:03] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=12&srKp=a0r
+[11:14:04] ✓ parsed 33 fields
+[11:14:05] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=13&srKp=a0r
+[11:14:06] ✓ parsed 33 fields
+[11:14:06] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=14&srKp=a0r
+[11:14:08] ✓ parsed 33 fields
+[11:14:08] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=15&srKp=a0r
+[11:14:10] ✓ parsed 33 fields
+[11:14:10] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=16&srKp=a0r
+[11:14:12] ✓ parsed 33 fields
+[11:14:12] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=17&srKp=a0r
+[11:14:14] ✓ parsed 33 fields
+[11:14:14] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=18&srKp=a0r
+[11:14:15] ✓ parsed 33 fields
+[11:14:16] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=19&srKp=a0r
+[11:14:17] ✓ parsed 33 fields
+[11:14:17] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=20&srKp=a0r
+[11:14:19] ✓ parsed 33 fields
+[11:14:19] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=21&srKp=a0r
+[11:14:20] ✓ parsed 33 fields
+[11:14:21] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=22&srKp=a0r
+[11:14:22] ✓ parsed 33 fields
+[11:14:22] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=23&srKp=a0r
+[11:14:24] ✓ parsed 33 fields
+[11:14:24] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=24&srKp=a0r
+[11:14:26] ✓ parsed 33 fields
+[11:14:27] click Page suivante
+[11:14:27] === PAGE 8 (1-25) ===
+[11:14:27] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:14:29] ✓ parsed 33 fields
+[11:14:29] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:14:31] ✓ parsed 33 fields
+[11:14:31] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:14:32] ✓ parsed 33 fields
+[11:14:32] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:14:34] ✓ parsed 33 fields
+[11:14:34] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:14:36] ✓ parsed 33 fields
+[11:14:36] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:14:37] ✓ parsed 33 fields
+[11:14:37] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:14:39] ✓ parsed 33 fields
+[11:14:39] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:14:40] ✓ parsed 33 fields
+[11:14:40] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:14:42] ✓ parsed 33 fields
+[11:14:42] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:14:44] ✓ parsed 33 fields
+[11:14:44] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:14:46] ✓ parsed 33 fields
+[11:14:46] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:14:47] ✓ parsed 33 fields
+[11:14:47] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:14:49] ✓ parsed 33 fields
+[11:14:49] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:14:51] ✓ parsed 33 fields
+[11:14:51] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:14:53] ✓ parsed 33 fields
+[11:14:53] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:14:54] ✓ parsed 33 fields
+[11:14:54] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:14:56] ✓ parsed 33 fields
+[11:14:56] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:14:58] ✓ parsed 33 fields
+[11:14:58] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:15:00] ✓ parsed 33 fields
+[11:15:00] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:15:01] ✓ parsed 33 fields
+[11:15:02] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:15:03] ✓ parsed 33 fields
+[11:15:03] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:15:05] ✓ parsed 33 fields
+[11:15:05] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:15:07] ✓ parsed 33 fields
+[11:15:07] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:15:09] ✓ parsed 33 fields
+[11:15:10] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:15:12] ✓ parsed 33 fields
+[11:15:14] click Page suivante
+[11:15:14] === PAGE 9 (1-25) ===
+[11:15:15] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:15:16] ✓ parsed 33 fields
+[11:15:16] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:15:18] ✓ parsed 33 fields
+[11:15:18] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:15:20] ✓ parsed 33 fields
+[11:15:20] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:15:21] ✓ parsed 33 fields
+[11:15:21] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:15:23] ✓ parsed 33 fields
+[11:15:23] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:15:24] ✓ parsed 33 fields
+[11:15:25] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:15:26] ✓ parsed 33 fields
+[11:15:26] → open https://v.my.site.com/resi/a0rJQ000014wtwG?srPos=7&srKp=a0r
+[11:15:28] ✓ parsed 33 fields
+[11:15:28] → open https://v.my.site.com/resi/a0rJQ00000tTjoU?srPos=8&srKp=a0r
+[11:15:30] ✓ parsed 33 fields
+[11:15:30] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=9&srKp=a0r
+[11:15:32] ✓ parsed 33 fields
+[11:15:32] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=10&srKp=a0r
+[11:15:34] ✓ parsed 33 fields
+[11:15:34] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=11&srKp=a0r
+[11:15:35] ✓ parsed 33 fields
+[11:15:36] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=12&srKp=a0r
+[11:15:37] ✓ parsed 33 fields
+[11:15:37] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=13&srKp=a0r
+[11:15:39] ✓ parsed 33 fields
+[11:15:39] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=14&srKp=a0r
+[11:15:41] ✓ parsed 33 fields
+[11:15:41] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=15&srKp=a0r
+[11:15:42] ✓ parsed 33 fields
+[11:15:42] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=16&srKp=a0r
+[11:15:44] ✓ parsed 33 fields
+[11:15:44] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=17&srKp=a0r
+[11:15:46] ✓ parsed 33 fields
+[11:15:46] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=18&srKp=a0r
+[11:15:47] ✓ parsed 33 fields
+[11:15:47] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=19&srKp=a0r
+[11:15:49] ✓ parsed 33 fields
+[11:15:49] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=20&srKp=a0r
+[11:15:51] ✓ parsed 33 fields
+[11:15:51] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=21&srKp=a0r
+[11:15:52] ✓ parsed 33 fields
+[11:15:52] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=22&srKp=a0r
+[11:15:54] ✓ parsed 33 fields
+[11:15:54] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=23&srKp=a0r
+[11:15:55] ✓ parsed 33 fields
+[11:15:56] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=24&srKp=a0r
+[11:15:57] ✓ parsed 33 fields
+[11:15:58] click Page suivante
+[11:15:58] === PAGE 10 (1-25) ===
+[11:15:58] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:16:00] ✓ parsed 33 fields
+[11:16:00] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:16:01] ✓ parsed 33 fields
+[11:16:01] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:16:03] ✓ parsed 33 fields
+[11:16:03] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:16:04] ✓ parsed 33 fields
+[11:16:05] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:16:06] ✓ parsed 33 fields
+[11:16:07] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:16:08] ✓ parsed 33 fields
+[11:16:08] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:16:10] ✓ parsed 33 fields
+[11:16:10] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:16:11] ✓ parsed 33 fields
+[11:16:12] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:16:13] ✓ parsed 33 fields
+[11:16:13] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:16:15] ✓ parsed 33 fields
+[11:16:15] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:16:16] ✓ parsed 33 fields
+[11:16:16] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:16:18] ✓ parsed 33 fields
+[11:16:18] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:16:20] ✓ parsed 33 fields
+[11:16:20] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:16:21] ✓ parsed 33 fields
+[11:16:21] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:16:23] ✓ parsed 33 fields
+[11:16:23] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:16:25] ✓ parsed 33 fields
+[11:16:26] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:16:28] ✓ parsed 33 fields
+[11:16:28] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:16:30] ✓ parsed 33 fields
+[11:16:30] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:16:31] ✓ parsed 33 fields
+[11:16:31] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:16:33] ✓ parsed 33 fields
+[11:16:33] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:16:35] ✓ parsed 33 fields
+[11:16:35] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:16:36] ✓ parsed 33 fields
+[11:16:37] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:16:38] ✓ parsed 33 fields
+[11:16:38] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:16:40] ✓ parsed 33 fields
+[11:16:40] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:16:42] ✓ parsed 33 fields
+[11:16:44] click Page suivante
+[11:16:44] === PAGE 11 (1-25) ===
+[11:16:44] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:16:46] ✓ parsed 33 fields
+[11:16:46] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:16:47] ✓ parsed 33 fields
+[11:16:48] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:16:49] ✓ parsed 33 fields
+[11:16:49] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:16:51] ✓ parsed 33 fields
+[11:16:51] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:16:53] ✓ parsed 33 fields
+[11:16:53] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:16:54] ✓ parsed 33 fields
+[11:16:54] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:16:56] ✓ parsed 33 fields
+[11:16:56] → open https://v.my.site.com/resi/a0rJQ000014wtwG?srPos=7&srKp=a0r
+[11:16:57] ✓ parsed 33 fields
+[11:16:57] → open https://v.my.site.com/resi/a0rJQ00000tTjoU?srPos=8&srKp=a0r
+[11:16:59] ✓ parsed 33 fields
+[11:16:59] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=9&srKp=a0r
+[11:17:01] ✓ parsed 33 fields
+[11:17:01] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=10&srKp=a0r
+[11:17:03] ✓ parsed 33 fields
+[11:17:03] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=11&srKp=a0r
+[11:17:05] ✓ parsed 33 fields
+[11:17:05] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=12&srKp=a0r
+[11:17:06] ✓ parsed 33 fields
+[11:17:06] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=13&srKp=a0r
+[11:17:08] ✓ parsed 33 fields
+[11:17:08] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=14&srKp=a0r
+[11:17:10] ✓ parsed 33 fields
+[11:17:11] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=15&srKp=a0r
+[11:17:12] ✓ parsed 33 fields
+[11:17:12] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=16&srKp=a0r
+[11:17:14] ✓ parsed 33 fields
+[11:17:14] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=17&srKp=a0r
+[11:17:16] ✓ parsed 33 fields
+[11:17:16] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=18&srKp=a0r
+[11:17:17] ✓ parsed 33 fields
+[11:17:17] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=19&srKp=a0r
+[11:17:19] ✓ parsed 33 fields
+[11:17:19] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=20&srKp=a0r
+[11:17:21] ✓ parsed 33 fields
+[11:17:21] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=21&srKp=a0r
+[11:17:23] ✓ parsed 33 fields
+[11:17:23] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=22&srKp=a0r
+[11:17:24] ✓ parsed 33 fields
+[11:17:24] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=23&srKp=a0r
+[11:17:26] ✓ parsed 33 fields
+[11:17:27] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=24&srKp=a0r
+[11:17:29] ✓ parsed 33 fields
+[11:17:30] click Page suivante
+[11:17:30] === PAGE 12 (1-25) ===
+[11:17:30] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:17:32] ✓ parsed 33 fields
+[11:17:32] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:17:34] ✓ parsed 33 fields
+[11:17:34] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:17:36] ✓ parsed 33 fields
+[11:17:36] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:17:38] ✓ parsed 33 fields
+[11:17:38] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:17:39] ✓ parsed 33 fields
+[11:17:39] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:17:41] ✓ parsed 33 fields
+[11:17:41] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:17:43] ✓ parsed 33 fields
+[11:17:43] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:17:44] ✓ parsed 33 fields
+[11:17:44] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:17:46] ✓ parsed 33 fields
+[11:17:46] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:17:48] ✓ parsed 33 fields
+[11:17:48] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:17:49] ✓ parsed 33 fields
+[11:17:50] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:17:51] ✓ parsed 33 fields
+[11:17:51] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:17:53] ✓ parsed 33 fields
+[11:17:53] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:17:55] ✓ parsed 33 fields
+[11:17:55] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:17:56] ✓ parsed 33 fields
+[11:17:56] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:17:58] ✓ parsed 33 fields
+[11:17:58] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:17:59] ✓ parsed 33 fields
+[11:18:00] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:18:01] ✓ parsed 33 fields
+[11:18:01] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:18:03] ✓ parsed 33 fields
+[11:18:03] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:18:05] ✓ parsed 33 fields
+[11:18:05] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:18:06] ✓ parsed 33 fields
+[11:18:07] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:18:09] ✓ parsed 33 fields
+[11:18:09] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:18:11] ✓ parsed 33 fields
+[11:18:11] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:18:13] ✓ parsed 33 fields
+[11:18:13] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:45:44] Nav → login page
+[11:45:45] ⇒ find #username…
+[11:45:45] ✔ find #username OK
+[11:45:45] ⇒ find name='pw'…
+[11:45:45] ✔ find name='pw' OK
+[11:45:45] ⇒ click #Login…
+[11:45:45] ✔ click #Login OK
+[11:45:47] ⏳ wait phSearchInput
+[11:46:07] login complete
+[11:46:07] search → Beauceville
+[11:46:10] ✔ filtre panel ouvert
+[11:46:11] ✔ Actif=Oui sélectionné
+[11:46:11] FATAL ERROR 'SalesforceScraper' object has no attribute 'rta'
+[11:46:11] Quitting Chrome
+[11:50:08] Nav → login page
+[11:50:08] ⇒ find #username…
+[11:50:08] ✔ find #username OK
+[11:50:09] ⇒ find name='pw'…
+[11:50:09] ✔ find name='pw' OK
+[11:50:09] ⇒ click #Login…
+[11:50:09] ✔ click #Login OK
+[11:50:10] ⏳ wait phSearchInput
+[11:50:37] login complete
+[11:50:37] search → Beauceville
+[11:50:40] ✔ filtre panel ouvert
+[11:50:41] ✔ Actif=Oui sélectionné
+[11:50:42] ✔ RTA=g5x appliqué
+[11:50:42] ✔ filtres appliqués (ID)
+[11:50:42] ✔ table.list visible, prêt à parser
+[11:50:42] === PAGE 1 (1-25) ===
+[11:50:42] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:50:44] ✓ parsed 33 fields
+[11:50:44] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:50:45] ✓ parsed 33 fields
+[11:50:45] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:50:47] ✓ parsed 33 fields
+[11:50:47] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:50:48] ✓ parsed 33 fields
+[11:50:48] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:50:50] ✓ parsed 33 fields
+[11:50:50] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:50:51] ✓ parsed 33 fields
+[11:50:51] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:50:53] ✓ parsed 33 fields
+[11:50:53] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:50:54] ✓ parsed 33 fields
+[11:50:54] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:50:55] ✓ parsed 33 fields
+[11:50:56] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:50:57] ✓ parsed 33 fields
+[11:50:57] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:50:59] ✓ parsed 33 fields
+[11:50:59] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:51:00] ✓ parsed 33 fields
+[11:51:00] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:51:01] ✓ parsed 33 fields
+[11:51:02] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:51:03] ✓ parsed 33 fields
+[11:51:03] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:51:05] ✓ parsed 33 fields
+[11:51:05] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:51:06] ✓ parsed 33 fields
+[11:51:06] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:51:08] ✓ parsed 33 fields
+[11:51:08] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:51:09] ✓ parsed 33 fields
+[11:51:09] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:51:11] ✓ parsed 33 fields
+[11:51:11] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:51:13] ✓ parsed 33 fields
+[11:51:14] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:51:15] ✓ parsed 33 fields
+[11:51:15] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:51:17] ✓ parsed 33 fields
+[11:51:17] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:51:19] ✓ parsed 33 fields
+[11:51:19] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:51:20] ✓ parsed 33 fields
+[11:51:20] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:51:22] ✓ parsed 33 fields
+[11:51:23] click Page suivante
+[11:51:23] === PAGE 2 (1-25) ===
+[11:51:23] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:51:24] ✓ parsed 33 fields
+[11:51:24] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:51:26] ✓ parsed 33 fields
+[11:51:27] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:51:28] ✓ parsed 33 fields
+[11:51:28] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:51:30] ✓ parsed 33 fields
+[11:51:30] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:51:32] ✓ parsed 33 fields
+[11:51:32] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:51:34] ✓ parsed 33 fields
+[11:51:34] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:51:36] ✓ parsed 33 fields
+[11:51:36] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=7&srKp=a0r
+[11:51:37] ✓ parsed 33 fields
+[11:51:38] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=8&srKp=a0r
+[11:51:39] ✓ parsed 33 fields
+[11:51:39] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=9&srKp=a0r
+[11:51:41] ✓ parsed 33 fields
+[11:51:41] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=10&srKp=a0r
+[11:51:43] ✓ parsed 33 fields
+[11:51:43] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=11&srKp=a0r
+[11:51:45] ✓ parsed 33 fields
+[11:51:45] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=12&srKp=a0r
+[11:51:47] ✓ parsed 33 fields
+[11:51:47] → open https://v.my.site.com/resi/a0rJQ00000tTi2o?srPos=13&srKp=a0r
+[11:51:49] ✓ parsed 33 fields
+[11:51:49] → open https://v.my.site.com/resi/a0rJQ000014wtwG?srPos=14&srKp=a0r
+[11:51:50] ✓ parsed 33 fields
+[11:51:51] → open https://v.my.site.com/resi/a0rJQ00000tTjoU?srPos=15&srKp=a0r
+[11:51:52] ✓ parsed 33 fields
+[11:51:53] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=16&srKp=a0r
+[11:51:55] ✓ parsed 33 fields
+[11:51:55] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=17&srKp=a0r
+[11:51:57] ✓ parsed 33 fields
+[11:51:57] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=18&srKp=a0r
+[11:51:59] ✓ parsed 33 fields
+[11:51:59] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=19&srKp=a0r
+[11:52:01] ✓ parsed 33 fields
+[11:52:02] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=20&srKp=a0r
+[11:52:03] ✓ parsed 33 fields
+[11:52:04] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=21&srKp=a0r
+[11:52:07] ✓ parsed 33 fields
+[11:52:07] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=22&srKp=a0r
+[11:52:11] ✓ parsed 33 fields
+[11:52:12] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=23&srKp=a0r
+[11:52:15] ✓ parsed 33 fields
+[11:52:16] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=24&srKp=a0r
+[11:52:19] ✓ parsed 33 fields
+[11:52:20] click Page suivante
+[11:52:21] === PAGE 3 (1-25) ===
+[11:52:21] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:52:24] ✓ parsed 33 fields
+[11:52:25] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:52:28] ✓ parsed 33 fields
+[11:52:28] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:52:31] ✓ parsed 33 fields
+[11:52:31] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:52:35] ✓ parsed 33 fields
+[11:52:35] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:52:38] ✓ parsed 33 fields
+[11:52:39] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:52:42] ✓ parsed 33 fields
+[11:52:43] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:52:46] ✓ parsed 33 fields
+[11:52:47] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:52:50] ✓ parsed 33 fields
+[11:52:50] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:52:53] ✓ parsed 33 fields
+[11:52:53] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:52:56] ✓ parsed 33 fields
+[11:52:57] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:52:59] ✓ parsed 33 fields
+[11:53:00] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:53:03] ✓ parsed 33 fields
+[11:53:03] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:53:06] ✓ parsed 33 fields
+[11:53:07] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:53:11] ✓ parsed 33 fields
+[11:53:11] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:53:15] ✓ parsed 33 fields
+[11:53:16] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:53:19] ✓ parsed 33 fields
+[11:53:19] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:53:23] ✓ parsed 33 fields
+[11:53:23] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:53:25] ✓ parsed 33 fields
+[11:53:25] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:53:27] ✓ parsed 33 fields
+[11:53:27] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:53:29] ✓ parsed 33 fields
+[11:53:29] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:53:30] ✓ parsed 33 fields
+[11:53:30] → open https://v.my.site.com/resi/a0rJQ00001HprhI?srPos=21&srKp=a0r
+[11:53:32] ✓ parsed 33 fields
+[11:53:32] → open https://v.my.site.com/resi/a0rJQ00001HprhJ?srPos=22&srKp=a0r
+[11:53:34] ✓ parsed 33 fields
+[11:53:34] → open https://v.my.site.com/resi/a0rJQ00001HprhK?srPos=23&srKp=a0r
+[11:53:36] ✓ parsed 33 fields
+[11:53:36] → open https://v.my.site.com/resi/a0rJQ00001HprhL?srPos=24&srKp=a0r
+[11:53:37] ✓ parsed 33 fields
+[11:53:39] click Page suivante
+[11:53:39] === PAGE 4 (1-25) ===
+[11:53:39] → open https://v.my.site.com/resi/a0rd0000009aq2V?srPos=0&srKp=a0r
+[11:53:40] ✓ parsed 33 fields
+[11:53:40] → open https://v.my.site.com/resi/a0rAm000000Fqat?srPos=1&srKp=a0r
+[11:53:42] ✓ parsed 33 fields
+[11:53:42] → open https://v.my.site.com/resi/a0rd0000009apPf?srPos=2&srKp=a0r
+[11:53:43] ✓ parsed 33 fields
+[11:53:43] → open https://v.my.site.com/resi/a0rd0000009apTz?srPos=3&srKp=a0r
+[11:53:45] ✓ parsed 33 fields
+[11:53:45] → open https://v.my.site.com/resi/a0rd0000009aptP?srPos=4&srKp=a0r
+[11:53:47] ✓ parsed 33 fields
+[11:53:47] → open https://v.my.site.com/resi/a0rd0000009aptW?srPos=5&srKp=a0r
+[11:53:48] ✓ parsed 33 fields
+[11:53:48] → open https://v.my.site.com/resi/a0rd0000009apts?srPos=6&srKp=a0r
+[11:53:50] ✓ parsed 33 fields
+[11:53:50] → open https://v.my.site.com/resi/a0rJQ00001HpsT6?srPos=7&srKp=a0r
+[11:53:51] ✓ parsed 33 fields
+[11:53:52] → open https://v.my.site.com/resi/a0rJQ00001HpsT7?srPos=8&srKp=a0r
+[11:53:53] ✓ parsed 33 fields
+[11:53:53] → open https://v.my.site.com/resi/a0rJQ00001HpsT8?srPos=9&srKp=a0r
+[11:53:55] ✓ parsed 33 fields
+[11:53:55] → open https://v.my.site.com/resi/a0rJQ00001HpsT9?srPos=10&srKp=a0r
+[11:53:56] ✓ parsed 33 fields
+[11:53:57] → open https://v.my.site.com/resi/a0rJQ00001HpsTA?srPos=11&srKp=a0r
+[11:53:58] ✓ parsed 33 fields
+[11:53:58] → open https://v.my.site.com/resi/a0rJQ00001HpsTB?srPos=12&srKp=a0r
+[11:54:00] ✓ parsed 33 fields
+[11:54:00] → open https://v.my.site.com/resi/a0rJQ00001HpsTC?srPos=13&srKp=a0r
+[11:54:02] ✓ parsed 33 fields
+[11:54:02] → open https://v.my.site.com/resi/a0rJQ00001HpsTD?srPos=14&srKp=a0r
+[11:54:03] ✓ parsed 33 fields
+[11:54:03] → open https://v.my.site.com/resi/a0rJQ00001HpsTE?srPos=15&srKp=a0r
+[11:54:05] ✓ parsed 33 fields
+[11:54:05] → open https://v.my.site.com/resi/a0rJQ00001HpsTF?srPos=16&srKp=a0r
+[11:54:07] ✓ parsed 33 fields
+[11:54:07] → open https://v.my.site.com/resi/a0rJQ00001HpsTG?srPos=17&srKp=a0r
+[11:54:09] ✓ parsed 33 fields
+[11:54:09] → open https://v.my.site.com/resi/a0rJQ00001HpsTH?srPos=18&srKp=a0r
+[11:54:11] ✓ parsed 33 fields
+[11:54:11] → open https://v.my.site.com/resi/a0rJQ00001HprhG?srPos=19&srKp=a0r
+[11:54:13] ✓ parsed 33 fields
+[11:54:13] → open https://v.my.site.com/resi/a0rJQ00001HprhH?srPos=20&srKp=a0r
+[11:54:15] ✓ parsed 33 fields
+[11:54:16] click Page suivante
+[11:54:16] Quitting Chrome
