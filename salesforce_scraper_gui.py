@@ -142,7 +142,7 @@ def build_driver() -> uc.Chrome:
     opts.add_argument("--disable-gpu")
     if CFG["selenium_headless"]:
         opts.add_argument("--headless=new")
-    drv = uc.Chrome(options=opts)
+    drv = uc.Chrome(options=opts, version_main=135)
     drv.maximize_window()
     return drv
 
