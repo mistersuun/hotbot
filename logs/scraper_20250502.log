@@ -1,0 +1,28 @@
+[00:25:54] FATAL ERROR 
+---------------------
+Could not determine browser executable.
+---------------------
+Make sure your browser is installed in the default location (path).
+If you are sure about the browser executable, you can specify it using
+the `browser_executable_path='c:/path/to/your/browser.exe` parameter.
+
+
+[00:28:08] Nav → login page
+[00:28:08] ⇒ find #username…
+[00:28:08] ✔ find #username OK
+[00:28:09] ⇒ find name='pw'…
+[00:28:09] ✔ find name='pw' OK
+[00:28:09] ⇒ click #Login…
+[00:28:09] ✔ click #Login OK
+[00:28:09] ⏳ wait phSearchInput
+[00:29:09] MFA timeout – pause
+[00:30:34] Nav → login page
+[00:30:35] ⇒ find #username…
+[00:30:35] ✔ find #username OK
+[00:30:35] ⇒ find name='pw'…
+[00:30:35] ✔ find name='pw' OK
+[00:30:35] ⇒ click #Login…
+[00:30:35] ✔ click #Login OK
+[00:30:35] ⏳ wait phSearchInput
+[00:30:52] FATAL ERROR 'NoneType' object has no attribute 'is_displayed'
+[00:30:52] Quitting Chrome

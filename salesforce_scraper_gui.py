@@ -135,6 +135,8 @@ def fetch_streets_for_city(rel_id: int) -> List[str]:
     return sorted(names)
 
 # ── Selenium helpers ────────────────────────────────────────────────────
+BASE_DIR = pathlib.Path(__file__).resolve().parent
+
 def build_driver() -> uc.Chrome:
     opts = uc.ChromeOptions()
     opts.add_argument("--no-sandbox")
@@ -142,9 +144,13 @@ def build_driver() -> uc.Chrome:
     opts.add_argument("--disable-gpu")
     if CFG["selenium_headless"]:
         opts.add_argument("--headless=new")
-    drv = uc.Chrome(options=opts, version_main=135)
-    drv.maximize_window()
-    return drv
+
+    # ← tell ChromeDriver exactly which chrome.exe to use:
+    opts.binary_location = str(BASE_DIR / "chrome" / "chrome.exe")
+
+    driver = uc.Chrome(options=opts, version_main=136)
+    driver.maximize_window()
+    return driver
 
 def wait_visible(drv, by, val, timeout=20):
     return WebDriverWait(drv, timeout).until(EC.visibility_of_element_located((by, val)))

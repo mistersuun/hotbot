@@ -5,7 +5,7 @@ a = Analysis(
     ['salesforce_scraper_gui.py'],
     pathex=[],
     binaries=[],
-    datas=[('config.json', '.'), ('data', 'data'), ('helpers', 'helpers')],
+    datas=[('config.json', '.'), ('data', 'data'), ('helpers', 'helpers'), ('chrome', 'chrome')],
     hiddenimports=['customtkinter', 'undetected_chromedriver'],
     hookspath=[],
     hooksconfig={},

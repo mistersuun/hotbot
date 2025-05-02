@@ -1,2 +1,8 @@
 .venv/
 venv/
+
+.build
+build/
+
+.log
+log/
