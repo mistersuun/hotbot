@@ -34,3 +34,8 @@ htmlcov/
 .coverage
 .pytest_cache/
 .mypy_cache/
+
+./chrome
+/chrome
+
+/build
