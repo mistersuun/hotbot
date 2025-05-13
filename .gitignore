@@ -1,8 +1,36 @@
-.venv/
+# Python artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# virtualenv
 venv/
+.env/
+.Python
 
-.build
+# editors, OS files
+*.sublime-project
+*.sublime-workspace
+*.idea/
+*.vscode/
+.DS_Store
+Thumbs.db
+
+# logs and runtime data
+logs/
+data/
+
+# local Chrome bundle (if you’re shipping chrome-win64 alongside your code)
+chrome/
+chrome-win64/
+
+# PyInstaller build artifacts (if you ever build .exe)
+dist/
 build/
+*.spec
 
-.log
-log/
+# cache, coverage, pytest, mypy, etc.
+htmlcov/
+.coverage
+.pytest_cache/
+.mypy_cache/

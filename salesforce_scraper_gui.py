@@ -478,30 +478,45 @@ class SalesforceScraper(threading.Thread):
             except Exception as e2:
                 self._dbg(f"❌ échec apply fallback XPath ({e2})")
                 raise
-
+        
         # 5) Attendre la table des résultats
         WebDriverWait(d, 15).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, "table.list"))
         )
         self._dbg("✔ table.list visible, prêt à parser")
 
-    # --------------------------------------------------------------------
-    def _scrape_door(self, href: str):
+    # ─── telebot/handlers/salesforce_scraper.py  (ou le fichier équivalent) ────
+    from selenium.webdriver.common.by import By
+    from selenium.webdriver.support.ui import WebDriverWait
+    from selenium.webdriver.support import expected_conditions as EC
+
+    def _scrape_door(self, href: str) -> dict | None:
+        """
+        1. Ouvre <href> dans un NOUVEL onglet (fini les filtres qui sautent).
+        2. Parse exactement comme avant avec safe_find + <td> pairs.
+        3. Ferme l’onglet et revient sur la liste.
+        """
         if self._stop_evt.is_set():
             return None
 
-        d = self.driver
-        self._dbg(f"→ open {href}")
+        d    = self.driver
+        wait = WebDriverWait(d, 5)
         main = d.current_window_handle
 
-        # Ouvre dans le même onglet (plus de fermeture d’onglet ⇒ pas de ‘no such window’)
+        # ── 1) nouvel onglet vierge
+        d.switch_to.new_window("tab")
         d.get(href)
 
         try:
-            tbl = safe_find(d, "#ep table.detailList")
-            tds = [td.text.strip() or None for td in tbl.find_elements(By.TAG_NAME, "td")]
-            rec = {tds[i]: tds[i + 1] for i in range(0, len(tds), 2)
+            # ── 2) parsing “ancien style” — on ne change rien
+            tbl = safe_find(d, "#ep table.detailList")     # votre helper existant
+            tds = [td.text.strip() or None
+                for td in tbl.find_elements(By.TAG_NAME, "td")]
+
+            rec = {tds[i]: tds[i + 1]
+                for i in range(0, len(tds), 2)
                 if i + 1 < len(tds) and tds[i]}
+
             self._dbg(f"✓ parsed {len(rec)} fields")
             return rec
 
@@ -510,9 +525,14 @@ class SalesforceScraper(threading.Thread):
             return None
 
         finally:
-            # revient à la liste (flèche Retour) plutôt que gérer les fenêtres
-            d.back()
-            safe_find(d, "table.list")       # s’assurer que la liste est revenue
+            # ── 3) nettoyage
+            try:
+                d.close()                       # referme l’onglet détail
+            finally:
+                d.switch_to.window(main)        # retourne à la liste
+                # petit wait pour garantir que la table est de nouveau interactive
+                wait.until(EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, "table.list tr.dataRow")))
 
     # ---- main thread method --------------------------------------------
     def run(self):
@@ -522,97 +542,106 @@ class SalesforceScraper(threading.Thread):
                 return
             self._search_and_filter()
 
-            page_no     = 0          # page courante
-            total_pages = None       # inconnu tant qu’on n’a pas vu la dernière
+            page_no     = 0
+            total_pages = None
+            more        = True
 
-            more = True
             while more and not self._stop_evt.is_set():
                 page_no += 1
 
-                # ── range "(x-y)" ───────────────────────────────────────────
+                # ── (1) info plage "x‑y" ─────────────────────────────────────
                 try:
                     range_text = WebDriverWait(self.driver, 5).until(
-                        EC.visibility_of_element_located(
-                            (By.CSS_SELECTOR, ".itemsRange"))
-                    ).text            # ex : "(1-25)"
+                        EC.visibility_of_element_located((By.CSS_SELECTOR, ".itemsRange"))
+                    ).text                      # ex. "(1-25)"
                 except TimeoutException:
                     range_text = "(?)"
 
                 self._dbg(f"=== PAGE {page_no} {range_text} ===")
 
-                # ── liens de la page ────────────────────────────────────────
+                # ── (2) collecter tous les liens de la page ──────────────────
                 links = [a.get_attribute("href") for a in
-                        self.driver.find_elements(
-                            By.CSS_SELECTOR, "table.list tr.dataRow th a")]
+                        self.driver.find_elements(By.CSS_SELECTOR,
+                                                "table.list tr.dataRow th a")]
+                if not links:                      # aucune ligne => on s’arrête
+                    self._dbg("🚨 aucun enregistrement trouvé, arrêt boucle")
+                    break
 
                 for href in links:
                     rec = self._scrape_door(href)
                     if rec:
                         self.doors.append(rec)
 
-                # ── % d’avancement ─────────────────────────────────────────
+                # ── (3) progression GUI ─────────────────────────────────────
                 pct = None if total_pages is None else page_no / total_pages
                 self.gui_q.put(("progress", page_no, range_text,
                                 len(self.doors), pct))
 
-                # ── page suivante ? ────────────────────────────────────────
+                # ── (4) tenter d’avancer ────────────────────────────────────
                 try:
-                    # s’assurer que le footer est rendu
-                    self.driver.execute_script(
-                        "window.scrollTo(0, document.body.scrollHeight);")
+                    # s’assurer que le footer est visible
+                    self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
                     nxt_img = WebDriverWait(self.driver, 5).until(
                         EC.presence_of_element_located(
-                            (By.CSS_SELECTOR,
-                            ".pSearchShowMore a.nextArrow > img"))
+                            (By.CSS_SELECTOR, ".pSearchShowMore a.nextArrow > img"))
                     )
+
                     if "disabled" in nxt_img.get_attribute("src"):
                         total_pages = page_no
-                        more = False
+                        more = False                       # dernière page
                     else:
                         self._dbg("click Page suivante")
-                        self.driver.execute_script(
-                            "arguments[0].parentElement.click()", nxt_img)
+                        self.driver.execute_script("arguments[0].parentElement.click()", nxt_img)
+
+                        # attendre que le nouveau tableau réapparaisse
                         WebDriverWait(self.driver, 15).until(
                             EC.visibility_of_element_located(
-                                (By.CSS_SELECTOR, "table.list")))
+                                (By.CSS_SELECTOR, "table.list tr.dataRow"))
+                        )
+
                 except Exception as e:
                     self._dbg(f"no next page ({e})")
                     total_pages = page_no
                     more = False
 
-            # ── export JSON + CSV ──────────────────────────────────────────
-            ts = datetime.now().strftime("%Y%m%d-%H%M%S")
-
-            # prefix = city[_street][_rta]
-            parts = [_slug(self.city)]
-            if self.street:
-                parts.append(_slug(self.street))
-            if self.rta:
-                parts.append(_slug(self.rta))
+            # ── (5) EXPORTS ──────────────────────────────────────────────────
+            ts     = datetime.now().strftime("%Y%m%d-%H%M%S")
+            parts  = [_slug(self.city)]
+            if self.street: parts.append(_slug(self.street))
+            if self.rta:    parts.append(_slug(self.rta))
             prefix = "_".join(parts)
 
             json_path = DATA_DIR / f"doors_{prefix}_{ts}.json"
             csv_path  = DATA_DIR / f"doors_{prefix}_{ts}.csv"
 
-            json_path.write_text(
-                json.dumps(self.doors, ensure_ascii=False, indent=2),
-                encoding="utf-8"
-            )
+            # même si aucune porte n’a été trouvée, écrire un fichier JSON vide
+            json_path.write_text(json.dumps(self.doors, ensure_ascii=False, indent=2),
+                                encoding="utf-8")
 
-            import csv
+            # ➊ si aucune fiche => CSV minimal + message GUI puis retour
+            if not self.doors:
+                with open(csv_path, "w", newline="", encoding="utf-8") as f:
+                    csv.writer(f).writerow(["city", "street", "rta"])   # en‑tête simple
+                self.gui_q.put(("done", str(json_path), str(csv_path), 0))
+                return
+
+            # ➋ construire l’ensemble complet des champs rencontrés
+            all_keys = set().union(*(rec.keys() for rec in self.doors))
+            header   = ["city", "street", "rta"] + sorted(all_keys)
+
             with open(csv_path, "w", newline="", encoding="utf-8") as f:
                 w = csv.writer(f)
-                header = ["city", "street", "rta"] + list(self.doors[0].keys())
                 w.writerow(header)
                 for rec in self.doors:
                     w.writerow([
                         self.city,
                         self.street or "",
-                        self.rta    or ""
-                    ] + [rec.get(k, "") for k in header[3:]])
+                        self.rta    or "",
+                        *[rec.get(k, "") for k in sorted(all_keys)]
+                    ])
 
             self.gui_q.put(("done", str(json_path), str(csv_path), len(self.doors)))
-
 
         except Exception as e:
             self._dbg(f"FATAL ERROR {e}")
