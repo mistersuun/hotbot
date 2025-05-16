@@ -404,9 +404,19 @@ class ClicDetailScraper(threading.Thread):
         try:
             contact_el = d.find_element(By.CSS_SELECTOR, contact_css)
             parts = [ln.strip() for ln in contact_el.text.splitlines() if ln.strip()]
-            # typically: [ email, language, phone, …]
-            out["Courriel"]  = parts[0]
-            out["Téléphone"] = parts[2]
+
+            # find any email‐looking part
+            email = next((p for p in parts if "@" in p), "")
+
+            # find any phone‐looking part (e.g. 418 588-4462 or 4185884462)
+            phone = next(
+                (p for p in reversed(parts)
+                if re.search(r"\d{3}[\s\-]?\d{3}[\s\-]?\d{4}", p)),
+                ""
+            )
+
+            out["Courriel"]  = email or "N/A"
+            out["Téléphone"] = phone or "N/A"
             self._dbg("✔ step ⑥: extracted Courriel & Téléphone")
         except Exception as e:
             self._dbg(f"❌ compte {account} step ⑥ (extract contact): {e}")
