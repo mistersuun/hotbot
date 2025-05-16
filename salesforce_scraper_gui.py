@@ -441,74 +441,70 @@ class ClicDetailScraper(threading.Thread):
     # ---------- thread main ---------------------------------------------
     def run(self):
         try:
+            # 1) Read all accounts to scrape
             accts = self._accounts_from_file(self.path)
             if not accts:
-                self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client »."))
-                return
+                self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client ».")); return
 
+            # 2) Scrape details
             self.driver = build_driver()
             self._login_and_ready()
-
             for idx, acc in enumerate(accts, 1):
                 if self._stop_evt.is_set():
                     self._dbg("⏹ Specifics stopped by user")
                     break
-
-                # 2) respect GUI pause
+                # respect GUI pause
                 while self.pause_evt.is_set() and not self._stop_evt.is_set():
                     time.sleep(0.3)
-
                 info = self._scrape_one(acc)
                 if info:
                     self.rows.append(info)
                 self.gui_q.put(("detail_progress", idx, len(accts)))
 
-            # ── export CSV ───────────────────────────────────────────────
+            # 3) Build a lookup of scraped details
+            details_map = { r["Compte client"]: {"Courriel": r["Courriel"], "Téléphone": r["Téléphone"]} 
+                            for r in self.rows }
+
+            # 4) Read original doors CSV into list of dicts
+            with open(self.path, encoding="utf-8", newline="") as f:
+                reader = csv.DictReader(f)
+                original_rows = list(reader)
+                # capture your original columns
+                template_cols = list(reader.fieldnames)
+            
+            # 5) Append our two new columns
+            template_cols += ["Courriel", "Téléphone"]
+
+            # 6) Merge: for each original row, inject scraped details (or N/A)
+            merged = []
+            for row in original_rows:
+                acct = row.get("Compte client", "")
+                info = details_map.get(acct, {})
+                row["Courriel"] = info.get("Courriel", "N/A")
+                row["Téléphone"] = info.get("Téléphone", "N/A")
+                merged.append(row)
+
+            # 7) Write out the final CSV with headers in the correct order
             ts = datetime.now().strftime("%Y%m%d-%H%M%S")
             prefix = _slug(self.path.stem.replace("doors_", ""))
-            out = self.dest_dir / f"specifics_{prefix}_{ts}.csv"   # 1️⃣ écrit direct
+            out = self.dest_dir / f"specifics_{prefix}_{ts}.csv"
 
             with out.open("w", newline="", encoding="utf-8") as f:
-                w = csv.DictWriter(f, fieldnames=self.rows[0].keys())
-                w.writeheader(); w.writerows(self.rows)
+                writer = csv.DictWriter(f, fieldnames=template_cols)
+                writer.writeheader()
+                writer.writerows(merged)
 
-            # ② signal + ouverture
-            self.gui_q.put(("detail_done", str(out), len(self.rows)))
+            # 8) Signal done
+            self.gui_q.put(("detail_done", str(out), len(merged)))
             open_folder(self.dest_dir)
-            return                         # ← plus rien après
-
-
-            with out.open("w", newline="", encoding="utf-8") as f:
-                w = csv.DictWriter(f, fieldnames=self.rows[0].keys())
-                w.writeheader()
-                w.writerows(self.rows)
-
-            self.gui_q.put(("detail_done", str(out), len(self.rows)))
 
         except Exception as e:
             self.gui_q.put(("error", str(e)))
         finally:
-            # — EXPORT inconditionnel -----------------------------------------
-            try:
-                if self.rows:
-                    ts = datetime.now().strftime("%Y%m%d-%H%M%S")
-                    prefix = _slug(self.path.stem.replace("doors_", ""))
-                    out = self.dest_dir / f"specifics_{prefix}_{ts}.csv"
-
-                    with out.open("w", newline="", encoding="utf-8") as f:
-                        w = csv.DictWriter(f, fieldnames=self.rows[0].keys())
-                        w.writeheader(); w.writerows(self.rows)
-
-                    self.gui_q.put(("detail_done", str(out), len(self.rows)))
-                else:
-                    self._dbg("aucun compte exporté")
-            except Exception as exp:
-                self._dbg(f"❌ export final failed : {exp}")
-                self.gui_q.put(("error", f"export failed: {exp}"))
-            finally:
-                if self.driver:
-                    with contextlib.suppress(Exception):
-                        self.driver.quit()
+            # ensure driver quits
+            if self.driver:
+                with contextlib.suppress(Exception):
+                    self.driver.quit()
 
 # ── Thread Worker ───────────────────────────────────────────────────────
 class SalesforceScraper(threading.Thread):
