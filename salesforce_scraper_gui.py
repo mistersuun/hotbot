@@ -1084,8 +1084,8 @@ class ScraperGUI:
         # — Boutons Start / Specifics / Pause / Stop —
         btn_f = ctk.CTkFrame(self.root)
         btn_f.pack(pady=8)
-        self.start_btn = ctk.CTkButton(btn_f, text="▶ Start", width=160, command=self._start)
-        self.detail_btn = ctk.CTkButton(btn_f, text="📄 Get specifics", width=160, state="normal", command=self._start_details)
+        self.start_btn = ctk.CTkButton(btn_f, text="▶ Door Scrape", width=160, command=self._start)
+        self.detail_btn = ctk.CTkButton(btn_f, text="📄 Get Numbers", width=160, state="normal", command=self._start_details)
         self.pause_btn = ctk.CTkButton(btn_f, text="Pause", width=160, state="disabled", command=self._toggle_pause)
         self.stop_btn  = ctk.CTkButton(btn_f, text="■ Stop",  width=160, state="disabled", command=self._stop_worker)
         self.start_btn.grid(row=0, column=0, padx=6)
@@ -1187,6 +1187,7 @@ class ScraperGUI:
         )
         self._log(f"▶ Specifics : {doors_fp} → {dst_dir}")
         self.detail_scraper.start()
+        self.stop_btn.configure(state="normal")
 
     def _log(self, txt: str):
         ts = datetime.now().strftime("[%H:%M:%S] ")
