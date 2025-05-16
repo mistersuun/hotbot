@@ -468,26 +468,31 @@ class ClicDetailScraper(threading.Thread):
             import pandas as pd
             doors_df = pd.read_csv(self.path, encoding="utf-8", header=1)
 
+            salesforce=[]
+            #print(doors_df)
+            for row in doors_df:
+                print(row)
+                salesforce.append(row)
+            print(salesforce)
             # 5) build a DataFrame of the scraped phones & emails
             specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone", "Courriel"]]
 
             # 6) merge on Compte client
-            merged = pd.merge(doors_df,
-                              specs_df,
-                              on="Compte client",
-                              how="left")
+            #merged = pd.merge(doors_df,
+            #                  specs_df,
+            #                  on="Compte client",
+            #                  how="left")
 
             # 7) assemble exactly the eight Template columns
             output = pd.DataFrame({
-                "RUE": merged["street"],
-                "ADRESSE": merged["Résidence"],
-                "CLIENT": merged["Client"],
-                "NUMÉRO DE TÉLÉPHONE": merged["Téléphone"],
-                "COURRIEL": merged["Courriel"],
-                "NUMÉRO DE COMPTE": merged["Compte client"],
-                "SERVICES ACTUELS": merged["Services actuels"],
-                "DERNIER STATUT": merged["Dernier statut"],
-                "SERVICE AVANT DEBRANCHEMENT": merged["Services avant débranchement"]
+                "ADRESSE": doors_df["Résidence"],
+                "CLIENT": doors_df["Client"],
+                "NUMÉRO DE TÉLÉPHONE": specs_df["Téléphone"],
+                "COURRIEL": specs_df["Courriel"],
+                "NUMÉRO DE COMPTE": doors_df["Compte client"],
+                "SERVICES ACTUELS": doors_df["Services actuels"],
+                "DERNIER STATUT": doors_df["Dernier statut"],
+                "SERVICE AVANT DEBRANCHEMENT": doors_df["Services avant débranchement"]
             })
 
             # 8) write out an .xlsx
@@ -1084,8 +1089,8 @@ class ScraperGUI:
         # — Boutons Start / Specifics / Pause / Stop —
         btn_f = ctk.CTkFrame(self.root)
         btn_f.pack(pady=8)
-        self.start_btn = ctk.CTkButton(btn_f, text="▶ Door Scrape", width=160, command=self._start)
-        self.detail_btn = ctk.CTkButton(btn_f, text="📄 Get Numbers", width=160, state="normal", command=self._start_details)
+        self.start_btn = ctk.CTkButton(btn_f, text="▶ Start", width=160, command=self._start)
+        self.detail_btn = ctk.CTkButton(btn_f, text="📄 Get specifics", width=160, state="normal", command=self._start_details)
         self.pause_btn = ctk.CTkButton(btn_f, text="Pause", width=160, state="disabled", command=self._toggle_pause)
         self.stop_btn  = ctk.CTkButton(btn_f, text="■ Stop",  width=160, state="disabled", command=self._stop_worker)
         self.start_btn.grid(row=0, column=0, padx=6)
@@ -1187,7 +1192,6 @@ class ScraperGUI:
         )
         self._log(f"▶ Specifics : {doors_fp} → {dst_dir}")
         self.detail_scraper.start()
-        self.stop_btn.configure(state="normal")
 
     def _log(self, txt: str):
         ts = datetime.now().strftime("[%H:%M:%S] ")
