@@ -246,6 +246,10 @@ class ClicDetailScraper(threading.Thread):
         self.clic_pwd  = clic_pwd
         self.rows: list[dict] = []
         self.dest_dir = dest_dir
+        self._stop_evt = threading.Event()
+
+    def stop(self):
+        self._stop_evt.set()
     # ---------- helpers --------------------------------------------------
     def _dbg(self, txt: str):
         self.gui_q.put(("log", txt))
@@ -446,9 +450,14 @@ class ClicDetailScraper(threading.Thread):
             self._login_and_ready()
 
             for idx, acc in enumerate(accts, 1):
-                if self.pause_evt.is_set():                     # pause gérée par le GUI
-                    while self.pause_evt.is_set():
-                        time.sleep(0.3)
+                if self._stop_evt.is_set():
+                    self._dbg("⏹ Specifics stopped by user")
+                    break
+
+                # 2) respect GUI pause
+                while self.pause_evt.is_set() and not self._stop_evt.is_set():
+                    time.sleep(0.3)
+
                 info = self._scrape_one(acc)
                 if info:
                     self.rows.append(info)
@@ -1242,7 +1251,9 @@ class ScraperGUI:
     def _stop_worker(self):
         if self.worker and self.worker.is_alive():
             self.worker.stop()
-            self._log("⏹ Arrêt demandé…")
+        if hasattr(self, 'detail_scraper') and self.detail_scraper.is_alive():
+            self.detail_scraper.stop()
+        self._log("⏹ Arrêt demandé…")
         self.pause_evt.clear()
 
     def _poll_queue(self):
