@@ -16,3 +16,9 @@ Traceback (most recent call last):
     from distutils.version import LooseVersion
 ModuleNotFoundError: No module named 'distutils'
 PS C:\Users\elfathio\Documents\hotbot> 
+
+cd path\to\your\project
+mkdir chrome
+curl -L "https://download-chromium.appspot.com/dl/Win_x64?type=snapshots" -o chrome\chromium.zip
+
+Expand-Archive chrome\chromium.zip -DestinationPath chrome
