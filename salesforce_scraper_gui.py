@@ -181,7 +181,7 @@ def build_driver() -> uc.Chrome:
         opts.add_argument("--headless=new")
 
     # ← tell ChromeDriver exactly which chrome.exe to use:
-    opts.binary_location = str(BASE_DIR / "chrome" / "chrome.exe")
+    #opts.binary_location = str(BASE_DIR / "chrome" / "chrome.exe")
 
     driver = uc.Chrome(options=opts, version_main=136)
     driver.maximize_window()
@@ -982,7 +982,7 @@ class ScraperGUI:
         self.pwd_var    = tk.StringVar(value="Brick2025$")
         self.clic_user_var   = tk.StringVar()
         self.clic_pwd_var    = tk.StringVar()
-        self.clic_user_var   = tk.StringVar(value="elfathio0")
+        self.clic_user_var   = tk.StringVar(value="elfathio")
         self.clic_pwd_var    = tk.StringVar(value="Videotron2025$")
         self.city_var   = tk.StringVar()
         self.street_var = tk.StringVar()
