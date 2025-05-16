@@ -16,4 +16,6 @@ python -m PyInstaller --onefile --noconsole `
   --hidden-import undetected_chromedriver `
   salesforce_scraper_gui.py
   
-python -m Pyinstaller --onefile --noconsole  --add-data "config.json;." --add-data "data;data" --add-data "helpers;helpers" --hidden-import customtkinter --hidden-import undetected_chromedriver   salesforce_scraper_gui.pypyinstaller --onefile --noconsole  --add-data "config.json;." --add-data "data;data" --add-data "helpers;helpers" --hidden-import customtkinter --hidden-import undetected_chromedriver   salesforce_scraper_gui.py
+python -m Pyinstaller --onefile --noconsole  --add-data "config.json;." --add-data "data;data" --add-data "helpers;helpers" --hidden-import customtkinter --hidden-import undetected_chromedriver   salesforce_scraper_gui.py
+
+pyinstaller --onefile --noconsole  --add-data "config.json;." --add-data "data;data" --add-data "helpers;helpers" --add-data "chrome;chrome" --hidden-import customtkinter --hidden-import undetected_chromedriver   salesforce_scraper_gui.py 

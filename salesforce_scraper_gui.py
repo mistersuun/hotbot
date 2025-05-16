@@ -44,7 +44,42 @@ LOG_DIR       = BASE_DIR / "logs"
 CITIES_CACHE  = DATA_DIR / "qc_cities.json"
 CONFIG_PATH   = BASE_DIR / "config.json"
 
+LOCATORS = {
+    "input":     (By.CSS_SELECTOR,
+                "input[name='account.sgaAccountNumber']"),   # unique name attr
+    "search_btn":(By.XPATH,
+                "//button[@data-qa='_StyledButton' and"
+                "        descendant::span[normalize-space()='Rechercher']]"),
+    "header":    (By.CSS_SELECTOR,
+                "[data-qa='clic__Header'], .header_container___mGxJS"),
+    # the little magnifying-glass that brings the search box back
+    "reopen":    (By.XPATH,
+                "//*[(self::span or self::i)        "
+                "   and contains(@class,'fa-search')]/ancestor::a[1]")
+}
+
 DATA_DIR.mkdir(exist_ok=True), LOG_DIR.mkdir(exist_ok=True)
+
+import sys, os, shutil, subprocess
+from pathlib import Path
+import tkinter.filedialog as fd
+
+def downloads_dir() -> Path:
+    if sys.platform.startswith("win"):
+        return Path(os.path.expandvars(r"%USERPROFILE%\\Downloads"))
+    xdg = os.getenv("XDG_DOWNLOAD_DIR")
+    return Path(xdg) if xdg else Path.home() / "Downloads"
+
+def open_folder(p: Path):
+    try:
+        if sys.platform.startswith("win"):
+            os.startfile(p)
+        elif sys.platform.startswith("darwin"):
+            subprocess.Popen(["open", p])
+        else:
+            subprocess.Popen(["xdg-open", p])
+    except Exception:
+        pass
 
 DEFAULT_CFG = {
     "max_parallel_tabs": 5,
@@ -196,14 +231,15 @@ class ClicDetailScraper(threading.Thread):
     URL = "https://clicplus.int.videotron.com/vui/#/clic/infos-externes"
 
     def __init__(self, doors_path: Path,
-                 gui_q: queue.Queue, pause_evt: threading.Event):
+                 gui_q: queue.Queue, pause_evt: threading.Event,
+                 dest_dir: Path):
         super().__init__(daemon=True)
         self.path      = doors_path
         self.gui_q     = gui_q
         self.pause_evt = pause_evt
         self.driver: Optional[uc.Chrome] = None
         self.rows: list[dict] = []
-
+        self.dest_dir = dest_dir
     # ---------- helpers --------------------------------------------------
     def _dbg(self, txt: str):
         self.gui_q.put(("log", txt))
@@ -224,41 +260,141 @@ class ClicDetailScraper(threading.Thread):
         return WebDriverWait(self.driver, to).until(
             EC.visibility_of_element_located((by, sel)))
 
+    # ───── ClicDetailScraper._login_and_ready  (remplace l’ancienne version)
     def _login_and_ready(self):
         d = self.driver
         d.get(self.URL)
-        self._dbg("→ waiting Continuer…")
-        self._wait(By.CSS_SELECTOR, "button.wrapper___2na1A").click()
 
-        self._dbg("→ waiting Recherche icon…")
-        self._wait(By.CSS_SELECTOR, ".search_wrapper___39tl7 a").click()
+        # ① « Continuer » : utilise l’attribut data‑qa fixe, pas le nom de classe
+        #cont = WebDriverWait(d, 30).until(
+        #    EC.element_to_be_clickable(
+        #        (By.CSS_SELECTOR, "button[data-qa='clic_infos-externes_StyledButton']"))
+        #)
+        #cont.click()
+        #self._dbg("✔ click Continuer")
 
-    def _scrape_one(self, acc: str) -> Optional[dict]:
-        d = self.driver
+        # ② attendre l’input *ou* le bouton Recherche
         try:
-            inp = self._wait(By.CSS_SELECTOR, "input[name='account.sgaAccountNumber']")
+            WebDriverWait(d, 30).until(
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR, "input[name='account.sgaAccountNumber']"))
+            )
+            self._dbg("✔ champ compte visible")
+            return
+        except TimeoutException:
+            pass                                   # il faut d’abord ouvrir le panneau
+
+        # ③ cliquer sur l’icône Recherche (l’attribut data‑qa n’existe pas, on combine)
+        search_btn = WebDriverWait(d, 15).until(
+            EC.element_to_be_clickable((
+                By.CSS_SELECTOR,
+                ".search_wrapper___39tl7 a, .fa-search"        # 2 fallbacks
+            ))
+        )
+        search_btn.click()
+        self._dbg("✔ click Recherche")
+
+        WebDriverWait(d, 15).until(
+            EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, "input[name='account.sgaAccountNumber']"))
+        )
+        self._dbg("✔ champ compte visible")
+
+    def _scrape_one(self, account: str) -> Optional[dict]:
+        """Return a dict of all header fields—or None if phone never appeared."""
+        d     = self.driver
+        wait  = WebDriverWait(d, 10)
+        out   = {"Compte client": account}
+
+        # ② ─ Make sure the account input is clickable (open panel if needed)
+        try:
+            inp = wait.until(EC.element_to_be_clickable(LOCATORS["input"]))
+        except TimeoutException:
+            # panel was closed, click the magnifier to reopen
+            try:
+                icon = wait.until(EC.element_to_be_clickable(LOCATORS["reopen"]))
+                icon.click()
+                inp = wait.until(EC.element_to_be_clickable(LOCATORS["input"]))
+            except Exception as e:
+                self._dbg(f"❌ compte {account} step ② (open panel): {e}")
+                return None
+
+        try:
             inp.clear()
-            inp.send_keys(acc)
-            d.find_element(By.CSS_SELECTOR,
-                "button.wrapper___2na1A[type='submit'] span").click()
-
-            # attendre que le header se charge (contient le n° compte)
-            self._wait(By.CSS_SELECTOR, ".header_container___mGxJS")
-
-            # récupérer quelques champs :
-            out: dict[str, str] = {"Compte client": acc}
-            out["Adresse"] = d.find_element(
-                By.CSS_SELECTOR, "[data-qa='clic__Address']").text
-            out["Courriel"] = d.find_element(
-                By.CSS_SELECTOR, "[data-qa='clic__Contact'] .email___ftlWz").text
-            out["Téléphone"] = d.find_element(
-                By.CSS_SELECTOR, "[data-qa='clic__Contact'] span").text
-            out["Mensualité"] = d.find_element(
-                By.XPATH, "//span[contains(text(),'Mensualité')]/../div/span").text
-            return out
-        except Exception as e:                       # compte peut être invalide
-            self._dbg(f"⚠ compte {acc} : {e}")
+            inp.send_keys(account)
+            self._dbg("✔ step ②: input field ready and account entered")
+        except Exception as e:
+            self._dbg(f"❌ compte {account} step ② (send_keys): {e}")
             return None
+
+        # ③ ─ Click “Rechercher”
+        try:
+            btn = wait.until(EC.element_to_be_clickable(LOCATORS["search_btn"]))
+            btn.click()
+            self._dbg("✔ step ③: clicked Rechercher")
+        except Exception as e:
+            self._dbg(f"❌ compte {account} step ③ (click): {e}")
+            return None
+
+        # ④ ─ Wait for the results header
+        try:
+            header = wait.until(EC.visibility_of_element_located(LOCATORS["header"]))
+            self._dbg("✔ step ④: header block visible")
+        except Exception as e:
+            self._dbg(f"❌ compte {account} step ④ (header wait): {e}")
+            return None
+
+        # ⑤ ─ Parse all label/value pairs in that header
+        try:
+            lines = [l.strip() for l in header.text.splitlines() if l.strip()]
+            for i in range(0, len(lines) - 1, 2):
+                out[lines[i]] = lines[i + 1]
+            self._dbg(f"✔ step ⑤: parsed {len(lines)//2} fields")
+        except Exception as e:
+            self._dbg(f"❌ compte {account} step ⑤ (parse): {e}")
+            return None
+
+        # ─▶ Ensure the phone number is present (retry once if needed)
+        contact_css = "[data-qa='clic__Contact']"
+        def phone_loaded(driver):
+            try:
+                txt = driver.find_element(By.CSS_SELECTOR, contact_css).text
+            except NoSuchElementException:
+                return False
+            # look for a pattern like 418 588-4462 or similar
+            return bool(re.search(r"\d{3}\s*\d{3}-\d{4}", txt))
+
+        # first check
+        if not phone_loaded(d):
+            self._dbg(f"⚠ compte {account} phone not yet loaded—waiting 5s and retrying")
+            time.sleep(5)
+            if not phone_loaded(d):
+                self._dbg(f"❌ compte {account} phone still missing after retry—skipping")
+                return None
+
+        # now pull out the phone (and email) from the contact block
+        try:
+            contact_el = d.find_element(By.CSS_SELECTOR, contact_css)
+            parts = [ln.strip() for ln in contact_el.text.splitlines() if ln.strip()]
+            # typically: [ email, language, phone, …]
+            out["Courriel"]  = parts[0]
+            out["Téléphone"] = parts[2]
+            self._dbg("✔ step ⑥: extracted Courriel & Téléphone")
+        except Exception as e:
+            self._dbg(f"❌ compte {account} step ⑥ (extract contact): {e}")
+            return None
+
+        # ⑦ ─ Re-open the search panel
+        try:
+            reopen = wait.until(EC.element_to_be_clickable(LOCATORS["reopen"]))
+            # JS click in case normal click is blocked
+            d.execute_script("arguments[0].click();", reopen)
+            self._dbg("✔ step ⑦: reopened search for next iteration")
+        except Exception as e:
+            self._dbg(f"⚠ compte {account} step ⑦ (reopen search): {e}")
+            # not a fatal error—interface may still work for next loop
+
+        return out
 
     # ---------- thread main ---------------------------------------------
     def run(self):
@@ -280,10 +416,21 @@ class ClicDetailScraper(threading.Thread):
                     self.rows.append(info)
                 self.gui_q.put(("detail_progress", idx, len(accts)))
 
-            # export CSV
+            # ── export CSV ───────────────────────────────────────────────
             ts = datetime.now().strftime("%Y%m%d-%H%M%S")
             prefix = _slug(self.path.stem.replace("doors_", ""))
-            out = DATA_DIR / f"specifics_{prefix}_{ts}.csv"
+            out = self.dest_dir / f"specifics_{prefix}_{ts}.csv"   # 1️⃣ écrit direct
+
+            with out.open("w", newline="", encoding="utf-8") as f:
+                w = csv.DictWriter(f, fieldnames=self.rows[0].keys())
+                w.writeheader(); w.writerows(self.rows)
+
+            # ② signal + ouverture
+            self.gui_q.put(("detail_done", str(out), len(self.rows)))
+            open_folder(self.dest_dir)
+            return                         # ← plus rien après
+
+
             with out.open("w", newline="", encoding="utf-8") as f:
                 w = csv.DictWriter(f, fieldnames=self.rows[0].keys())
                 w.writeheader()
@@ -294,9 +441,27 @@ class ClicDetailScraper(threading.Thread):
         except Exception as e:
             self.gui_q.put(("error", str(e)))
         finally:
-            if self.driver:
-                with contextlib.suppress(Exception):
-                    self.driver.quit()
+            # — EXPORT inconditionnel -----------------------------------------
+            try:
+                if self.rows:
+                    ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+                    prefix = _slug(self.path.stem.replace("doors_", ""))
+                    out = self.dest_dir / f"specifics_{prefix}_{ts}.csv"
+
+                    with out.open("w", newline="", encoding="utf-8") as f:
+                        w = csv.DictWriter(f, fieldnames=self.rows[0].keys())
+                        w.writeheader(); w.writerows(self.rows)
+
+                    self.gui_q.put(("detail_done", str(out), len(self.rows)))
+                else:
+                    self._dbg("aucun compte exporté")
+            except Exception as exp:
+                self._dbg(f"❌ export final failed : {exp}")
+                self.gui_q.put(("error", f"export failed: {exp}"))
+            finally:
+                if self.driver:
+                    with contextlib.suppress(Exception):
+                        self.driver.quit()
 
 # ── Thread Worker ───────────────────────────────────────────────────────
 class SalesforceScraper(threading.Thread):
@@ -310,7 +475,8 @@ class SalesforceScraper(threading.Thread):
         street: Optional[str],
         rta:    Optional[str],          # déjà présent
         gui_q:  queue.Queue,
-        pause_evt: threading.Event
+        pause_evt: threading.Event,
+        dest_dir: Path,
     ):
         super().__init__(daemon=True)
 
@@ -320,6 +486,7 @@ class SalesforceScraper(threading.Thread):
         self.city   = city
         self.street = street
         self.rta    = rta              # ← AJOUT OBLIGATOIRE
+        self.dest_dir = dest_dir
         # ----------------------------------------------------
 
         self.gui_q      = gui_q
@@ -388,6 +555,20 @@ class SalesforceScraper(threading.Thread):
             while self.pause_evt.is_set() and not self._stop_evt.is_set():
                 time.sleep(0.5)
             self._dbg("⏳ resuming after MFA")
+            # --- si l’onglet d’origine a été fermé par Salesforce -------------
+            try:
+                # simple ping : « donne-moi le titre »
+                _ = d.title
+            except Exception:
+                self._dbg("⚠ session DevTools perdue – recherche onglet survivant")
+                try:
+                    # se raccrocher au dernier onglet encore ouvert
+                    last = d.window_handles[-1]
+                    d.switch_to.window(last)
+                    self._dbg(f"✔ basculé sur handle {last}")
+                except Exception as e:
+                    self._dbg(f"❌ impossible de récupérer la session ({e})")
+                    return False        # → run() attrapera et loguera l’erreur
             wait_visible(d, By.ID, "phSearchInput")
             return not self._stop_evt.is_set()
 
@@ -458,6 +639,34 @@ class SalesforceScraper(threading.Thread):
             except Exception as e:
                 self._dbg(f"❌ Impossible de saisir RTA={self.rta}: {e}")
 
+        # 4‑bis) Remplir Ville + Rue si présents -------------------------------
+        try:
+            # Champ VILLE – toujours renseigné
+            city_inp = safe_find(
+                d,
+                "00Nd0000008ASBbEAOResidences__c",   # ← id du champ Ville
+                by=By.ID
+            )
+            d.execute_script("arguments[0].scrollIntoView(true);", city_inp)
+            city_inp.clear()
+            city_inp.send_keys(self.city)
+            self._dbg(f"✔ Ville={self.city} appliquée")
+
+            # Champ RUE – seulement si self.street
+            if self.street:
+                street_inp = safe_find(
+                    d,
+                    "00Nd0000008B6ClEAKResidences__c",   # ← id du champ Rue
+                    by=By.ID
+                )
+                d.execute_script("arguments[0].scrollIntoView(true);", street_inp)
+                street_inp.clear()
+                street_inp.send_keys(self.street)
+                self._dbg(f"✔ Rue={self.street} appliquée")
+
+        except Exception as e:
+            self._dbg(f"❌ Impossible de saisir ville/rue : {e}")
+
         # 5) Cliquer sur Appliquer les filtres
         try:
             apply_btn = WebDriverWait(d, 15).until(
@@ -479,6 +688,7 @@ class SalesforceScraper(threading.Thread):
                 self._dbg(f"❌ échec apply fallback XPath ({e2})")
                 raise
         
+        time.sleep(5)
         # 5) Attendre la table des résultats
         WebDriverWait(d, 15).until(
             EC.visibility_of_element_located((By.CSS_SELECTOR, "table.list"))
@@ -567,53 +777,103 @@ class SalesforceScraper(threading.Thread):
                     self._dbg("🚨 aucun enregistrement trouvé, arrêt boucle")
                     break
 
+                import re
+
                 for href in links:
                     rec = self._scrape_door(href)
-                    if rec:
+                    if not rec:
+                        continue
+
+                    # grab the raw “Compte client” value (fall back to empty string)
+                    acct = rec.get("Compte client", "")
+                    # strip out non‐digits and count
+                    digits = re.sub(r'\D', '', acct)
+
+                    if len(digits) <= 9:
                         self.doors.append(rec)
+                    else:
+                        self._dbg(f"⏭ Skipping door, Compte client too long ({acct})")
+
 
                 # ── (3) progression GUI ─────────────────────────────────────
                 pct = None if total_pages is None else page_no / total_pages
                 self.gui_q.put(("progress", page_no, range_text,
                                 len(self.doors), pct))
 
-                # ── (4) tenter d’avancer ────────────────────────────────────
-                try:
-                    # s’assurer que le footer est visible
-                    self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                from selenium.common.exceptions import StaleElementReferenceException
 
+                # --- (4) tenter d’avancer ------------------------------------------------
+                try:
+                    # garder une référence au tableau courant
+                    old_tbl = self.driver.find_element(By.CSS_SELECTOR, "table.list")
+
+                    # rendre le footer visible + récupérer le bouton flèche
+                    self.driver.execute_script(
+                        "window.scrollTo(0, document.body.scrollHeight);")
                     nxt_img = WebDriverWait(self.driver, 5).until(
                         EC.presence_of_element_located(
                             (By.CSS_SELECTOR, ".pSearchShowMore a.nextArrow > img"))
                     )
 
+                    # dernière page ?
                     if "disabled" in nxt_img.get_attribute("src"):
                         total_pages = page_no
-                        more = False                       # dernière page
+                        more = False
                     else:
                         self._dbg("click Page suivante")
                         self.driver.execute_script("arguments[0].parentElement.click()", nxt_img)
 
-                        # attendre que le nouveau tableau réapparaisse
+                        # ❶ attendre que l’ancien tableau devienne obsolète,
+                        #    puis ❷ attendre que le nouveau soit prêt
+                        WebDriverWait(self.driver, 10).until(EC.staleness_of(old_tbl))
                         WebDriverWait(self.driver, 15).until(
                             EC.visibility_of_element_located(
                                 (By.CSS_SELECTOR, "table.list tr.dataRow"))
                         )
+
+                except StaleElementReferenceException as e:
+                    self._dbg(f"stale element récupéré → retry ({e})")
+                    continue        # relance immédiatement la boucle while
 
                 except Exception as e:
                     self._dbg(f"no next page ({e})")
                     total_pages = page_no
                     more = False
 
-            # ── (5) EXPORTS ──────────────────────────────────────────────────
+
+            # ── (5) EXPORTS ─────────────────────────────────────────────
             ts     = datetime.now().strftime("%Y%m%d-%H%M%S")
             parts  = [_slug(self.city)]
             if self.street: parts.append(_slug(self.street))
             if self.rta:    parts.append(_slug(self.rta))
             prefix = "_".join(parts)
 
-            json_path = DATA_DIR / f"doors_{prefix}_{ts}.json"
-            csv_path  = DATA_DIR / f"doors_{prefix}_{ts}.csv"
+            # --- 1️⃣ chemins DE DESTINATION directement dans le dossier choisi
+            out_json = self.dest_dir / f"doors_{prefix}_{ts}.json"
+            out_csv  = self.dest_dir / f"doors_{prefix}_{ts}.csv"
+
+            # ① JSON (toujours, même vide)
+            out_json.write_text(json.dumps(self.doors, ensure_ascii=False, indent=2),
+                                encoding="utf-8")
+
+            # ② CSV
+            if self.doors:
+                all_keys = set().union(*(rec.keys() for rec in self.doors))
+                header   = ["city", "street", "rta"] + sorted(all_keys)
+                with out_csv.open("w", newline="", encoding="utf-8") as f:
+                    w = csv.writer(f); w.writerow(header)
+                    for rec in self.doors:
+                        w.writerow([self.city, self.street or "", self.rta or "",
+                                    *[rec.get(k, "") for k in sorted(all_keys)]])
+            else:                          # aucune porte
+                with out_csv.open("w", newline="", encoding="utf-8") as f:
+                    csv.writer(f).writerow(["city", "street", "rta"])
+
+            # ③ notification GUI + ouverture du dossier
+            self.gui_q.put(("done", str(out_json), str(out_csv), len(self.doors)))
+            open_folder(self.dest_dir)
+            return                           # ← il ne faut plus rien après
+
 
             # même si aucune porte n’a été trouvée, écrire un fichier JSON vide
             json_path.write_text(json.dumps(self.doors, ensure_ascii=False, indent=2),
@@ -647,10 +907,40 @@ class SalesforceScraper(threading.Thread):
             self._dbg(f"FATAL ERROR {e}")
             self.gui_q.put(("error", str(e)))
         finally:
-            if self.driver:
-                with contextlib.suppress(Exception):
-                    self._dbg("Quitting Chrome")
-                    self.driver.quit()
+            # — EXPORT inconditionnel -----------------------------------------
+            try:
+                if self.doors:
+                    ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+                    parts = [_slug(self.city)]
+                    if self.street: parts.append(_slug(self.street))
+                    if self.rta:    parts.append(_slug(self.rta))
+                    prefix = "_".join(parts)
+
+                    out_json = self.dest_dir / f"doors_{prefix}_{ts}.json"
+                    out_csv  = self.dest_dir / f"doors_{prefix}_{ts}.csv"
+
+                    out_json.write_text(json.dumps(self.doors, ensure_ascii=False, indent=2),
+                                        encoding="utf-8")
+
+                    all_keys = set().union(*(rec.keys() for rec in self.doors))
+                    header   = ["city", "street", "rta"] + sorted(all_keys)
+                    with out_csv.open("w", newline="", encoding="utf-8") as f:
+                        w = csv.writer(f); w.writerow(header)
+                        for rec in self.doors:
+                            w.writerow([self.city, self.street or "", self.rta or "",
+                                        *[rec.get(k, "") for k in sorted(all_keys)]])
+
+                    self.gui_q.put(("done", str(out_json), str(out_csv), len(self.doors)))
+                else:
+                    self._dbg("aucune porte collectée — rien à exporter")
+            except Exception as exp:
+                self._dbg(f"❌ export final failed : {exp}")
+            finally:
+                if self.driver:
+                    with contextlib.suppress(Exception):
+                        self._dbg("Quitting Chrome")
+                        self.driver.quit()
+
 
 # ── Interface graphique ─────────────────────────────────────────────────
 class ScraperGUI:
@@ -673,6 +963,8 @@ class ScraperGUI:
         # Variables liées à l’UI
         self.user_var   = tk.StringVar()
         self.pwd_var    = tk.StringVar()
+        self.user_var   = tk.StringVar(value="othmane.elfathi@videotron.com")
+        self.pwd_var    = tk.StringVar(value="Brick2025$")
         self.city_var   = tk.StringVar()
         self.street_var = tk.StringVar()
         self.rta_var    = tk.StringVar()
@@ -812,20 +1104,22 @@ class ScraperGUI:
         self.street_cb.configure(values=sorted(vals))
 
     def _start_details(self):
-        """Choisit un fichier doors_*.json/csv et lance ClicDetailScraper."""
-        fp = filedialog.askopenfilename(
+        doors_fp = filedialog.askopenfilename(
             title="Choose a doors file",
             initialdir=DATA_DIR,
-            filetypes=[("Doors exports", "doors_*.json doors_*.csv"),
-                    ("All files", "*.*")]
+            filetypes=[("Doors exports", "doors_*.json doors_*.csv"), ("All files", "*.*")]
         )
-        if not fp:
+        if not doors_fp:
             return
 
-        self._log(f"▶ Specifics : {fp}")
+        dst_dir = fd.askdirectory(title="Choisir le dossier de destination",
+                                initialdir=downloads_dir())
+        if not dst_dir:
+            return
         self.detail_scraper = ClicDetailScraper(
-            Path(fp), self.gui_q, self.pause_evt
+            Path(doors_fp), self.gui_q, self.pause_evt, dest_dir=Path(dst_dir)
         )
+        self._log(f"▶ Specifics : {doors_fp} → {dst_dir}")
         self.detail_scraper.start()
 
     def _log(self, txt: str):
@@ -850,6 +1144,12 @@ class ScraperGUI:
         street = self.street_var.get().strip().upper() or None
         rta    = self.rta_var.get().strip() or None
 
+        dst_dir = fd.askdirectory(title="Choisir le dossier de destination",
+                          initialdir=downloads_dir())
+        if not dst_dir:
+            return        # utilisateur a cancel
+        self.dest_dir = Path(dst_dir)
+
         # Reset UI
         self.page_lbl.configure(text="Page: 0")
         self.door_lbl.configure(text="Doors: 0")
@@ -862,7 +1162,7 @@ class ScraperGUI:
         self.pause_evt.clear()
         self.worker = SalesforceScraper(
             user, pwd, city, street, rta,
-            self.gui_q, self.pause_evt
+            self.gui_q, self.pause_evt, dest_dir=self.dest_dir,
         )
         self.worker.start()
 
