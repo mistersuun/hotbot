@@ -441,14 +441,17 @@ class ClicDetailScraper(threading.Thread):
     # ---------- thread main ---------------------------------------------
     def run(self):
         try:
-            # 1) Read all accounts to scrape
+            # 1) read list of accounts from the doors file
             accts = self._accounts_from_file(self.path)
             if not accts:
-                self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client ».")); return
+                self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client »."))
+                return
 
-            # 2) Scrape details
+            # 2) launch browser & log in
             self.driver = build_driver()
             self._login_and_ready()
+
+            # 3) scrape each account
             for idx, acc in enumerate(accts, 1):
                 if self._stop_evt.is_set():
                     self._dbg("⏹ Specifics stopped by user")
@@ -456,52 +459,55 @@ class ClicDetailScraper(threading.Thread):
                 # respect GUI pause
                 while self.pause_evt.is_set() and not self._stop_evt.is_set():
                     time.sleep(0.3)
+
                 info = self._scrape_one(acc)
                 if info:
                     self.rows.append(info)
                 self.gui_q.put(("detail_progress", idx, len(accts)))
 
-            # 3) Build a lookup of scraped details
-            details_map = { r["Compte client"]: {"Courriel": r["Courriel"], "Téléphone": r["Téléphone"]} 
-                            for r in self.rows }
+            # 4) load doors CSV
+            import pandas as pd
+            doors_df = pd.read_csv(self.path, encoding="utf-8")
 
-            # 4) Read original doors CSV into list of dicts
-            with open(self.path, encoding="utf-8", newline="") as f:
-                reader = csv.DictReader(f)
-                original_rows = list(reader)
-                # capture your original columns
-                template_cols = list(reader.fieldnames)
-            
-            # 5) Append our two new columns
-            template_cols += ["Courriel", "Téléphone"]
+            # 5) build a DataFrame of the scraped phones
+            specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone"]]
 
-            # 6) Merge: for each original row, inject scraped details (or N/A)
-            merged = []
-            for row in original_rows:
-                acct = row.get("Compte client", "")
-                info = details_map.get(acct, {})
-                row["Courriel"] = info.get("Courriel", "N/A")
-                row["Téléphone"] = info.get("Téléphone", "N/A")
-                merged.append(row)
+            # 6) merge on Compte client
+            merged = pd.merge(
+                doors_df,
+                specs_df,
+                on="Compte client",
+                how="left"
+            ).rename(columns={"Téléphone": "NUMÉRO DE TÉLÉPHONE"})
 
-            # 7) Write out the final CSV with headers in the correct order
-            ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+            # 7) assemble exactly the eight Template columns
+            output = pd.DataFrame({
+                "RUE": merged["street"],
+                "ADRESSE": merged["Résidence"],
+                "CLIENT": merged["Client"],
+                "NUMÉRO DE TÉLÉPHONE": merged["NUMÉRO DE TÉLÉPHONE"],
+                "NUMÉRO DE COMPTE": merged["Compte client"],
+                "SERVICES ACTUELS": merged["Services actuels"],
+                "DERNIER STATUT": merged["Dernier statut"],
+                "SERVICE AVANT DEBRANCHEMENT": merged["Services avant débranchement"]
+            })
+
+            # 8) write out an .xlsx
+            ts     = datetime.now().strftime("%Y%m%d-%H%M%S")
             prefix = _slug(self.path.stem.replace("doors_", ""))
-            out = self.dest_dir / f"specifics_{prefix}_{ts}.csv"
+            out_xlsx = self.dest_dir / f"specifics_{prefix}_{ts}.xlsx"
 
-            with out.open("w", newline="", encoding="utf-8") as f:
-                writer = csv.DictWriter(f, fieldnames=template_cols)
-                writer.writeheader()
-                writer.writerows(merged)
+            with pd.ExcelWriter(out_xlsx, engine="openpyxl") as writer:
+                output.to_excel(writer, index=False)
 
-            # 8) Signal done
-            self.gui_q.put(("detail_done", str(out), len(merged)))
+            # 9) notify GUI and open folder
+            self.gui_q.put(("detail_done", str(out_xlsx), len(output)))
             open_folder(self.dest_dir)
+            return
 
         except Exception as e:
             self.gui_q.put(("error", str(e)))
         finally:
-            # ensure driver quits
             if self.driver:
                 with contextlib.suppress(Exception):
                     self.driver.quit()
