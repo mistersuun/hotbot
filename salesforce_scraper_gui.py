@@ -456,7 +456,6 @@ class ClicDetailScraper(threading.Thread):
                 if self._stop_evt.is_set():
                     self._dbg("⏹ Specifics stopped by user")
                     break
-                # respect GUI pause
                 while self.pause_evt.is_set() and not self._stop_evt.is_set():
                     time.sleep(0.3)
 
@@ -465,27 +464,26 @@ class ClicDetailScraper(threading.Thread):
                     self.rows.append(info)
                 self.gui_q.put(("detail_progress", idx, len(accts)))
 
-            # 4) load doors CSV
+            # 4) load doors CSV, skipping the blank first line so header aligns
             import pandas as pd
-            doors_df = pd.read_csv(self.path, encoding="utf-8")
+            doors_df = pd.read_csv(self.path, encoding="utf-8", header=1)
 
-            # 5) build a DataFrame of the scraped phones
-            specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone"]]
+            # 5) build a DataFrame of the scraped phones & emails
+            specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone", "Courriel"]]
 
             # 6) merge on Compte client
-            merged = pd.merge(
-                doors_df,
-                specs_df,
-                on="Compte client",
-                how="left"
-            ).rename(columns={"Téléphone": "NUMÉRO DE TÉLÉPHONE"})
+            merged = pd.merge(doors_df,
+                              specs_df,
+                              on="Compte client",
+                              how="left")
 
             # 7) assemble exactly the eight Template columns
             output = pd.DataFrame({
                 "RUE": merged["street"],
                 "ADRESSE": merged["Résidence"],
                 "CLIENT": merged["Client"],
-                "NUMÉRO DE TÉLÉPHONE": merged["NUMÉRO DE TÉLÉPHONE"],
+                "NUMÉRO DE TÉLÉPHONE": merged["Téléphone"],
+                "COURRIEL": merged["Courriel"],
                 "NUMÉRO DE COMPTE": merged["Compte client"],
                 "SERVICES ACTUELS": merged["Services actuels"],
                 "DERNIER STATUT": merged["Dernier statut"],
