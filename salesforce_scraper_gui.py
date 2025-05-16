@@ -284,7 +284,12 @@ class ClicDetailScraper(threading.Thread):
             pwd.clear()
             pwd.send_keys(self.clic_pwd)
 
-            cont_btn = WebDriverWait(d, 30).until(
+            cont = wait.until(EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "button[data-qa='clic_infos-externes_StyledButton']")))
+            cont.click()
+            self._dbg("✔ Clic+ login submitted")
+
+            second_cont_btn = WebDriverWait(d, 30).until(
                 EC.visibility_of_element_located((
                     By.XPATH,
                     "//button[@data-qa='clic_infos-externes_StyledButton']"
@@ -292,10 +297,10 @@ class ClicDetailScraper(threading.Thread):
                 ))
             )
             # ② Make sure it's in view
-            d.execute_script("arguments[0].scrollIntoView({ block: 'center' });", cont_btn)
+            d.execute_script("arguments[0].scrollIntoView({ block: 'center' });", second_cont_btn)
             # ③ Use JS to click it (more reliable when something intercepts Selenium’s .click())
-            d.execute_script("arguments[0].click();", cont_btn)
-            self._dbg("✔ Clic+ login submitted")
+            d.execute_script("arguments[0].click();", second_cont_btn)
+
         except Exception as e:
             self._dbg(f"❌ Clic+ login failed: {e}")
             raise
