@@ -466,7 +466,13 @@ class ClicDetailScraper(threading.Thread):
 
             # 4) load doors CSV, skipping the blank first line so header aligns
             import pandas as pd
-            doors_df = pd.read_csv(self.path, encoding="utf-8", header=1)
+            if self.path.suffix.lower() == ".csv":
+                doors_df = pd.read_csv(self.path, encoding="utf-8")
+            elif self.path.suffix.lower() == ".json":
+                doors = json.loads(self.path.read_text(encoding="utf-8"))
+                doors_df = pd.DataFrame(doors)
+            else:
+                raise ValueError(f"Unsupported file type {self.path.suffix}")
 
             salesforce=[]
             #print(doors_df)
@@ -1192,6 +1198,9 @@ class ScraperGUI:
         )
         self._log(f"▶ Specifics : {doors_fp} → {dst_dir}")
         self.detail_scraper.start()
+        self.pause_btn .configure(state="normal")
+        self.stop_btn  .configure(state="normal")
+        self.detail_btn.configure(state="disabled")
 
     def _log(self, txt: str):
         ts = datetime.now().strftime("[%H:%M:%S] ")
