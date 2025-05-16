@@ -230,14 +230,20 @@ class ClicDetailScraper(threading.Thread):
     """
     URL = "https://clicplus.int.videotron.com/vui/#/clic/infos-externes"
 
-    def __init__(self, doors_path: Path,
-                 gui_q: queue.Queue, pause_evt: threading.Event,
-                 dest_dir: Path):
+    def __init__(self,
+                 doors_path: Path,
+                 gui_q: queue.Queue,
+                 pause_evt: threading.Event,
+                 dest_dir: Path,
+                 clic_user: str,
+                 clic_pwd: str):
         super().__init__(daemon=True)
         self.path      = doors_path
         self.gui_q     = gui_q
         self.pause_evt = pause_evt
         self.driver: Optional[uc.Chrome] = None
+        self.clic_user = clic_user
+        self.clic_pwd  = clic_pwd
         self.rows: list[dict] = []
         self.dest_dir = dest_dir
     # ---------- helpers --------------------------------------------------
@@ -265,40 +271,42 @@ class ClicDetailScraper(threading.Thread):
         d = self.driver
         d.get(self.URL)
 
-        # ① « Continuer » : utilise l’attribut data‑qa fixe, pas le nom de classe
-        #cont = WebDriverWait(d, 30).until(
-        #    EC.element_to_be_clickable(
-        #        (By.CSS_SELECTOR, "button[data-qa='clic_infos-externes_StyledButton']"))
-        #)
-        #cont.click()
-        #self._dbg("✔ click Continuer")
-
-        # ② attendre l’input *ou* le bouton Recherche
+        # ① — Fill in Clic+ credentials (username + password)
+        wait = WebDriverWait(d, 20)
         try:
-            WebDriverWait(d, 30).until(
-                EC.visibility_of_element_located(
-                    (By.CSS_SELECTOR, "input[name='account.sgaAccountNumber']"))
-            )
+            usr = wait.until(EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "input[name='userName']")))
+            usr.clear()
+            usr.send_keys(self.clic_user)
+
+            pwd = wait.until(EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "input[name='password']")))
+            pwd.clear()
+            pwd.send_keys(self.clic_pwd)
+
+            cont = wait.until(EC.element_to_be_clickable(
+                (By.CSS_SELECTOR, "button[data-qa='clic_infos-externes_StyledButton']")))
+            cont.click()
+            self._dbg("✔ Clic+ login submitted")
+        except Exception as e:
+            self._dbg(f"❌ Clic+ login failed: {e}")
+            raise
+
+        # ② — Now wait for the account search input to appear
+        try:
+            wait.until(EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, "input[name='account.sgaAccountNumber']")))
             self._dbg("✔ champ compte visible")
-            return
         except TimeoutException:
-            pass                                   # il faut d’abord ouvrir le panneau
-
-        # ③ cliquer sur l’icône Recherche (l’attribut data‑qa n’existe pas, on combine)
-        search_btn = WebDriverWait(d, 15).until(
-            EC.element_to_be_clickable((
-                By.CSS_SELECTOR,
-                ".search_wrapper___39tl7 a, .fa-search"        # 2 fallbacks
-            ))
-        )
-        search_btn.click()
-        self._dbg("✔ click Recherche")
-
-        WebDriverWait(d, 15).until(
-            EC.visibility_of_element_located(
-                (By.CSS_SELECTOR, "input[name='account.sgaAccountNumber']"))
-        )
-        self._dbg("✔ champ compte visible")
+            # panel closed, so open via the search icon
+            search_btn = wait.until(EC.element_to_be_clickable((
+                By.CSS_SELECTOR, ".search_wrapper___39tl7 a, .fa-search"
+            )))
+            search_btn.click()
+            self._dbg("✔ click Recherche")
+            wait.until(EC.visibility_of_element_located(
+                (By.CSS_SELECTOR, "input[name='account.sgaAccountNumber']")))
+            self._dbg("✔ champ compte visible")
 
     def _scrape_one(self, account: str) -> Optional[dict]:
         """Return a dict of all header fields—or None if phone never appeared."""
@@ -338,8 +346,15 @@ class ClicDetailScraper(threading.Thread):
 
         # ④ ─ Wait for the results header
         try:
+            # a) wait for the outer header container
             header = wait.until(EC.visibility_of_element_located(LOCATORS["header"]))
-            self._dbg("✔ step ④: header block visible")
+            self._dbg("✔ step ④a: header container is visible")
+
+            # b) wait for the 'Requérant' sub-block inside it (data-qa='clic__Requerant')
+            wait.until(EC.visibility_of_element_located((
+                By.CSS_SELECTOR, "[data-qa='clic__Header'] [data-qa='clic__Requerant']"
+            )))
+            self._dbg("✔ step ④b: 'Requérant' block inside header is visible")
         except Exception as e:
             self._dbg(f"❌ compte {account} step ④ (header wait): {e}")
             return None
@@ -965,6 +980,10 @@ class ScraperGUI:
         self.pwd_var    = tk.StringVar()
         self.user_var   = tk.StringVar(value="othmane.elfathi@videotron.com")
         self.pwd_var    = tk.StringVar(value="Brick2025$")
+        self.clic_user_var   = tk.StringVar()
+        self.clic_pwd_var    = tk.StringVar()
+        self.clic_user_var   = tk.StringVar(value="elfathio0")
+        self.clic_pwd_var    = tk.StringVar(value="Videotron2025$")
         self.city_var   = tk.StringVar()
         self.street_var = tk.StringVar()
         self.rta_var    = tk.StringVar()
@@ -984,15 +1003,25 @@ class ScraperGUI:
     def _build_widgets(self):
         pad = {"padx": 8, "pady": 3}
 
-        # — Identifiants —
+        # — Salesforce Identifiants —
         cred_f = ctk.CTkFrame(self.root)
         cred_f.pack(pady=8, fill="x")
         for c in range(4):
             cred_f.grid_columnconfigure(c, weight=1)
-        ctk.CTkLabel(cred_f, text="Username:").grid(row=0, column=0, **pad, sticky="e")
+        ctk.CTkLabel(cred_f, text="SF Username:").grid(row=0, column=0, **pad, sticky="e")
         ctk.CTkEntry(cred_f, textvariable=self.user_var).grid(row=0, column=1, **pad, sticky="w")
-        ctk.CTkLabel(cred_f, text="Password:").grid(row=0, column=2, **pad, sticky="e")
+        ctk.CTkLabel(cred_f, text="SF Password:").grid(row=0, column=2, **pad, sticky="e")
         ctk.CTkEntry(cred_f, textvariable=self.pwd_var, show="*").grid(row=0, column=3, **pad, sticky="w")
+
+        # — Clic+ Identifiants —  ← NEW
+        clic_f = ctk.CTkFrame(self.root)
+        clic_f.pack(pady=4, fill="x")
+        for c in range(4):
+            clic_f.grid_columnconfigure(c, weight=1)
+        ctk.CTkLabel(clic_f, text="Clic+ User:").grid(row=0, column=0, **pad, sticky="e")
+        ctk.CTkEntry(clic_f, textvariable=self.clic_user_var).grid(row=0, column=1, **pad, sticky="w")
+        ctk.CTkLabel(clic_f, text="Clic+ Pass:").grid(row=0, column=2, **pad, sticky="e")
+        ctk.CTkEntry(clic_f, textvariable=self.clic_pwd_var, show="*").grid(row=0, column=3, **pad, sticky="w")
 
         # — Sélecteurs Ville / Rue / RTA —
         sel_f = ctk.CTkFrame(self.root)
@@ -1117,7 +1146,12 @@ class ScraperGUI:
         if not dst_dir:
             return
         self.detail_scraper = ClicDetailScraper(
-            Path(doors_fp), self.gui_q, self.pause_evt, dest_dir=Path(dst_dir)
+            Path(doors_fp),
+            self.gui_q,
+            self.pause_evt,
+            dest_dir=Path(dst_dir),
+            clic_user=self.clic_user_var.get().strip(),
+            clic_pwd=self.clic_pwd_var.get().strip(),
         )
         self._log(f"▶ Specifics : {doors_fp} → {dst_dir}")
         self.detail_scraper.start()
