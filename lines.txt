@@ -7,7 +7,8 @@ tab then enter the clic_user pass Videotron2025$
 select item inside there is only one and click
 <input role="combobox" id="postal-code" type="text" autocorrect="off" autocapitalize="off" autocomplete="a42ab3c36c00" aria-expanded="true" aria-owns="a42ab3c36c00" aria-activedescendant="a42ab3c36c00-0">
 
-20459
+then enter 20459 inline
+<input class="form-control mt-0 ng-pristine ng-valid ng-touched" placeholder="" type="text" maxlength="10" name="">
 
 then click
 <button id="Submit-btn" type="button" data-dismiss="modal" class="btn btn-primary letter-spacing-normal size-17 btn-md">Soumettre</button>
