@@ -442,64 +442,50 @@ class ClicDetailScraper(threading.Thread):
         return out
 
     def _scrape_csr(self, account: str) -> Optional[dict]:
-        """
-        For accounts longer than 8 chars, go to the CSR site,
-        log in, enter the last 7 digits of the account, submit,
-        click the user-icon, then parse all the key/value atoms.
-        """
-        d = self.driver
+        d    = self.driver
         wait = WebDriverWait(d, 20)
-        out = {"Compte client": account}
+        out  = {"Compte client": account}
 
-        # 1) load CSR dashboard
+        # … after login …
         d.get("https://csr.etiya.videotron.com/private/dashboard")
-        
-        # 2) wait for username, enter credentials
-        #try:
-        #    usr = wait.until(EC.element_to_be_clickable((By.ID, "username")))
-        #    usr.clear()
-        #    usr.send_keys(self.clic_user)
-        #    usr.send_keys(Keys.TAB)
 
-        #    pwd = wait.until(EC.element_to_be_clickable((By.ID, "password")))
-        #    pwd.clear()
-        #    pwd.send_keys(self.clic_pwd)
-        #    pwd.send_keys(Keys.ENTER)
-        #    self._dbg("✔ CSR login submitted")
-        #except Exception as e:
-        #    self._dbg(f"❌ CSR login failed: {e}")
-        #    return None
+        # ① wait for the modal to appear
+        modal = wait.until(EC.visibility_of_element_located((
+            By.CSS_SELECTOR,
+            "div[role='document'].modal-dialog.modal-dialog-centered.modal-sm"
+        )))
 
-        # 3) wait for postal-code combobox, type last 7 digits, submit
         try:
-            # … after CSR login is confirmed …
-
-            # 1) Click the combobox to open the single suggestion
-            combo = wait.until(EC.element_to_be_clickable((By.ID, "postal-code")))
-            combo.click()
+            # ② Open the postal‐code combobox
+            combo = modal.find_element(By.CSS_SELECTOR, "input[role='combobox']#postal-code")
+            d.execute_script("arguments[0].scrollIntoView(true);", combo)
+            d.execute_script("arguments[0].click();", combo)
             self._dbg("✔ Opened postal-code combobox")
 
-            # 2) Arrow down & Enter to select the only item
+            # ③ Arrow-down + Enter to select the only item
             combo.send_keys(Keys.ARROW_DOWN, Keys.ENTER)
             self._dbg("✔ Selected the postal-code suggestion")
 
-            # 3) Now enter the fixed code “20459” into the next inline input
-            inline = wait.until(EC.element_to_be_clickable((
+            # ④ Enter your CSR code into the “CLIC+ numéro de représentant” field
+            inline = modal.find_element(
                 By.CSS_SELECTOR,
-                "input.form-control.mt-0.ng-pristine.ng-valid.ng-touched"
-            )))
+                "atoms-input-with-label#work-site-user-number input.form-control"
+            )
+            d.execute_script("arguments[0].scrollIntoView(true);", inline)
             inline.clear()
             inline.send_keys(self.csr_code)
-            self._dbg("✔ Entered 20459")
+            self._dbg(f"✔ Entered CSR code: {self.csr_code}")
 
-            # 4) Click the “Soumettre” button
-            submit = wait.until(EC.element_to_be_clickable((By.ID, "Submit-btn")))
-            submit.click()
+            # ⑤ Click the “Soumettre” button
+            submit = modal.find_element(By.CSS_SELECTOR, "button#Submit-btn")
+            d.execute_script("arguments[0].scrollIntoView(true);", submit)
+            d.execute_script("arguments[0].click();", submit)
             self._dbg("✔ Clicked Soumettre")
 
         except Exception as e:
-            self._dbg(f"❌ Entering postal-code failed: {e}")
+            self._dbg(f"❌ CSR code entry in modal failed: {e}")
             return None
+
 
         # 4) click the “user” icon to load details
         try:
