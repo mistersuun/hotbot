@@ -596,11 +596,11 @@ class ClicDetailScraper(threading.Thread):
             specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone", "Courriel"]]
 
             # 6) merge on Compte client
-            #merged = pd.merge(doors_df,
-            #                  specs_df,
-            #                  on="Compte client",
-            #                  how="left")
-
+            merged = pd.merge(doors_df,
+                              specs_df,
+                              on="Compte client",
+                              how="left")
+            print(merged)
             # 7) assemble exactly the eight Template columns
             output = pd.DataFrame({
                 "ADRESSE": doors_df["Résidence"],
