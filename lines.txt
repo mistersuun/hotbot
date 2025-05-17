@@ -21,3 +21,112 @@ then write the 7 last numbers from the long compte client inside
 
 <div csrcollapse="" class="collapse show" style=""><div data-collapse-content=""><div class="inner d-block overflow-hidden p-4 shadow rounded-bottom-left-10 rounded-bottom-right-10"><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Civilité <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="">M.</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Prénom <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="Guy">Guy</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Nom <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="Laberge">Laberge</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Date de naissance <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="">1990-06-18</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Nom de jeune fille de la mère <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title=""></li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Mot-clé secret <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="">Denise</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Nom d'utilisateur <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="guylaberge18@gmail.com">guylaberge18@gmail.com</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Numéro de téléphone principal <!----></li><li class="color--vui-black mb-2 pl-3 size-13 value w-50 weight-5" title="">Mobile - (514) 886-4045 </li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><!----><!----><div><atoms-button buttonlabel="Delegate" buttonclass="font-family-secondary size-14 weight-6 mt-md-3 mt-3 letter-spacing-normal" buttonid="delegate" class="d-inline-flex"><button id="Delegate-btn" type="button" class="btn font-family-secondary size-14 weight-6 mt-md-3 mt-3 letter-spacing-normal btn-primary btn-md">Mandataire</button></atoms-button><!----></div></div></div></div>
 
+def run(self):
+    try:
+        accts = self._accounts_from_file(self.path)
+        if not accts:
+            self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client »."))  
+            return
+
+        # 1️⃣ Split into two lists
+        clic_accts = [a for a in accts if len(a) <= 8]
+        csr_accts  = [a for a in accts if len(a) >  8]
+
+        # 2️⃣ Launch browser once
+        self.driver = build_driver()
+
+        # ───> Part A: Clic+ accounts
+        if clic_accts:
+            self._login_and_ready()
+            for idx, acc in enumerate(clic_accts, 1):
+                if self._stop_evt.is_set(): break
+                while self.pause_evt.is_set(): time.sleep(0.3)
+
+                info = self._scrape_one(acc)
+                if info: self.rows.append(info)
+                self.gui_q.put(("detail_progress", idx, len(accts)))
+
+        # ───> Part B: CSR accounts
+        # change page to CSR
+        for idx, acc in enumerate(csr_accts, len(clic_accts) + 1):
+            if self._stop_evt.is_set(): break
+            while self.pause_evt.is_set(): time.sleep(0.3)
+
+            info = self._scrape_csr(acc)
+            if info: self.rows.append(info)
+            self.gui_q.put(("detail_progress", idx, len(accts)))
+
+        # … rest of your merging + Excel export …
+
+    except Exception as e:
+        self.gui_q.put(("error", str(e)))
+    finally:
+        if self.driver:
+            with contextlib.suppress(Exception):
+                self.driver.quit()
+
+
+from selenium.webdriver.common.keys import Keys
+
+def _scrape_csr(self, account: str) -> Optional[dict]:
+    d    = self.driver
+    wait = WebDriverWait(d, 20)
+    out  = {"Compte client": account}
+
+    # — ① Go to CSR dashboard
+    d.get("https://csr.etiya.videotron.com/private/dashboard")
+
+    # — ② Login
+    try:
+        wait.until(EC.element_to_be_clickable((By.ID,   "username"))).send_keys(self.clic_user, Keys.TAB)
+        wait.until(EC.element_to_be_clickable((By.ID,   "password"))).send_keys(self.clic_pwd, Keys.ENTER)
+        self._dbg("✔ CSR login submitted")
+    except Exception as e:
+        self._dbg(f"❌ CSR login failed: {e}")
+        return None
+
+    # — ③ Pick the 1 suggestion in the combobox
+    try:
+        combo = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, "input[role='combobox']#postal-code")))
+        combo.click()
+        combo.send_keys(Keys.ARROW_DOWN, Keys.ENTER)
+        self._dbg("✔ Selected the postal-code suggestion")
+
+        # ④ Enter the CSR code you passed in
+        inline = wait.until(EC.element_to_be_clickable((By.ID, "custId")))
+        inline.clear()
+        inline.send_keys(self.csr_code)
+        self._dbg(f"✔ Entered CSR code: {self.csr_code}")
+
+        # ⑤ Click “Soumettre”
+        wait.until(EC.element_to_be_clickable((By.ID, "Submit-btn"))).click()
+        self._dbg("✔ Clicked Soumettre")
+    except Exception as e:
+        self._dbg(f"❌ CSR code entry failed: {e}")
+        return None
+
+    # — ⑥ Click the user-icon (svg) to load the detail panel
+    try:
+        wait.until(EC.element_to_be_clickable((
+            By.CSS_SELECTOR, "svg.icon-light.svg-size--4"
+        ))).click()
+        self._dbg("✔ CSR user icon clicked")
+    except Exception as e:
+        self._dbg(f"❌ CSR click user icon failed: {e}")
+        return None
+
+    # — ⑦ Parse all <atoms-key-value> pairs
+    try:
+        panel = wait.until(EC.visibility_of_element_located((
+            By.CSS_SELECTOR, "div.inner.d-block.overflow-hidden"
+        )))
+        for kv in panel.find_elements(By.CSS_SELECTOR, "atoms-key-value"):
+            key = kv.find_element(By.CSS_SELECTOR, ".key").text.strip()
+            val = kv.find_element(By.CSS_SELECTOR, ".value").text.strip()
+            out[key] = val
+        self._dbg(f"✔ CSR parsed {len(out)-1} fields")
+    except Exception as e:
+        self._dbg(f"❌ CSR parsing failed: {e}")
+        return None
+
+    return out
