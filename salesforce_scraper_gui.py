@@ -492,7 +492,7 @@ class ClicDetailScraper(threading.Thread):
             # 7) assemble exactly the eight Template columns
             output = pd.DataFrame({
                 "ADRESSE": doors_df["Résidence"],
-                "CLIENT": doors_df["Client"],
+                "CLIENT": doors_df["Compte client"],
                 "NUMÉRO DE TÉLÉPHONE": specs_df["Téléphone"],
                 "COURRIEL": specs_df["Courriel"],
                 "NUMÉRO DE COMPTE": doors_df["Compte client"],
@@ -847,7 +847,7 @@ class SalesforceScraper(threading.Thread):
                     # strip out non‐digits and count
                     digits = re.sub(r'\D', '', acct)
 
-                    if len(digits) <= 9:
+                    if len(digits) <= 8:
                         self.doors.append(rec)
                     else:
                         self._dbg(f"⏭ Skipping door, Compte client too long ({acct})")
@@ -1200,7 +1200,6 @@ class ScraperGUI:
         self.detail_scraper.start()
         self.pause_btn .configure(state="normal")
         self.stop_btn  .configure(state="normal")
-        self.detail_btn.configure(state="disabled")
 
     def _log(self, txt: str):
         ts = datetime.now().strftime("[%H:%M:%S] ")
