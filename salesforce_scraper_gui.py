@@ -453,22 +453,22 @@ class ClicDetailScraper(threading.Thread):
 
         # 1) load CSR dashboard
         d.get("https://csr.etiya.videotron.com/private/dashboard")
-
+        
         # 2) wait for username, enter credentials
-        try:
-            usr = wait.until(EC.element_to_be_clickable((By.ID, "username")))
-            usr.clear()
-            usr.send_keys(self.clic_user)
-            usr.send_keys(Keys.TAB)
+        #try:
+        #    usr = wait.until(EC.element_to_be_clickable((By.ID, "username")))
+        #    usr.clear()
+        #    usr.send_keys(self.clic_user)
+        #    usr.send_keys(Keys.TAB)
 
-            pwd = wait.until(EC.element_to_be_clickable((By.ID, "password")))
-            pwd.clear()
-            pwd.send_keys(self.clic_pwd)
-            pwd.send_keys(Keys.ENTER)
-            self._dbg("✔ CSR login submitted")
-        except Exception as e:
-            self._dbg(f"❌ CSR login failed: {e}")
-            return None
+        #    pwd = wait.until(EC.element_to_be_clickable((By.ID, "password")))
+        #    pwd.clear()
+        #    pwd.send_keys(self.clic_pwd)
+        #    pwd.send_keys(Keys.ENTER)
+        #    self._dbg("✔ CSR login submitted")
+        #except Exception as e:
+        #    self._dbg(f"❌ CSR login failed: {e}")
+        #    return None
 
         # 3) wait for postal-code combobox, type last 7 digits, submit
         try:
@@ -503,10 +503,9 @@ class ClicDetailScraper(threading.Thread):
 
         # 4) click the “user” icon to load details
         try:
-            user_icon = wait.until(EC.element_to_be_clickable((
-                By.CSS_SELECTOR, "svg.icon-light[viewBox='0 0 30 30']"
-            )))
-            user_icon.click()
+            wait.until(EC.element_to_be_clickable((
+                By.CSS_SELECTOR, "svg.icon-light.svg-size--4"
+            ))).click()
             self._dbg("✔ CSR user icon clicked")
         except Exception as e:
             self._dbg(f"❌ CSR click user icon failed: {e}")
@@ -534,83 +533,40 @@ class ClicDetailScraper(threading.Thread):
     # ---------- thread main ---------------------------------------------
     def run(self):
         try:
-            # 1) read list of accounts from the doors file
             accts = self._accounts_from_file(self.path)
             if not accts:
-                self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client »."))
+                self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client »."))  
                 return
 
-            # 2) launch browser & log in
+            # 1️⃣ Split into two lists
+            clic_accts = [a for a in accts if len(a) <= 8]
+            csr_accts  = [a for a in accts if len(a) >  8]
+
+            # 2️⃣ Launch browser once
             self.driver = build_driver()
 
-            # 3) scrape each account
-            for idx, acc in enumerate(accts, 1):
-                if self._stop_evt.is_set():
-                    self._dbg("⏹ Specifics stopped by user")
-                    break
-                while self.pause_evt.is_set() and not self._stop_evt.is_set():
-                    time.sleep(0.3)
+            # ───> Part A: Clic+ accounts
+            if clic_accts:
+                self._login_and_ready()
+                for idx, acc in enumerate(clic_accts, 1):
+                    if self._stop_evt.is_set(): break
+                    while self.pause_evt.is_set(): time.sleep(0.3)
 
-                if len(acc) == 8:
-                    print(acc)
-                    self._login_and_ready()
                     info = self._scrape_one(acc)
-                else:
-                    info = self._scrape_csr(acc)
+                    if info: self.rows.append(info)
+                    self.gui_q.put(("detail_progress", idx, len(accts)))
 
-                if info:
-                    self.rows.append(info)
+            # ───> Part B: CSR accounts
+            # change page to CSR
+            for idx, acc in enumerate(csr_accts, len(clic_accts) + 1):
+                if self._stop_evt.is_set(): break
+                while self.pause_evt.is_set(): time.sleep(0.3)
+
+                info = self._scrape_csr(acc)
+                if info: self.rows.append(info)
                 self.gui_q.put(("detail_progress", idx, len(accts)))
 
-            # 4) load doors CSV, skipping the blank first line so header aligns
-            import pandas as pd
-            if self.path.suffix.lower() == ".csv":
-                doors_df = pd.read_csv(self.path, encoding="utf-8")
-            elif self.path.suffix.lower() == ".json":
-                doors = json.loads(self.path.read_text(encoding="utf-8"))
-                doors_df = pd.DataFrame(doors)
-            else:
-                raise ValueError(f"Unsupported file type {self.path.suffix}")
-
-            salesforce=[]
-            #print(doors_df)
-            for row in doors_df:
-                print(row)
-                salesforce.append(row)
-            print(salesforce)
-            # 5) build a DataFrame of the scraped phones & emails
-            specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone", "Courriel"]]
-
-            # 6) merge on Compte client
-            #merged = pd.merge(doors_df,
-            #                  specs_df,
-            #                  on="Compte client",
-            #                  how="left")
-
-            # 7) assemble exactly the eight Template columns
-            output = pd.DataFrame({
-                "ADRESSE": doors_df["Résidence"],
-                "CLIENT": doors_df["Compte client"],
-                "NUMÉRO DE TÉLÉPHONE": specs_df["Téléphone"],
-                "COURRIEL": specs_df["Courriel"],
-                "NUMÉRO DE COMPTE": doors_df["Compte client"],
-                "SERVICES ACTUELS": doors_df["Services actuels"],
-                "DERNIER STATUT": doors_df["Dernier statut"],
-                "SERVICE AVANT DEBRANCHEMENT": doors_df["Services avant débranchement"]
-            })
-
-            # 8) write out an .xlsx
-            ts     = datetime.now().strftime("%Y%m%d-%H%M%S")
-            prefix = _slug(self.path.stem.replace("doors_", ""))
-            out_xlsx = self.dest_dir / f"specifics_{prefix}_{ts}.xlsx"
-
-            with pd.ExcelWriter(out_xlsx, engine="openpyxl") as writer:
-                output.to_excel(writer, index=False)
-
-            # 9) notify GUI and open folder
-            self.gui_q.put(("detail_done", str(out_xlsx), len(output)))
-            open_folder(self.dest_dir)
-            return
+            # … rest of your merging + Excel export …
 
         except Exception as e:
             self.gui_q.put(("error", str(e)))
@@ -1190,7 +1146,7 @@ class ScraperGUI:
 
         ctk.CTkLabel(sel_f, text="Employee code:").grid(row=0, column=6, **pad, sticky="e")
         ctk.CTkEntry(
-            sel_f, textvariable=self.rta_var,
+            sel_f, textvariable=self.employee_code,
             placeholder_text="e.g. 75261", width=100
         ).grid(row=0, column=7, **pad, sticky="w")
         
