@@ -524,8 +524,11 @@ class ClicDetailScraper(threading.Thread):
             val_text = val_el.get_attribute("title") or val_el.text.strip()
             out[key_text] = val_text
 
+        print(out)
         self._dbg(f"✔ CSR parsed second panel: {len(entries)} fields")
 
+        out["Téléphone"] = out.get("NUMÉRO DE TÉLÉPHONE PRINCIPAL", "N/A").replace("Mobile - ", "").strip()
+        out["Courriel"] = out.get("NOM D'UTILISATEUR", "N/A")
 
         return out
     
@@ -577,10 +580,10 @@ class ClicDetailScraper(threading.Thread):
 
             salesforce=[]
             #print(doors_df)
-            for row in doors_df:
-                print(row)
-                salesforce.append(row)
-            print(csr_accts)
+            #for row in doors_df:
+            #    print(row)
+            #    salesforce.append(row)
+            #print(csr_accts)
             # 5) build a DataFrame of the scraped phones & emails
             specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone", "Courriel"]]
 
@@ -1105,7 +1108,7 @@ class ScraperGUI:
         ctk.set_default_color_theme("blue")
         self.root = ctk.CTk()
         self.root.title("Salesforce Door-Scraper")
-        self.root.geometry("830x640")
+        self.root.geometry("980x640")
         self.root.protocol("WM_DELETE_WINDOW", self._on_close)
 
         # État interne
