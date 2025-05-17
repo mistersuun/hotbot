@@ -237,7 +237,8 @@ class ClicDetailScraper(threading.Thread):
                  pause_evt: threading.Event,
                  dest_dir: Path,
                  clic_user: str,
-                 clic_pwd: str):
+                 clic_pwd: str,
+                 csr_code: str):
         super().__init__(daemon=True)
         self.path      = doors_path
         self.gui_q     = gui_q
@@ -245,6 +246,7 @@ class ClicDetailScraper(threading.Thread):
         self.driver: Optional[uc.Chrome] = None
         self.clic_user = clic_user
         self.clic_pwd  = clic_pwd
+        self.csr_code = csr_code
         self.rows: list[dict] = []
         self.dest_dir = dest_dir
         self._stop_evt = threading.Event()
@@ -1103,6 +1105,8 @@ class ScraperGUI:
         self.city_var   = tk.StringVar()
         self.street_var = tk.StringVar()
         self.rta_var    = tk.StringVar()
+        self.employee_code    = tk.StringVar()
+        self.employee_code    = tk.StringVar(value="20459")
 
         # Traces pour filtrage dynamique
         self.city_var.trace_add("write", self._filter_cities)
@@ -1162,9 +1166,15 @@ class ScraperGUI:
         ctk.CTkLabel(sel_f, text="RTA (opt.):").grid(row=0, column=4, **pad, sticky="e")
         ctk.CTkEntry(
             sel_f, textvariable=self.rta_var,
-            placeholder_text="e.g. 75261762", width=200
+            placeholder_text="e.g. 75261762", width=100
         ).grid(row=0, column=5, **pad, sticky="w")
 
+        ctk.CTkLabel(sel_f, text="Employee code:").grid(row=0, column=6, **pad, sticky="e")
+        ctk.CTkEntry(
+            sel_f, textvariable=self.rta_var,
+            placeholder_text="e.g. 75261", width=100
+        ).grid(row=0, column=7, **pad, sticky="w")
+        
         # — Boutons Start / Specifics / Pause / Stop —
         btn_f = ctk.CTkFrame(self.root)
         btn_f.pack(pady=8)
@@ -1268,6 +1278,7 @@ class ScraperGUI:
             dest_dir=Path(dst_dir),
             clic_user=self.clic_user_var.get().strip(),
             clic_pwd=self.clic_pwd_var.get().strip(),
+            csr_code=self.employee_code.get().strip(),
         )
         self._log(f"▶ Specifics : {doors_fp} → {dst_dir}")
         self.detail_scraper.start()
