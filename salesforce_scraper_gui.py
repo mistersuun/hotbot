@@ -489,7 +489,7 @@ class ClicDetailScraper(threading.Thread):
                 "input.form-control.mt-0.ng-pristine.ng-valid.ng-touched"
             )))
             inline.clear()
-            inline.send_keys("20459")
+            inline.send_keys(self.csr_code)
             self._dbg("✔ Entered 20459")
 
             # 4) Click the “Soumettre” button
@@ -542,7 +542,6 @@ class ClicDetailScraper(threading.Thread):
 
             # 2) launch browser & log in
             self.driver = build_driver()
-            self._login_and_ready()
 
             # 3) scrape each account
             for idx, acc in enumerate(accts, 1):
@@ -553,6 +552,8 @@ class ClicDetailScraper(threading.Thread):
                     time.sleep(0.3)
 
                 if len(acc) == 8:
+                    print(acc)
+                    self._login_and_ready()
                     info = self._scrape_one(acc)
                 else:
                     info = self._scrape_csr(acc)
