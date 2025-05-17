@@ -472,13 +472,31 @@ class ClicDetailScraper(threading.Thread):
 
         # 3) wait for postal-code combobox, type last 7 digits, submit
         try:
+            # … after CSR login is confirmed …
+
+            # 1) Click the combobox to open the single suggestion
             combo = wait.until(EC.element_to_be_clickable((By.ID, "postal-code")))
-            combo.clear()
-            combo.send_keys(account[-7:])
-            self._dbg(f"✔ Entered last 7 digits: {account[-7:]}")
+            combo.click()
+            self._dbg("✔ Opened postal-code combobox")
+
+            # 2) Arrow down & Enter to select the only item
+            combo.send_keys(Keys.ARROW_DOWN, Keys.ENTER)
+            self._dbg("✔ Selected the postal-code suggestion")
+
+            # 3) Now enter the fixed code “20459” into the next inline input
+            inline = wait.until(EC.element_to_be_clickable((
+                By.CSS_SELECTOR,
+                "input.form-control.mt-0.ng-pristine.ng-valid.ng-touched"
+            )))
+            inline.clear()
+            inline.send_keys("20459")
+            self._dbg("✔ Entered 20459")
+
+            # 4) Click the “Soumettre” button
             submit = wait.until(EC.element_to_be_clickable((By.ID, "Submit-btn")))
             submit.click()
-            self._dbg("✔ CSR postal-code submitted")
+            self._dbg("✔ Clicked Soumettre")
+
         except Exception as e:
             self._dbg(f"❌ Entering postal-code failed: {e}")
             return None
