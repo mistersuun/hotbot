@@ -11,6 +11,7 @@ salesforce_scraper_gui_v2.py
 from __future__ import annotations
 import contextlib, concurrent.futures as _fut
 import json, pathlib, queue, random, threading, time
+from selenium.webdriver.common.keys import Keys
 from datetime import datetime
 from typing import Dict, List, Optional
 import re
@@ -438,6 +439,78 @@ class ClicDetailScraper(threading.Thread):
 
         return out
 
+    def _scrape_csr(self, account: str) -> Optional[dict]:
+        """
+        For accounts longer than 8 chars, go to the CSR site,
+        log in, enter the last 7 digits of the account, submit,
+        click the user-icon, then parse all the key/value atoms.
+        """
+        d = self.driver
+        wait = WebDriverWait(d, 20)
+        out = {"Compte client": account}
+
+        # 1) load CSR dashboard
+        d.get("https://csr.etiya.videotron.com/private/dashboard")
+
+        # 2) wait for username, enter credentials
+        try:
+            usr = wait.until(EC.element_to_be_clickable((By.ID, "username")))
+            usr.clear()
+            usr.send_keys(self.clic_user)
+            usr.send_keys(Keys.TAB)
+
+            pwd = wait.until(EC.element_to_be_clickable((By.ID, "password")))
+            pwd.clear()
+            pwd.send_keys(self.clic_pwd)
+            pwd.send_keys(Keys.ENTER)
+            self._dbg("✔ CSR login submitted")
+        except Exception as e:
+            self._dbg(f"❌ CSR login failed: {e}")
+            return None
+
+        # 3) wait for postal-code combobox, type last 7 digits, submit
+        try:
+            combo = wait.until(EC.element_to_be_clickable((By.ID, "postal-code")))
+            combo.clear()
+            combo.send_keys(account[-7:])
+            self._dbg(f"✔ Entered last 7 digits: {account[-7:]}")
+            submit = wait.until(EC.element_to_be_clickable((By.ID, "Submit-btn")))
+            submit.click()
+            self._dbg("✔ CSR postal-code submitted")
+        except Exception as e:
+            self._dbg(f"❌ Entering postal-code failed: {e}")
+            return None
+
+        # 4) click the “user” icon to load details
+        try:
+            user_icon = wait.until(EC.element_to_be_clickable((
+                By.CSS_SELECTOR, "svg.icon-light[viewBox='0 0 30 30']"
+            )))
+            user_icon.click()
+            self._dbg("✔ CSR user icon clicked")
+        except Exception as e:
+            self._dbg(f"❌ CSR click user icon failed: {e}")
+            return None
+
+        # 5) wait for the detail panel and parse all atoms-key-value pairs
+        try:
+            panel = wait.until(EC.visibility_of_element_located((
+                By.CSS_SELECTOR, "div.inner.d-block.overflow-hidden"
+            )))
+            kvs = panel.find_elements(By.CSS_SELECTOR, "atoms-key-value")
+            for kv in kvs:
+                key = kv.get_attribute("keyclass")  # or better: find the <li class="key">
+                val = kv.find_element(By.CSS_SELECTOR, ".value").text.strip()
+                # normalize your key (e.g. strip, uppercase, etc)
+                out[key] = val
+            self._dbg(f"✔ CSR parsed {len(kvs)} fields")
+        except Exception as e:
+            self._dbg(f"❌ CSR parsing failed: {e}")
+            return None
+
+        # 6) return the collected dict
+        return out
+    
     # ---------- thread main ---------------------------------------------
     def run(self):
         try:
@@ -459,7 +532,11 @@ class ClicDetailScraper(threading.Thread):
                 while self.pause_evt.is_set() and not self._stop_evt.is_set():
                     time.sleep(0.3)
 
-                info = self._scrape_one(acc)
+                if len(acc) == 8:
+                    info = self._scrape_one(acc)
+                else:
+                    info = self._scrape_csr(acc)
+
                 if info:
                     self.rows.append(info)
                 self.gui_q.put(("detail_progress", idx, len(accts)))
@@ -847,11 +924,7 @@ class SalesforceScraper(threading.Thread):
                     # strip out non‐digits and count
                     digits = re.sub(r'\D', '', acct)
 
-                    if len(digits) <= 8:
-                        self.doors.append(rec)
-                    else:
-                        self._dbg(f"⏭ Skipping door, Compte client too long ({acct})")
-
+                    self.doors.append(rec)
 
                 # ── (3) progression GUI ─────────────────────────────────────
                 pct = None if total_pages is None else page_no / total_pages

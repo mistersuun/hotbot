@@ -1,8 +1,8 @@
-wait for load then enter clic_user elfathio
-tab then enter the clic_user pass Videotron2025$
-
 go to the website
 https://csr.etiya.videotron.com/private/dashboard
+
+wait for load then enter clic_user elfathio
+tab then enter the clic_user pass Videotron2025$
 
 select item inside there is only one and click
 <input role="combobox" id="postal-code" type="text" autocorrect="off" autocapitalize="off" autocomplete="a42ab3c36c00" aria-expanded="true" aria-owns="a42ab3c36c00" aria-activedescendant="a42ab3c36c00-0">
