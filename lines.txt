@@ -219,3 +219,70 @@ self._dbg(f"✔ CSR parsed second panel: {len(kvs2)} fields")
 return out
 
 <div csrcollapse="" class="collapse show" style=""><div data-collapse-content=""><div class="inner d-block overflow-hidden p-4 shadow rounded-bottom-left-10 rounded-bottom-right-10"><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Civilité <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="">M.</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Prénom <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="Guy">Guy</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Nom <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="Laberge">Laberge</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Date de naissance <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="">1990-06-18</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Nom de jeune fille de la mère <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title=""></li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Mot-clé secret <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="">Denise</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Nom d'utilisateur <!----></li><li class="color--vui-black mb-2 pl-3 size-13 text-ellipsis value w-50 weight-5" title="guylaberge18@gmail.com">guylaberge18@gmail.com</li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><atoms-key-value keycolor="vui--black" keyclass="key w-50 font-family-secondary size-14 weight-6 text-uppercase letter-spacing-1 mb-2" class="w-100"><div class="d-flex align-items-baseline"><ul class="list-unstyled d-flex flex-wrap w-100"><li class="color--vui--black font-family-secondary key letter-spacing-1 mb-2 size-14 text-uppercase w-50 weight-6"> Numéro de téléphone principal <!----></li><li class="color--vui-black mb-2 pl-3 size-13 value w-50 weight-5" title="">Mobile - (514) 886-4045 </li><!----><!----><!----></ul></div><!----><!----></atoms-key-value><!----><!----><div><atoms-button buttonlabel="Delegate" buttonclass="font-family-secondary size-14 weight-6 mt-md-3 mt-3 letter-spacing-normal" buttonid="delegate" class="d-inline-flex"><button id="Delegate-btn" type="button" class="btn font-family-secondary size-14 weight-6 mt-md-3 mt-3 letter-spacing-normal btn-primary btn-md">Mandataire</button></atoms-button><!----></div></div></div></div>
+
+# — ⑥ after pressing ENTER on the custId field…
+#    wait for the collapse panel to finish loading
+panel2 = wait.until(EC.visibility_of_element_located((
+    By.CSS_SELECTOR,
+    "div[csrcollapse].collapse.show div.inner.d-block.overflow-hidden"
+)))
+
+# — ⑦ grab each atoms-key-value inside it
+entries = panel2.find_elements(By.CSS_SELECTOR, "atoms-key-value")
+for entry in entries:
+    # the <li class="key"> holds the label
+    key_el   = entry.find_element(By.CSS_SELECTOR, "li.key")
+    # the <li class="value"> holds the value (sometimes in its title attr)
+    val_el   = entry.find_element(By.CSS_SELECTOR, "li.value")
+    key_text = key_el.text.strip()
+    # prefer the title="" attribute if present, else fallback to visible text
+    val_text = val_el.get_attribute("title") or val_el.text.strip()
+    out[key_text] = val_text
+
+self._dbg(f"✔ CSR parsed second panel: {len(entries)} fields")
+
+# — right after sending ENTER on custId…
+
+# 1) Wait for the collapse panel to be present in the DOM
+panel2 = wait.until(EC.presence_of_element_located((
+    By.CSS_SELECTOR,
+    "div[csrcollapse].collapse.show"
+)))
+
+# 2) Scroll it into view and override overflow: hidden
+d.execute_script("arguments[0].scrollIntoView(true);", panel2)
+d.execute_script("arguments[0].style.overflow = 'visible';", panel2)
+
+# 3) Grab every atoms-key-value anywhere under panel2
+entries = panel2.find_elements(By.CSS_SELECTOR, "atoms-key-value")
+
+for kv in entries:
+    key_el = kv.find_element(By.CSS_SELECTOR, "li.key")
+    val_el = kv.find_element(By.CSS_SELECTOR, "li.value")
+    key_text = key_el.text.strip()
+    val_text = val_el.get_attribute("title") or val_el.text.strip()
+    out[key_text] = val_text
+
+self._dbg(f"✔ CSR parsed second panel: {len(entries)} fields")
+
+
+# 1) presence via XPath
+panel2 = wait.until(EC.presence_of_element_located((
+    By.XPATH,
+    "//div[@csrcollapse and contains(@class,'show')]"
+)))
+
+# 2) scroll & un-hide
+d.execute_script("arguments[0].scrollIntoView(true);", panel2)
+d.execute_script("arguments[0].style.overflow = 'visible';", panel2)
+
+# 3) find all key‐value pairs
+entries = panel2.find_elements(By.XPATH, ".//atoms-key-value")
+
+for kv in entries:
+    key_text = kv.find_element(By.XPATH, ".//li[contains(@class,'key')]").text.strip()
+    val_node = kv.find_element(By.XPATH, ".//li[contains(@class,'value')]")
+    val_text = val_node.get_attribute("title") or val_node.text.strip()
+    out[key_text] = val_text
+
+self._dbg(f"✔ CSR parsed second panel: {len(entries)} fields")
