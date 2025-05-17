@@ -71,6 +71,9 @@ def downloads_dir() -> Path:
     xdg = os.getenv("XDG_DOWNLOAD_DIR")
     return Path(xdg) if xdg else Path.home() / "Downloads"
 
+def _clean_acc(acc: str):
+    return re.sub(r"\D", "", acc.strip())
+
 def open_folder(p: Path):
     try:
         if sys.platform.startswith("win"):
@@ -535,15 +538,20 @@ class ClicDetailScraper(threading.Thread):
     # ---------- thread main ---------------------------------------------
     def run(self):
         try:
-            accts = self._accounts_from_file(self.path)
+            raw_accts = self._accounts_from_file(self.path)
+            accts = [a.strip() for a in raw_accts if a and a.strip()]
+            digit_map = {a: _clean_acc(a) for a in accts}
+            
             if not accts:
                 self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client »."))  
                 return
 
             # 1️⃣ Split into two lists
-            clic_accts = [a for a in accts if len(a) <= 8]
-            csr_accts  = [a for a in accts if len(a) >  8]
+            clic_accts = [a for a, d in digit_map.items() if len(d) <= 8]
+            csr_accts  = [a for a, d in digit_map.items() if len(d) > 8]
 
+            self._dbg(f"Clic+ accounts (<8 digits): {clic_accts}")
+            self._dbg(f"Clic+ accounts (>8 digits): {csr_accts}")
             # 2️⃣ Launch browser once
             self.driver = build_driver()
 
@@ -596,7 +604,7 @@ class ClicDetailScraper(threading.Thread):
             # 7) assemble exactly the eight Template columns
             output = pd.DataFrame({
                 "ADRESSE": doors_df["Résidence"],
-                "CLIENT": doors_df["Compte client"],
+                "CLIENT": doors_df["Client"],
                 "NUMÉRO DE TÉLÉPHONE": specs_df["Téléphone"],
                 "COURRIEL": specs_df["Courriel"],
                 "NUMÉRO DE COMPTE": doors_df["Compte client"],
