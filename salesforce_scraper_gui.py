@@ -551,7 +551,7 @@ class ClicDetailScraper(threading.Thread):
             csr_accts  = [a for a, d in digit_map.items() if len(d) > 8]
 
             self._dbg(f"Clic+ accounts (<8 digits): {clic_accts}")
-            self._dbg(f"Clic+ accounts (>8 digits): {csr_accts}")
+            self._dbg(f"Etiya accounts (>8 digits): {csr_accts}")
             # 2️⃣ Launch browser once
             self.driver = build_driver()
 
@@ -595,22 +595,24 @@ class ClicDetailScraper(threading.Thread):
             # 5) build a DataFrame of the scraped phones & emails
             specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone", "Courriel"]]
 
+            doors_df["Compte client"] = doors_df["Compte client"].astype(str)
+            specs_df["Compte client"] = specs_df["Compte client"].astype(str)
             # 6) merge on Compte client
             merged = pd.merge(doors_df,
                               specs_df,
                               on="Compte client",
                               how="left")
-            print(merged)
+            #print(merged)
             # 7) assemble exactly the eight Template columns
             output = pd.DataFrame({
-                "ADRESSE": doors_df["Résidence"],
-                "CLIENT": doors_df["Client"],
-                "NUMÉRO DE TÉLÉPHONE": specs_df["Téléphone"],
-                "COURRIEL": specs_df["Courriel"],
-                "NUMÉRO DE COMPTE": doors_df["Compte client"],
-                "SERVICES ACTUELS": doors_df["Services actuels"],
-                "DERNIER STATUT": doors_df["Dernier statut"],
-                "SERVICE AVANT DEBRANCHEMENT": doors_df["Services avant débranchement"]
+                "ADRESSE": merged["Résidence"],
+                "CLIENT": merged["Client"],
+                "NUMÉRO DE TÉLÉPHONE": merged["Téléphone"],
+                "COURRIEL": merged["Courriel"],
+                "NUMÉRO DE COMPTE": merged["Compte client"],
+                "SERVICES ACTUELS": merged["Services actuels"],
+                "DERNIER STATUT": merged["Dernier statut"],
+                "SERVICE AVANT DEBRANCHEMENT": merged["Services avant débranchement"]
             })
 
             # 8) write out an .xlsx
