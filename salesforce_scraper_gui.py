@@ -504,17 +504,28 @@ class ClicDetailScraper(threading.Thread):
         cust.send_keys(account[-7:], Keys.ENTER)
         self._dbg(f"✔ Entered last 7 digits ({account[-7:]}) into custId")
 
-        # 7) — wait for the collapse‐show panel to appear, then parse its atoms-key-value
-        panel2 = wait.until(EC.visibility_of_element_located((
+        # 1) Wait for the collapse panel to be present in the DOM
+        panel2 = wait.until(EC.presence_of_element_located((
             By.CSS_SELECTOR,
-            "div[csrcollapse] .collapse.show"
+            "div[csrcollapse].collapse.show"
         )))
-        kvs2 = panel2.find_elements(By.CSS_SELECTOR, "atoms-key-value")
-        for kv in kvs2:
-            key = kv.find_element(By.CSS_SELECTOR, "li.key").text.strip()
-            val = kv.find_element(By.CSS_SELECTOR, "li.value").text.strip()
-            out[key] = val
-        self._dbg(f"✔ CSR parsed second panel: {len(kvs2)} fields")
+
+        # 2) Scroll it into view and override overflow: hidden
+        d.execute_script("arguments[0].scrollIntoView(true);", panel2)
+        d.execute_script("arguments[0].style.overflow = 'visible';", panel2)
+
+        # 3) Grab every atoms-key-value anywhere under panel2
+        entries = panel2.find_elements(By.CSS_SELECTOR, "atoms-key-value")
+
+        for kv in entries:
+            key_el = kv.find_element(By.CSS_SELECTOR, "li.key")
+            val_el = kv.find_element(By.CSS_SELECTOR, "li.value")
+            key_text = key_el.text.strip()
+            val_text = val_el.get_attribute("title") or val_el.text.strip()
+            out[key_text] = val_text
+
+        self._dbg(f"✔ CSR parsed second panel: {len(entries)} fields")
+
 
         return out
     
@@ -554,7 +565,55 @@ class ClicDetailScraper(threading.Thread):
                 if info: self.rows.append(info)
                 self.gui_q.put(("detail_progress", idx, len(accts)))
 
-            # … rest of your merging + Excel export …
+            # 4) load doors CSV, skipping the blank first line so header aligns
+            import pandas as pd
+            if self.path.suffix.lower() == ".csv":
+                doors_df = pd.read_csv(self.path, encoding="utf-8")
+            elif self.path.suffix.lower() == ".json":
+                doors = json.loads(self.path.read_text(encoding="utf-8"))
+                doors_df = pd.DataFrame(doors)
+            else:
+                raise ValueError(f"Unsupported file type {self.path.suffix}")
+
+            salesforce=[]
+            #print(doors_df)
+            for row in doors_df:
+                print(row)
+                salesforce.append(row)
+            print(csr_accts)
+            # 5) build a DataFrame of the scraped phones & emails
+            specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone", "Courriel"]]
+
+            # 6) merge on Compte client
+            #merged = pd.merge(doors_df,
+            #                  specs_df,
+            #                  on="Compte client",
+            #                  how="left")
+
+            # 7) assemble exactly the eight Template columns
+            output = pd.DataFrame({
+                "ADRESSE": doors_df["Résidence"],
+                "CLIENT": doors_df["Compte client"],
+                "NUMÉRO DE TÉLÉPHONE": specs_df["Téléphone"],
+                "COURRIEL": specs_df["Courriel"],
+                "NUMÉRO DE COMPTE": doors_df["Compte client"],
+                "SERVICES ACTUELS": doors_df["Services actuels"],
+                "DERNIER STATUT": doors_df["Dernier statut"],
+                "SERVICE AVANT DEBRANCHEMENT": doors_df["Services avant débranchement"]
+            })
+
+            # 8) write out an .xlsx
+            ts     = datetime.now().strftime("%Y%m%d-%H%M%S")
+            prefix = _slug(self.path.stem.replace("doors_", ""))
+            out_xlsx = self.dest_dir / f"specifics_{prefix}_{ts}.xlsx"
+
+            with pd.ExcelWriter(out_xlsx, engine="openpyxl") as writer:
+                output.to_excel(writer, index=False)
+
+            # 9) notify GUI and open folder
+            self.gui_q.put(("detail_done", str(out_xlsx), len(output)))
+            open_folder(self.dest_dir)
+            return
 
         except Exception as e:
             self.gui_q.put(("error", str(e)))
