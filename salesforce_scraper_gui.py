@@ -497,23 +497,35 @@ class ClicDetailScraper(threading.Thread):
             self._dbg(f"❌ CSR click user icon failed: {e}")
             return None
 
-        # 5) wait for the detail panel and parse all atoms-key-value pairs
-        try:
-            panel = wait.until(EC.visibility_of_element_located((
-                By.CSS_SELECTOR, "div.inner.d-block.overflow-hidden"
-            )))
-            kvs = panel.find_elements(By.CSS_SELECTOR, "atoms-key-value")
-            for kv in kvs:
-                key = kv.get_attribute("keyclass")  # or better: find the <li class="key">
-                val = kv.find_element(By.CSS_SELECTOR, ".value").text.strip()
-                # normalize your key (e.g. strip, uppercase, etc)
-                out[key] = val
-            self._dbg(f"✔ CSR parsed {len(kvs)} fields")
-        except Exception as e:
-            self._dbg(f"❌ CSR parsing failed: {e}")
-            return None
+        # 5) — (existing) wait for the first detail panel and parse it
+        panel1 = wait.until(EC.visibility_of_element_located((
+            By.CSS_SELECTOR, "div.inner.d-block.overflow-hidden"
+        )))
+        for kv in panel1.find_elements(By.CSS_SELECTOR, "atoms-key-value"):
+            key = kv.find_element(By.CSS_SELECTOR, "li.key").text.strip()
+            val = kv.find_element(By.CSS_SELECTOR, "li.value").text.strip()
+            out[key] = val
+        self._dbg(f"✔ CSR parsed header panel: {len(panel1.find_elements(By.CSS_SELECTOR,'atoms-key-value'))} fields")
 
-        # 6) return the collected dict
+        # 6) — enter the last 7 digits into the custId field and press ENTER
+        cust = wait.until(EC.element_to_be_clickable((By.ID, "custId")))
+        d.execute_script("arguments[0].scrollIntoView(true);", cust)
+        cust.clear()
+        cust.send_keys(account[-7:], Keys.ENTER)
+        self._dbg(f"✔ Entered last 7 digits ({account[-7:]}) into custId")
+
+        # 7) — wait for the collapse‐show panel to appear, then parse its atoms-key-value
+        panel2 = wait.until(EC.visibility_of_element_located((
+            By.CSS_SELECTOR,
+            "div[csrcollapse] .collapse.show div.inner.d-block.overflow-hidden"
+        )))
+        kvs2 = panel2.find_elements(By.CSS_SELECTOR, "atoms-key-value")
+        for kv in kvs2:
+            key = kv.find_element(By.CSS_SELECTOR, "li.key").text.strip()
+            val = kv.find_element(By.CSS_SELECTOR, "li.value").text.strip()
+            out[key] = val
+        self._dbg(f"✔ CSR parsed second panel: {len(kvs2)} fields")
+
         return out
     
     # ---------- thread main ---------------------------------------------
