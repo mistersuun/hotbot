@@ -1213,14 +1213,16 @@ class ScraperGUI:
         # — Boutons Start / Specifics / Pause / Stop —
         btn_f = ctk.CTkFrame(self.root)
         btn_f.pack(pady=8)
-        self.start_btn = ctk.CTkButton(btn_f, text="▶ Start", width=160, command=self._start)
-        self.detail_btn = ctk.CTkButton(btn_f, text="📄 Get specifics", width=160, state="normal", command=self._start_details)
+        self.full_btn         = ctk.CTkButton(btn_f, text="✅ Full Completion", width=160, command=self._full_completion)
+        self.get_doors_btn = ctk.CTkButton(btn_f, text="▶ Get Doors", width=160, command=self._start)
+        self.get_numbers_btn = ctk.CTkButton(btn_f, text="📄 Get Numbers", width=160, state="normal", command=self._start_details)
         self.pause_btn = ctk.CTkButton(btn_f, text="Pause", width=160, state="disabled", command=self._toggle_pause)
         self.stop_btn  = ctk.CTkButton(btn_f, text="■ Stop",  width=160, state="disabled", command=self._stop_worker)
-        self.start_btn.grid(row=0, column=0, padx=6)
-        self.detail_btn.grid(row=0, column=1, padx=6)
-        self.pause_btn.grid(row=0, column=2, padx=6)
-        self.stop_btn .grid(row=0, column=3, padx=6)
+        self.full_btn.grid(        row=0, column=0, padx=6)
+        self.get_doors_btn.grid(   row=0, column=1, padx=6)
+        self.get_numbers_btn.grid( row=0, column=2, padx=6)
+        self.pause_btn.grid(row=0, column=3, padx=6)
+        self.stop_btn. grid(row=0, column=4, padx=6)
 
         # — Progression & stats —
         self.prog      = ctk.CTkProgressBar(self.root, width=780)
@@ -1237,6 +1239,46 @@ class ScraperGUI:
         self.log = ctk.CTkTextbox(self.root, width=800, height=340, wrap="none")
         self.log.configure(state="disabled")
         self.log.pack(pady=8)
+
+    def _full_completion(self):
+        """
+        1) Ask for a folder.
+        2) Run the doors‐scraper into that folder.
+        3) When it finishes, automatically run the numbers‐scraper
+           against the newly created doors_*.csv (or .json) in that folder.
+        """
+        # pick a folder
+        dst = fd.askdirectory(title="Choose destination for doors + numbers", initialdir=downloads_dir())
+        if not dst:
+            return
+
+        # clear any old state
+        self.destination_folder = Path(dst)
+        self._log(f"▶ Full: doors → numbers into {dst}")
+
+        # step 1: run the SalesforceScraper
+        self.pause_evt.clear()
+        self.worker = SalesforceScraper(
+            self.user_var.get().strip(),
+            self.pwd_var.get().strip(),
+            self.city_var.get().strip(),
+            self.street_var.get().strip().upper() or None,
+            self.rta_var.get().strip() or None,
+            self.gui_q,
+            self.pause_evt,
+            dest_dir=self.destination_folder
+        )
+        self.worker.start()
+
+        # disable buttons until both finish
+        self.get_doors_btn.configure(state="disabled")
+        self.get_numbers_btn.configure(state="disabled")
+        self.full_btn.configure(state="disabled")
+        self.pause_btn.configure(state="normal")
+        self.stop_btn.configure(state="normal")
+
+        # tell _poll_queue that we're in full‐mode
+        self.full_mode = True
 
     def _load_or_fetch_cities(self):
         self.city2rel = fetch_or_load_cities(CITIES_CACHE)
@@ -1393,45 +1435,42 @@ class ScraperGUI:
             while True:
                 tag, *payload = self.gui_q.get_nowait()
 
-                if tag == "log":
-                    self._log(payload[0])
-
-                elif tag == "progress":
-                    pg, rng, doors, pct = payload
-                    self.page_lbl.configure(text=f"Page {pg} {rng}")
-                    self.door_lbl.configure(text=f"Doors: {doors:,}")
-                    self.prog.set(pct if pct is not None else -1)
-
-                elif tag == "done":
+                if tag == "done":
                     json_path, csv_path, cnt = payload
-                    self._log(f"✓ Terminé : {cnt:,} portes")
-                    self._log(f"JSON → {json_path}")
-                    self._log(f"CSV  → {csv_path}")
-                    messagebox.showinfo(
-                        "Done",
-                        f"{cnt:,} portes exportées\n{json_path}\n{csv_path}"
-                    )
-                    self._reset_buttons()
-
-                elif tag == "error":
-                    self._log(f"❌ ERREUR : {payload[0]}")
-                    messagebox.showerror("Error", payload[0])
-                    self._reset_buttons()
-                
-                elif tag == "detail_progress":
-                    done, total = payload
-                    self.page_lbl.configure(text=f"Compte {done}/{total}")
-                    # barre indéterminée ici :
-                    self.prog.set(done / total)
+                    self._log(f"✓ Doors done: {cnt:,} records")
+                    # if we're in full‐mode, immediately launch the numbers‐scraper:
+                    if getattr(self, "full_mode", False):
+                        # detect the doors file we just got:
+                        doors_fp = Path(csv_path if csv_path.endswith(".csv") else json_path)
+                        # fire up the ClicDetailScraper with the same dest folder
+                        self.detail_scraper = ClicDetailScraper(
+                            doors_fp,
+                            self.gui_q,
+                            self.pause_evt,
+                            dest_dir=self.destination_folder,
+                            clic_user=self.clic_user_var.get().strip(),
+                            clic_pwd=self.clic_pwd_var.get().strip(),
+                            csr_code=self.employee_code.get().strip()
+                        )
+                        self._log(f"▶ Full: now getting numbers from {doors_fp.name}")
+                        self.detail_scraper.start()
+                        # clear the flag so we only chain once
+                        self.full_mode = False
+                    else:
+                        # your normal single‐mode behavior:
+                        self._reset_buttons()
 
                 elif tag == "detail_done":
                     csv_path, nb = payload
-                    self._log(f"✓ Specifics terminé : {nb} comptes")
-                    self._log(f"CSV  → {csv_path}")
+                    self._log(f"✓ Numbers done: {nb} comptes")
+                    # full‐mode or normal, wrap up the UI:
+                    self._reset_buttons()
                     messagebox.showinfo(
-                        "Done", f"{nb} comptes exportés dans\n{csv_path}"
+                        "Full Completion",
+                        f"All done!\nDoors + Numbers in:\n{self.destination_folder}"
                     )
 
+                # … the rest of your existing handlers …
         except queue.Empty:
             pass
 
