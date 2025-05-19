@@ -444,19 +444,16 @@ class ClicDetailScraper(threading.Thread):
 
         return out
 
-    def _with_retries(self, label: str, func, *args, retries: int = 2, delay: float = 1.0):
-        """
-        Try `func(*args)` up to `retries` times, logging each failure.
-        On last failure it propagates the exception.
-        """
-        for attempt in range(1, retries + 1):
+    def _with_retries(self, label: str, func, *args, **kwargs):
+        """Try func(*args, **kwargs) up to 2 times, logging each failure."""
+        for attempt in (1, 2):
             try:
-                return func(*args)
+                return func(*args, **kwargs)
             except Exception as e:
-                self._dbg(f"⚠ {label} (attempt {attempt}/{retries}) failed: {e}")
-                if attempt == retries:
-                    raise
-                time.sleep(delay)
+                self._dbg(f"⚠ {label} failed (attempt {attempt}/2): {e}")
+                time.sleep(1)
+        # after 2 failures, bubble up
+        raise
 
     def _scrape_csr(self, account: str) -> Optional[dict]:
         d    = self.driver
@@ -466,14 +463,21 @@ class ClicDetailScraper(threading.Thread):
         # … after login …
         d.get("https://csr.etiya.videotron.com/private/dashboard")
 
-        # ① wait for the modal to appear (no change)
-        modal = wait.until(EC.visibility_of_element_located((
-            By.CSS_SELECTOR,
-            "div[role='document'].modal-dialog.modal-dialog-centered.modal-sm"
-        )))
-
+        # ① wait for the modal to appear
         try:
-            # ② Open postal-code combobox
+            modal = self._with_retries(
+                "wait for CSR modal",
+                wait.until,
+                EC.visibility_of_element_located(
+                    (By.CSS_SELECTOR,"div[role='document'].modal-dialog.modal-dialog-centered.modal-sm")
+                )
+            )
+        except Exception:
+            self._dbg("❌ CSR login modal never appeared → skipping account")
+            return None
+
+        # ②–⑤ fill in the modal
+        try:
             combo = self._with_retries(
                 "locate postal-code combobox",
                 modal.find_element,
@@ -483,13 +487,10 @@ class ClicDetailScraper(threading.Thread):
             self._with_retries("click postal-code combobox",
                                lambda el: d.execute_script("arguments[0].click();", el),
                                combo)
-
-            # ③ select suggestion
-            self._with_retries("select postal-code suggestion",
+            self._with_retries("select suggestion",
                                combo.send_keys,
                                Keys.ARROW_DOWN, Keys.ENTER)
 
-            # ④ enter CSR code
             inline = self._with_retries(
                 "locate CSR code input",
                 modal.find_element,
@@ -498,17 +499,17 @@ class ClicDetailScraper(threading.Thread):
             )
             self._with_retries("fill CSR code", inline.send_keys, self.csr_code)
 
-            # ⑤ click Submit
             submit = self._with_retries(
                 "locate Submit button",
                 modal.find_element,
                 By.CSS_SELECTOR,
                 "button#Submit-btn"
             )
-            self._with_retries("click Submit", lambda btn: d.execute_script("arguments[0].click();", btn), submit)
-
+            self._with_retries("click Submit",
+                               lambda btn: d.execute_script("arguments[0].click();", btn),
+                               submit)
         except Exception:
-            self._dbg("❌ CSR code entry in modal failed after retries")
+            self._dbg("❌ CSR code entry in modal failed after retries → skipping account")
             return None
 
         # 4) click the “user” icon
@@ -520,7 +521,7 @@ class ClicDetailScraper(threading.Thread):
             )
             self._with_retries("click CSR user icon", user_icon.click)
         except Exception:
-            self._dbg("❌ CSR click user icon failed after retries")
+            self._dbg("❌ CSR user‐icon click failed after retries → skipping account")
             return None
 
         # 6) enter last 7 digits into custId + ENTER
@@ -532,30 +533,30 @@ class ClicDetailScraper(threading.Thread):
             )
             self._with_retries("fill custId", cust.send_keys, account[-7:])
             time.sleep(0.7)
-            self._with_retries("press ENTER on custId", cust.send_keys, Keys.ENTER)
+            self._with_retries("press ENTER in custId", cust.send_keys, Keys.ENTER)
         except Exception:
-            self._dbg("❌ Entering last‐7 digits failed after retries")
+            self._dbg("❌ Entering last‐7 digits failed after retries → skipping account")
             return None
 
         # 1) wait for the collapse panel
         try:
             panel2 = self._with_retries(
                 "wait for collapse panel",
-                WebDriverWait(d, 30).until,
+                wait.until,
                 EC.visibility_of_element_located((By.CSS_SELECTOR, "div[csrcollapse].collapse.show"))
             )
             d.execute_script("arguments[0].scrollIntoView(true);", panel2)
             d.execute_script("arguments[0].style.overflow = 'visible';", panel2)
         except Exception:
-            self._dbg("❌ Collapse panel never appeared after retries")
+            self._dbg("❌ Collapse panel never appeared after retries → account may not exist, skipping")
             return None
 
-        # 3) parse entries (no change)
+        # 3) parse entries
         entries = panel2.find_elements(By.CSS_SELECTOR, "atoms-key-value")
         for kv in entries:
-            key_el = kv.find_element(By.CSS_SELECTOR, "li.key")
-            val_el = kv.find_element(By.CSS_SELECTOR, "li.value")
-            out[key_el.text.strip()] = (val_el.get_attribute("title") or val_el.text.strip())
+            key = kv.find_element(By.CSS_SELECTOR, "li.key").text.strip()
+            val = kv.find_element(By.CSS_SELECTOR, "li.value").get_attribute("title") or kv.text.strip()
+            out[key] = val
 
         self._dbg(f"✔ CSR parsed second panel: {len(entries)} fields")
         out["Téléphone"] = out.get("NUMÉRO DE TÉLÉPHONE PRINCIPAL", "N/A").replace("Mobile - ", "").strip()
