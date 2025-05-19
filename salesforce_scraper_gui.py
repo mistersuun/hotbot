@@ -923,8 +923,14 @@ class SalesforceScraper(threading.Thread):
                 for td in tbl.find_elements(By.TAG_NAME, "td")]
 
             rec = {tds[i]: tds[i + 1]
-                for i in range(0, len(tds), 2)
-                if i + 1 < len(tds) and tds[i]}
+               for i in range(0, len(tds), 2)
+               if i + 1 < len(tds) and tds[i]}
+
+            # ← NEW: drop any “fizz” clients
+            client_val = rec.get("Client", "") or rec.get("Compte client", "")
+            if "fizz" in client_val.lower():
+                self._dbg(f"⚠ Skipping fizz client: {client_val}")
+                return None
 
             self._dbg(f"✓ parsed {len(rec)} fields")
             return rec
