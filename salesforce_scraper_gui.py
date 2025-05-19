@@ -1295,6 +1295,21 @@ class ScraperGUI:
             self.pause_evt,
             dest_dir=self.destination_folder
         )
+        
+        if self.worker and self.worker.is_alive():
+            messagebox.showwarning("Running", "Scraper already running.")
+            return
+        user, pwd = self.user_var.get().strip(), self.pwd_var.get().strip()
+        if not user or not pwd:
+            messagebox.showerror("Error", "Entrez nom d’utilisateur et mot de passe.")
+            return
+        city = self.city_var.get().strip()
+        if not city:
+            messagebox.showerror("Error", "Sélectionnez une ville d’abord.")
+            return
+        street = self.street_var.get().strip().upper() or None
+        rta    = self.rta_var.get().strip() or None
+        
         self.worker.start()
 
         # disable buttons until both finish

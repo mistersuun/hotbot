@@ -5,7 +5,7 @@ a = Analysis(
     ['salesforce_scraper_gui.py'],
     pathex=[],
     binaries=[],
-    datas=[('config.json', '.'), ('data', 'data'), ('helpers', 'helpers'), ('chrome', 'chrome')],
+    datas=[('config.json', '.'), ('data', 'data'), ('helpers', 'helpers')],
     hiddenimports=['customtkinter', 'undetected_chromedriver'],
     hookspath=[],
     hooksconfig={},
@@ -35,4 +35,5 @@ exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['icon.ico'],
 )
