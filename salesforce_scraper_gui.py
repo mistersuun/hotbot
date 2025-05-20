@@ -18,7 +18,7 @@ import re
 import unicodedata
 from tkinter import filedialog
 import csv
-
+import pandas as pd, traceback, json, re
 # ── Dépendances externes ─────────────────────────────────────────────────
 import requests, undetected_chromedriver as uc
 from selenium.webdriver.common.by import By
@@ -564,70 +564,52 @@ class ClicDetailScraper(threading.Thread):
     
     # ---------- thread main ---------------------------------------------
     def run(self):
-        """
-        1.  Lit « Compte client » depuis doors_*.{csv|json} (en texte, zéros conservés)
-        2.  Sépare les comptes Clic+ (≤ 8 chiffres) et CSR (> 8) puis scrape
-        3.  Fusionne sur un helper key digits-only (duplicates allowed)
-        4.  Produit specifics_*.xlsx — toujours, même si zéro porte valide
-        """
-        try:
-            # ── 0) charger le fichier doors en conservant les zéros ─────────
-            import pandas as pd, json, csv, re, traceback
 
+        try:
+            # ── 0) read doors_* file, keep leading zeros ───────────────────
             if self.path.suffix.lower() == ".csv":
                 doors_df = pd.read_csv(
                     self.path,
                     encoding="utf-8",
-                    dtype={"Compte client": str}          # ← important
+                    dtype={"Compte client": str}          # ← keep zeros
                 )
             elif self.path.suffix.lower() == ".json":
-                doors = json.loads(self.path.read_text(encoding="utf-8"))
-                doors_df = pd.DataFrame(doors)
+                doors_df = pd.DataFrame(json.loads(self.path.read_text("utf-8")))
                 doors_df["Compte client"] = doors_df["Compte client"].astype(str)
             else:
-                raise ValueError(f"Unsupported file type {self.path.suffix}")
+                raise ValueError("Unsupported file type")
 
             accts = doors_df["Compte client"].dropna().astype(str).tolist()
             if not accts:
                 self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client »."))
                 return
 
-            # helper « digits-only » pour repérer Clic+ vs CSR
-            digit_map   = {a: _clean_acc(a) for a in accts}
-            clic_accts  = [a for a, d in digit_map.items() if len(d) <= 8]
-            csr_accts   = [a for a, d in digit_map.items() if len(d) > 8]
+            # split ⇢ Clic+ vs CSR
+            clic_accts = [a for a in accts if len(_clean_acc(a)) <= 8]
+            csr_accts  = [a for a in accts if len(_clean_acc(a)) >  8]
 
-            self._dbg(f"Clic+  (≤ 8) : {len(clic_accts):,}")
-            self._dbg(f"CSR   (> 8) : {len(csr_accts):,}")
-
-            # ── 1) Selenium ────────────────────────────────────────────────
             self.driver = build_driver()
 
-            # A) Clic+
+            # ── 1) scrape Clic+ ------------------------------------------------
             if clic_accts:
                 self._login_and_ready()
                 for idx, acc in enumerate(clic_accts, 1):
                     if self._stop_evt.is_set(): break
                     while self.pause_evt.is_set(): time.sleep(0.3)
-
                     info = self._scrape_one(acc)
                     if info: self.rows.append(info)
                     self.gui_q.put(("detail_progress", idx, len(accts)))
 
-            # B) CSR
+            # ── 2) scrape CSR --------------------------------------------------
             for idx, acc in enumerate(csr_accts, len(clic_accts) + 1):
                 if self._stop_evt.is_set(): break
                 while self.pause_evt.is_set(): time.sleep(0.3)
-
                 info = self._scrape_csr(acc)
                 if info: self.rows.append(info)
                 self.gui_q.put(("detail_progress", idx, len(accts)))
 
-            # ── 2) fusion téléphone+mail ←→ doors ─────────────────────────
+            # ── 3) merge phones/emails back into doors_df ---------------------
             specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone", "Courriel"]]
-            specs_df["Compte client"] = specs_df["Compte client"].astype(str)
-
-            # helper key sans séparateurs pour la jointure
             doors_df["acct_digits"]  = doors_df["Compte client"].str.replace(r"\D", "", regex=True)
             specs_df["acct_digits"]  = specs_df["Compte client"].str.replace(r"\D", "", regex=True)
 
@@ -635,13 +617,19 @@ class ClicDetailScraper(threading.Thread):
                 doors_df,
                 specs_df[["acct_digits", "Téléphone", "Courriel"]],
                 on="acct_digits",
-                how="left",                 # duplicates autorisés
+                how="left",
                 validate="many_to_one"
             )
 
-            # ── 3) assembler les 8 colonnes du modèle ─────────────────────
-            get = lambda col: merged[col] if col in merged.columns else ""
+            # optional: report still-missing numbers
+            miss = merged[merged["Téléphone"].isna()]
+            if not miss.empty:
+                miss_path = self.dest_dir / "missing_after_merge.csv"
+                miss.to_csv(miss_path, index=False, encoding="utf-8")
+                self._dbg(f"⚠ {len(miss)} comptes sans téléphone → {miss_path.name}")
 
+            # ── 4) build the 8-column template --------------------------------
+            get = lambda col: merged[col] if col in merged.columns else ""
             output = pd.DataFrame({
                 "ADRESSE":                     get("Résidence"),
                 "CLIENT":                      get("Client"),
@@ -653,9 +641,9 @@ class ClicDetailScraper(threading.Thread):
                 "SERVICE AVANT DEBRANCHEMENT": get("Services avant débranchement")
             })
 
-            # ── 4) export Excel ───────────────────────────────────────────
-            ts       = datetime.now().strftime("%Y%m%d-%H%M%S")
-            prefix   = _slug(self.path.stem.replace("doors_", ""))
+            # ── 5) export ------------------------------------------------------
+            ts     = datetime.now().strftime("%Y%m%d-%H%M%S")
+            prefix = _slug(self.path.stem.replace("doors_", ""))
             out_xlsx = self.dest_dir / f"specifics_{prefix}_{ts}.xlsx"
 
             with pd.ExcelWriter(out_xlsx, engine="openpyxl") as wr:
@@ -665,14 +653,12 @@ class ClicDetailScraper(threading.Thread):
             open_folder(self.dest_dir)
 
         except Exception as e:
-            # log complet pour debug
-            self._dbg("Export failed:\n" + traceback.format_exc())
+            self._dbg("ERROR:\n" + traceback.format_exc())
             self.gui_q.put(("error", str(e)))
 
         finally:
             if self.driver:
-                with contextlib.suppress(Exception):
-                    self.driver.quit()
+                with contextlib.suppress(Exception): self.driver.quit()
 
 # ── Thread Worker ───────────────────────────────────────────────────────
 class SalesforceScraper(threading.Thread):
