@@ -109,14 +109,14 @@ def _slug(txt: str) -> str:
         return ""
     # normaliser / enlever accents
     txt = unicodedata.normalize("NFKD", txt).encode("ascii", "ignore").decode()
-    # remplacer tout ce qui n’est pas [a-z0-9] par _
+    # remplacer tout ce qui n'est pas [a-z0-9] par _
     txt = re.sub(r"[^a-zA-Z0-9]+", "_", txt).strip("_").lower()
     return re.sub(r"_{2,}", "_", txt)  # compacter ___
 
 def load_cities_cache(path: Path) -> dict[str, int] | None:
     """
     Lit le cache JSON en UTF-8 et renvoie le dict city→rel_id,
-    ou None s’il n’existe pas / n’est pas lisible.
+    ou None s'il n'existe pas / n'est pas lisible.
     """
     if not path.exists():
         return None
@@ -128,7 +128,7 @@ def load_cities_cache(path: Path) -> dict[str, int] | None:
 
 def save_cities_cache(path: Path, data: dict[str, int]) -> None:
     """
-    Sauvegarde le dict city→rel_id en JSON UTF-8, sans erreur d’encodage.
+    Sauvegarde le dict city→rel_id en JSON UTF-8, sans erreur d'encodage.
     """
     with open(path, "w", encoding="utf-8") as f:
         json.dump(data, f, indent=2, ensure_ascii=False)
@@ -137,7 +137,7 @@ def fetch_or_load_cities(path: Path) -> dict[str, int]:
     """
     Essaie de charger le cache, sinon fetch_all_cities() et sauvegarde.
     """
-    from __main__ import fetch_all_cities  # ou adapte l’import
+    from __main__ import fetch_all_cities  # ou adapte l'import
     cache = load_cities_cache(path)
     if cache is not None:
         return {c: int(r) for c, r in cache.items()}
@@ -197,7 +197,7 @@ def wait_visible(drv, by, val, timeout=20):
 def safe_find(drv, css_or_xpath: str, by=By.CSS_SELECTOR,
                 timeout=15, retries=3, sleep_step=0.5):
     """
-    Essaie de localiser un élément plusieurs fois avant d’échouer.
+    Essaie de localiser un élément plusieurs fois avant d'échouer.
     `css_or_xpath` : chaîne CSS (défaut) ou XPath si `by` est By.XPATH.
     """
     for attempt in range(1, retries + 1):
@@ -276,7 +276,7 @@ class ClicDetailScraper(threading.Thread):
         return WebDriverWait(self.driver, to).until(
             EC.visibility_of_element_located((by, sel)))
 
-    # ───── ClicDetailScraper._login_and_ready  (remplace l’ancienne version)
+    # ───── ClicDetailScraper._login_and_ready  (remplace l'ancienne version)
     def _login_and_ready(self):
         d = self.driver
         d.get(self.URL)
@@ -308,7 +308,7 @@ class ClicDetailScraper(threading.Thread):
             )
             # ② Make sure it's in view
             d.execute_script("arguments[0].scrollIntoView({ block: 'center' });", second_cont_btn)
-            # ③ Use JS to click it (more reliable when something intercepts Selenium’s .click())
+            # ③ Use JS to click it (more reliable when something intercepts Selenium's .click())
             d.execute_script("arguments[0].click();", second_cont_btn)
 
         except Exception as e:
@@ -334,89 +334,113 @@ class ClicDetailScraper(threading.Thread):
     def _scrape_one(self, account: str) -> Optional[dict]:
         """Return a dict of all header fields—or None if phone never appeared."""
         d     = self.driver
-        wait  = WebDriverWait(d, 10)
+        wait  = WebDriverWait(d, 15)  # Increased timeout
         out   = {"Compte client": account}
+        self._dbg(f"\n🔍 Starting scrape for account: {account}")
 
         # ② ─ Make sure the account input is clickable (open panel if needed)
         try:
             inp = wait.until(EC.element_to_be_clickable(LOCATORS["input"]))
+            self._dbg("✓ Found account input field")
         except TimeoutException:
             # panel was closed, click the magnifier to reopen
             try:
+                self._dbg("⚠ Search panel closed, attempting to reopen...")
                 icon = wait.until(EC.element_to_be_clickable(LOCATORS["reopen"]))
                 icon.click()
                 inp = wait.until(EC.element_to_be_clickable(LOCATORS["input"]))
+                self._dbg("✓ Successfully reopened search panel")
             except Exception as e:
-                self._dbg(f"❌ compte {account} step ② (open panel): {e}")
+                self._dbg(f"❌ Failed to reopen search panel: {e}")
                 return None
 
         try:
             inp.clear()
             inp.send_keys(account)
-            self._dbg("✔ step ②: input field ready and account entered")
+            self._dbg(f"✓ Entered account number: {account}")
         except Exception as e:
-            self._dbg(f"❌ compte {account} step ② (send_keys): {e}")
+            self._dbg(f"❌ Failed to enter account number: {e}")
             return None
 
-        # ③ ─ Click “Rechercher”
+        # ③ ─ Click "Rechercher"
         try:
             btn = wait.until(EC.element_to_be_clickable(LOCATORS["search_btn"]))
             btn.click()
-            self._dbg("✔ step ③: clicked Rechercher")
+            self._dbg("✓ Clicked Rechercher button")
         except Exception as e:
-            self._dbg(f"❌ compte {account} step ③ (click): {e}")
+            self._dbg(f"❌ Failed to click Rechercher: {e}")
             return None
 
-        # ④ ─ Wait for the results header
-        try:
-            # a) wait for the outer header container
-            header = wait.until(EC.visibility_of_element_located(LOCATORS["header"]))
-            self._dbg("✔ step ④a: header container is visible")
+        # ④ ─ Wait for the results header with retries
+        max_retries = 3
+        for retry in range(max_retries):
+            try:
+                # a) wait for the outer header container
+                header = wait.until(EC.visibility_of_element_located(LOCATORS["header"]))
+                self._dbg("✓ Header container is visible")
 
-            # b) wait for the 'Requérant' sub-block inside it (data-qa='clic__Requerant')
-            wait.until(EC.visibility_of_element_located((
-                By.CSS_SELECTOR, "[data-qa='clic__Header'] [data-qa='clic__Requerant']"
-            )))
-            self._dbg("✔ step ④b: 'Requérant' block inside header is visible")
-        except Exception as e:
-            self._dbg(f"❌ compte {account} step ④ (header wait): {e}")
-            return None
+                # b) wait for the 'Requérant' sub-block inside it
+                wait.until(EC.visibility_of_element_located((
+                    By.CSS_SELECTOR, "[data-qa='clic__Header'] [data-qa='clic__Requerant']"
+                )))
+                self._dbg("✓ Requérant block is visible")
+                break
+            except Exception as e:
+                if retry == max_retries - 1:
+                    self._dbg(f"❌ Failed to load header after {max_retries} attempts: {e}")
+                    return None
+                self._dbg(f"⚠ Retry {retry + 1}/{max_retries} for header...")
+                time.sleep(2)
 
         # ⑤ ─ Parse all label/value pairs in that header
         try:
             lines = [l.strip() for l in header.text.splitlines() if l.strip()]
+            self._dbg(f"Found {len(lines)//2} fields in header:")
             for i in range(0, len(lines) - 1, 2):
-                out[lines[i]] = lines[i + 1]
-            self._dbg(f"✔ step ⑤: parsed {len(lines)//2} fields")
+                key = lines[i]
+                val = lines[i + 1]
+                out[key] = val
+                self._dbg(f"  • {key}: {val}")
         except Exception as e:
-            self._dbg(f"❌ compte {account} step ⑤ (parse): {e}")
+            self._dbg(f"❌ Failed to parse header fields: {e}")
             return None
 
-        # ─▶ Ensure the phone number is present (retry once if needed)
+        # ─▶ Ensure the phone number is present (retry multiple times if needed)
         contact_css = "[data-qa='clic__Contact']"
         def phone_loaded(driver):
             try:
                 txt = driver.find_element(By.CSS_SELECTOR, contact_css).text
+                self._dbg(f"Contact block text: {txt}")
             except NoSuchElementException:
                 return False
             # look for a pattern like 418 588-4462 or similar
-            return bool(re.search(r"\d{3}\s*\d{3}-\d{4}", txt))
+            has_phone = bool(re.search(r"\d{3}\s*\d{3}-\d{4}", txt))
+            if has_phone:
+                self._dbg("✓ Found phone number pattern in contact block")
+            return has_phone
 
-        # first check
-        if not phone_loaded(d):
-            self._dbg(f"⚠ compte {account} phone not yet loaded—waiting 5s and retrying")
-            time.sleep(5)
-            if not phone_loaded(d):
-                self._dbg(f"❌ compte {account} phone still missing after retry—skipping")
-                return None
+        # Try multiple times with increasing delays
+        for retry in range(3):
+            if phone_loaded(d):
+                break
+            self._dbg(f"⚠ Phone not found, waiting {5 * (retry + 1)}s (attempt {retry + 1}/3)")
+            time.sleep(5 * (retry + 1))
+        else:
+            self._dbg("❌ Phone number not found after all retries")
+            return None
 
         # now pull out the phone (and email) from the contact block
         try:
             contact_el = d.find_element(By.CSS_SELECTOR, contact_css)
             parts = [ln.strip() for ln in contact_el.text.splitlines() if ln.strip()]
+            self._dbg(f"Contact block parts: {parts}")
 
             # find any email‐looking part
             email = next((p for p in parts if "@" in p), "")
+            if email:
+                self._dbg(f"✓ Found email: {email}")
+            else:
+                self._dbg("⚠ No email found")
 
             # find any phone‐looking part (e.g. 418 588-4462 or 4185884462)
             phone = next(
@@ -424,12 +448,16 @@ class ClicDetailScraper(threading.Thread):
                 if re.search(r"\d{3}[\s\-]?\d{3}[\s\-]?\d{4}", p)),
                 ""
             )
+            if phone:
+                self._dbg(f"✓ Found phone: {phone}")
+            else:
+                self._dbg("⚠ No phone found")
 
             out["Courriel"]  = email or "N/A"
             out["Téléphone"] = phone or "N/A"
-            self._dbg("✔ step ⑥: extracted Courriel & Téléphone")
+            self._dbg("✓ Added contact info to output")
         except Exception as e:
-            self._dbg(f"❌ compte {account} step ⑥ (extract contact): {e}")
+            self._dbg(f"❌ Failed to extract contact info: {e}")
             return None
 
         # ⑦ ─ Re-open the search panel
@@ -437,40 +465,34 @@ class ClicDetailScraper(threading.Thread):
             reopen = wait.until(EC.element_to_be_clickable(LOCATORS["reopen"]))
             # JS click in case normal click is blocked
             d.execute_script("arguments[0].click();", reopen)
-            self._dbg("✔ step ⑦: reopened search for next iteration")
+            self._dbg("✓ Reopened search panel for next iteration")
         except Exception as e:
-            self._dbg(f"⚠ compte {account} step ⑦ (reopen search): {e}")
+            self._dbg(f"⚠ Failed to reopen search panel: {e}")
             # not a fatal error—interface may still work for next loop
 
+        self._dbg(f"✓ Successfully scraped account {account}")
         return out
-
-    def _with_retries(self, label: str, func, *args, retries: int = 2, delay: float = 1.0):
-        """
-        Try `func(*args)` up to `retries` times, logging each failure.
-        On last failure it propagates the exception.
-        """
-        for attempt in range(1, retries + 1):
-            try:
-                return func(*args)
-            except Exception as e:
-                self._dbg(f"⚠ {label} (attempt {attempt}/{retries}) failed: {e}")
-                if attempt == retries:
-                    raise
-                time.sleep(delay)
 
     def _scrape_csr(self, account: str) -> Optional[dict]:
         d    = self.driver
         wait = WebDriverWait(d, 20)
         out  = {"Compte client": account}
+        self._dbg(f"\n🔍 Starting CSR scrape for account: {account}")
 
         # … after login …
         d.get("https://csr.etiya.videotron.com/private/dashboard")
+        self._dbg("✓ Loaded CSR dashboard")
 
         # ① wait for the modal to appear (no change)
-        modal = wait.until(EC.visibility_of_element_located((
-            By.CSS_SELECTOR,
-            "div[role='document'].modal-dialog.modal-dialog-centered.modal-sm"
-        )))
+        try:
+            modal = wait.until(EC.visibility_of_element_located((
+                By.CSS_SELECTOR,
+                "div[role='document'].modal-dialog.modal-dialog-centered.modal-sm"
+            )))
+            self._dbg("✓ Found postal code modal")
+        except Exception as e:
+            self._dbg(f"❌ Failed to find postal code modal: {e}")
+            return None
 
         try:
             # ② Open postal-code combobox
@@ -480,14 +502,18 @@ class ClicDetailScraper(threading.Thread):
                 By.CSS_SELECTOR,
                 "input[role='combobox']#postal-code"
             )
+            self._dbg("✓ Found postal code combobox")
+            
             self._with_retries("click postal-code combobox",
                                lambda el: d.execute_script("arguments[0].click();", el),
                                combo)
+            self._dbg("✓ Clicked postal code combobox")
 
             # ③ select suggestion
             self._with_retries("select postal-code suggestion",
                                combo.send_keys,
                                Keys.ARROW_DOWN, Keys.ENTER)
+            self._dbg("✓ Selected postal code suggestion")
 
             # ④ enter CSR code
             inline = self._with_retries(
@@ -496,7 +522,10 @@ class ClicDetailScraper(threading.Thread):
                 By.CSS_SELECTOR,
                 "atoms-input-with-label#work-site-user-number input.form-control"
             )
+            self._dbg("✓ Found CSR code input")
+            
             self._with_retries("fill CSR code", inline.send_keys, self.csr_code)
+            self._dbg(f"✓ Entered CSR code: {self.csr_code}")
 
             # ⑤ click Submit
             submit = self._with_retries(
@@ -505,22 +534,28 @@ class ClicDetailScraper(threading.Thread):
                 By.CSS_SELECTOR,
                 "button#Submit-btn"
             )
+            self._dbg("✓ Found Submit button")
+            
             self._with_retries("click Submit", lambda btn: d.execute_script("arguments[0].click();", btn), submit)
+            self._dbg("✓ Clicked Submit")
 
-        except Exception:
-            self._dbg("❌ CSR code entry in modal failed after retries")
+        except Exception as e:
+            self._dbg(f"❌ Failed to complete modal: {e}")
             return None
 
-        # 4) click the “user” icon
+        # 4) click the "user" icon
         try:
             user_icon = self._with_retries(
                 "locate CSR user icon",
                 wait.until,
                 EC.element_to_be_clickable((By.CSS_SELECTOR, "svg.icon-light.svg-size--4"))
             )
+            self._dbg("✓ Found user icon")
+            
             self._with_retries("click CSR user icon", user_icon.click)
-        except Exception:
-            self._dbg("❌ CSR click user icon failed after retries")
+            self._dbg("✓ Clicked user icon")
+        except Exception as e:
+            self._dbg(f"❌ Failed to click user icon: {e}")
             return None
 
         # 6) enter last 7 digits into custId + ENTER
@@ -530,11 +565,17 @@ class ClicDetailScraper(threading.Thread):
                 wait.until,
                 EC.element_to_be_clickable((By.ID, "custId"))
             )
-            self._with_retries("fill custId", cust.send_keys, account[-7:])
+            self._dbg("✓ Found custId field")
+            
+            last_7 = account[-7:]
+            self._with_retries("fill custId", cust.send_keys, last_7)
+            self._dbg(f"✓ Entered last 7 digits: {last_7}")
+            
             time.sleep(0.7)
             self._with_retries("press ENTER on custId", cust.send_keys, Keys.ENTER)
-        except Exception:
-            self._dbg("❌ Entering last‐7 digits failed after retries")
+            self._dbg("✓ Pressed ENTER on custId")
+        except Exception as e:
+            self._dbg(f"❌ Failed to enter custId: {e}")
             return None
 
         # 1) wait for the collapse panel
@@ -544,75 +585,126 @@ class ClicDetailScraper(threading.Thread):
                 WebDriverWait(d, 30).until,
                 EC.visibility_of_element_located((By.CSS_SELECTOR, "div[csrcollapse].collapse.show"))
             )
+            self._dbg("✓ Found collapse panel")
+            
             d.execute_script("arguments[0].scrollIntoView(true);", panel2)
             d.execute_script("arguments[0].style.overflow = 'visible';", panel2)
-        except Exception:
-            self._dbg("❌ Collapse panel never appeared after retries")
+            self._dbg("✓ Scrolled panel into view")
+        except Exception as e:
+            self._dbg(f"❌ Failed to find collapse panel: {e}")
             return None
 
         # 3) parse entries (no change)
-        entries = panel2.find_elements(By.CSS_SELECTOR, "atoms-key-value")
-        for kv in entries:
-            key_el = kv.find_element(By.CSS_SELECTOR, "li.key")
-            val_el = kv.find_element(By.CSS_SELECTOR, "li.value")
-            out[key_el.text.strip()] = (val_el.get_attribute("title") or val_el.text.strip())
+        try:
+            entries = panel2.find_elements(By.CSS_SELECTOR, "atoms-key-value")
+            self._dbg(f"Found {len(entries)} key-value pairs:")
+            
+            for kv in entries:
+                key_el = kv.find_element(By.CSS_SELECTOR, "li.key")
+                val_el = kv.find_element(By.CSS_SELECTOR, "li.value")
+                key = key_el.text.strip()
+                val = val_el.get_attribute("title") or val_el.text.strip()
+                out[key] = val
+                self._dbg(f"  • {key}: {val}")
 
-        self._dbg(f"✔ CSR parsed second panel: {len(entries)} fields")
+            self._dbg(f"✓ Successfully parsed {len(entries)} fields")
+        except Exception as e:
+            self._dbg(f"❌ Failed to parse panel entries: {e}")
+            return None
+
         out["Téléphone"] = out.get("NUMÉRO DE TÉLÉPHONE PRINCIPAL", "N/A").replace("Mobile - ", "").strip()
         out["Courriel"]  = out.get("NOM D'UTILISATEUR", "N/A")
+        self._dbg(f"✓ Final contact info - Phone: {out['Téléphone']}, Email: {out['Courriel']}")
+        
+        self._dbg(f"✓ Successfully scraped CSR account {account}")
         return out
     
     # ---------- thread main ---------------------------------------------
     def run(self):
-
         try:
             # ── 0) read doors_* file, keep leading zeros ───────────────────
+            self._dbg(f"\n📂 Reading input file: {self.path}")
             if self.path.suffix.lower() == ".csv":
                 doors_df = pd.read_csv(
                     self.path,
                     encoding="utf-8",
                     dtype={"Compte client": str}          # ← keep zeros
                 )
+                self._dbg(f"✓ Loaded CSV with {len(doors_df)} rows")
             elif self.path.suffix.lower() == ".json":
                 doors_df = pd.DataFrame(json.loads(self.path.read_text("utf-8")))
                 doors_df["Compte client"] = doors_df["Compte client"].astype(str)
+                self._dbg(f"✓ Loaded JSON with {len(doors_df)} rows")
             else:
                 raise ValueError("Unsupported file type")
 
             accts = doors_df["Compte client"].dropna().astype(str).tolist()
             if not accts:
+                self._dbg("❌ No accounts found in input file")
                 self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client »."))
                 return
+
+            self._dbg(f"Found {len(accts)} accounts to process")
 
             # split ⇢ Clic+ vs CSR
             clic_accts = [a for a in accts if len(_clean_acc(a)) <= 8]
             csr_accts  = [a for a in accts if len(_clean_acc(a)) >  8]
+            self._dbg(f"Split accounts - Clic+: {len(clic_accts)}, CSR: {len(csr_accts)}")
 
             self.driver = build_driver()
+            self._dbg("✓ Initialized Chrome driver")
 
             # ── 1) scrape Clic+ ------------------------------------------------
             if clic_accts:
+                self._dbg("\n🔄 Starting Clic+ scraping")
                 self._login_and_ready()
                 for idx, acc in enumerate(clic_accts, 1):
                     if self._stop_evt.is_set(): break
                     while self.pause_evt.is_set(): time.sleep(0.3)
                     info = self._scrape_one(acc)
-                    if info: self.rows.append(info)
+                    if info: 
+                        self.rows.append(info)
+                        self._dbg(f"✓ Added Clic+ data for account {acc}")
+                    else:
+                        self._dbg(f"❌ Failed to get Clic+ data for account {acc}")
                     self.gui_q.put(("detail_progress", idx, len(accts)))
 
             # ── 2) scrape CSR --------------------------------------------------
-            for idx, acc in enumerate(csr_accts, len(clic_accts) + 1):
-                if self._stop_evt.is_set(): break
-                while self.pause_evt.is_set(): time.sleep(0.3)
-                info = self._scrape_csr(acc)
-                if info: self.rows.append(info)
-                self.gui_q.put(("detail_progress", idx, len(accts)))
+            if csr_accts:
+                self._dbg("\n🔄 Starting CSR scraping")
+                for idx, acc in enumerate(csr_accts, len(clic_accts) + 1):
+                    if self._stop_evt.is_set(): break
+                    while self.pause_evt.is_set(): time.sleep(0.3)
+                    info = self._scrape_csr(acc)
+                    if info: 
+                        self.rows.append(info)
+                        self._dbg(f"✓ Added CSR data for account {acc}")
+                    else:
+                        self._dbg(f"❌ Failed to get CSR data for account {acc}")
+                    self.gui_q.put(("detail_progress", idx, len(accts)))
 
             # ── 3) merge phones/emails back into doors_df ---------------------
-            specs_df = pd.DataFrame(self.rows)[["Compte client", "Téléphone", "Courriel"]]
-            doors_df["acct_digits"]  = doors_df["Compte client"].str.replace(r"\D", "", regex=True)
-            specs_df["acct_digits"]  = specs_df["Compte client"].str.replace(r"\D", "", regex=True)
+            if not self.rows:
+                self._dbg("❌ No results found during scraping")
+                return
 
+            self._dbg(f"\n🔄 Starting merge process with {len(self.rows)} results")
+            specs_df = pd.DataFrame(self.rows)
+            
+            # Normalize account numbers for matching
+            doors_df["acct_digits"] = doors_df["Compte client"].str.replace(r"\D", "", regex=True)
+            specs_df["acct_digits"] = specs_df["Compte client"].str.replace(r"\D", "", regex=True)
+            self._dbg("✓ Normalized account numbers for matching")
+            
+            # Ensure we have the required columns
+            if "Téléphone" not in specs_df.columns:
+                specs_df["Téléphone"] = "N/A"
+                self._dbg("⚠ Added missing Téléphone column")
+            if "Courriel" not in specs_df.columns:
+                specs_df["Courriel"] = "N/A"
+                self._dbg("⚠ Added missing Courriel column")
+
+            # Merge with better handling of duplicates
             merged = pd.merge(
                 doors_df,
                 specs_df[["acct_digits", "Téléphone", "Courriel"]],
@@ -620,13 +712,19 @@ class ClicDetailScraper(threading.Thread):
                 how="left",
                 validate="many_to_one"
             )
+            self._dbg(f"✓ Merged data - {len(merged)} rows")
+
+            # Fill missing values with N/A
+            merged["Téléphone"] = merged["Téléphone"].fillna("N/A")
+            merged["Courriel"] = merged["Courriel"].fillna("N/A")
+            self._dbg("✓ Filled missing values with N/A")
 
             # optional: report still-missing numbers
-            miss = merged[merged["Téléphone"].isna()]
+            miss = merged[merged["Téléphone"] == "N/A"]
             if not miss.empty:
                 miss_path = self.dest_dir / "missing_after_merge.csv"
                 miss.to_csv(miss_path, index=False, encoding="utf-8")
-                self._dbg(f"⚠ {len(miss)} comptes sans téléphone → {miss_path.name}")
+                self._dbg(f"⚠ {len(miss)} accounts missing phone numbers → {miss_path.name}")
 
             # ── 4) build the 8-column template --------------------------------
             get = lambda col: merged[col] if col in merged.columns else ""
@@ -640,6 +738,7 @@ class ClicDetailScraper(threading.Thread):
                 "DERNIER STATUT":              get("Dernier statut"),
                 "SERVICE AVANT DEBRANCHEMENT": get("Services avant débranchement")
             })
+            self._dbg("✓ Built output template")
 
             # ── 5) export ------------------------------------------------------
             ts     = datetime.now().strftime("%Y%m%d-%H%M%S")
@@ -648,9 +747,11 @@ class ClicDetailScraper(threading.Thread):
 
             with pd.ExcelWriter(out_xlsx, engine="openpyxl") as wr:
                 output.to_excel(wr, index=False)
+            self._dbg(f"✓ Exported to Excel: {out_xlsx}")
 
             self.gui_q.put(("detail_done", str(out_xlsx), len(output)))
             open_folder(self.dest_dir)
+            self._dbg("✓ Process complete!")
 
         except Exception as e:
             self._dbg("ERROR:\n" + traceback.format_exc())
@@ -658,7 +759,9 @@ class ClicDetailScraper(threading.Thread):
 
         finally:
             if self.driver:
-                with contextlib.suppress(Exception): self.driver.quit()
+                with contextlib.suppress(Exception): 
+                    self._dbg("Closing Chrome driver")
+                    self.driver.quit()
 
 # ── Thread Worker ───────────────────────────────────────────────────────
 class SalesforceScraper(threading.Thread):
@@ -752,9 +855,9 @@ class SalesforceScraper(threading.Thread):
             while self.pause_evt.is_set() and not self._stop_evt.is_set():
                 time.sleep(0.5)
             self._dbg("⏳ resuming after MFA")
-            # --- si l’onglet d’origine a été fermé par Salesforce -------------
+            # --- si l'onglet d'origine a été fermé par Salesforce -------------
             try:
-                # simple ping : « donne-moi le titre »
+                # simple ping : « donne-moi le titre »
                 _ = d.title
             except Exception:
                 self._dbg("⚠ session DevTools perdue – recherche onglet survivant")
@@ -765,7 +868,7 @@ class SalesforceScraper(threading.Thread):
                     self._dbg(f"✔ basculé sur handle {last}")
                 except Exception as e:
                     self._dbg(f"❌ impossible de récupérer la session ({e})")
-                    return False        # → run() attrapera et loguera l’erreur
+                    return False        # → run() attrapera et loguera l'erreur
             wait_visible(d, By.ID, "phSearchInput")
             return not self._stop_evt.is_set()
 
@@ -784,7 +887,7 @@ class SalesforceScraper(threading.Thread):
         d.find_element(By.ID, "phSearchButton").click()
         time.sleep(1)
 
-        # 2) Cliquer sur “Afficher les filtres” si dispo
+        # 2) Cliquer sur "Afficher les filtres" si dispo
         try:
             filt_btn = WebDriverWait(d, 8).until(
                 EC.element_to_be_clickable((
@@ -797,9 +900,9 @@ class SalesforceScraper(threading.Thread):
         except TimeoutException:
             self._dbg("⚠ pas de panneau filtres détecté (UI différente ?)")
 
-        # 3) Sélectionner “Actif = Oui”
+        # 3) Sélectionner "Actif = Oui"
         try:
-            # attendre la visibilité du select “Actif”
+            # attendre la visibilité du select "Actif"
             # APRÈS  (By.ID => toujours valide)
             sel_elem = safe_find(
                 d,
@@ -901,7 +1004,7 @@ class SalesforceScraper(threading.Thread):
         """
         1. Ouvre <href> dans un NOUVEL onglet (fini les filtres qui sautent).
         2. Parse exactement comme avant avec safe_find + <td> pairs.
-        3. Ferme l’onglet et revient sur la liste.
+        3. Ferme l'onglet et revient sur la liste.
         """
         if self._stop_evt.is_set():
             return None
@@ -915,7 +1018,7 @@ class SalesforceScraper(threading.Thread):
         d.get(href)
 
         try:
-            # ── 2) parsing “ancien style” — on ne change rien
+            # ── 2) parsing "ancien style" — on ne change rien
             tbl = safe_find(d, "#ep table.detailList")     # votre helper existant
             tds = [td.text.strip() or None
                 for td in tbl.find_elements(By.TAG_NAME, "td")]
@@ -924,7 +1027,7 @@ class SalesforceScraper(threading.Thread):
                for i in range(0, len(tds), 2)
                if i + 1 < len(tds) and tds[i]}
 
-            # ← NEW: drop any “fizz” clients
+            # ← NEW: drop any "fizz" clients
             client_val = rec.get("Client", "") or rec.get("Compte client", "")
             if "fizz" in client_val.lower():
                 self._dbg(f"⚠ Skipping fizz client: {client_val}")
@@ -940,7 +1043,7 @@ class SalesforceScraper(threading.Thread):
         finally:
             # ── 3) nettoyage
             try:
-                d.close()                       # referme l’onglet détail
+                d.close()                       # referme l'onglet détail
             finally:
                 d.switch_to.window(main)        # retourne à la liste
                 # petit wait pour garantir que la table est de nouveau interactive
@@ -976,7 +1079,7 @@ class SalesforceScraper(threading.Thread):
                 links = [a.get_attribute("href") for a in
                         self.driver.find_elements(By.CSS_SELECTOR,
                                                 "table.list tr.dataRow th a")]
-                if not links:                      # aucune ligne => on s’arrête
+                if not links:                      # aucune ligne => on s'arrête
                     self._dbg("🚨 aucun enregistrement trouvé, arrêt boucle")
                     break
 
@@ -987,7 +1090,7 @@ class SalesforceScraper(threading.Thread):
                     if not rec:
                         continue
 
-                    # grab the raw “Compte client” value (fall back to empty string)
+                    # grab the raw "Compte client" value (fall back to empty string)
                     acct = rec.get("Compte client", "")
                     # strip out non‐digits and count
                     digits = re.sub(r'\D', '', acct)
@@ -1001,7 +1104,7 @@ class SalesforceScraper(threading.Thread):
 
                 from selenium.common.exceptions import StaleElementReferenceException
 
-                # --- (4) tenter d’avancer ------------------------------------------------
+                # --- (4) tenter d'avancer ------------------------------------------------
                 try:
                     # garder une référence au tableau courant
                     old_tbl = self.driver.find_element(By.CSS_SELECTOR, "table.list")
@@ -1022,7 +1125,7 @@ class SalesforceScraper(threading.Thread):
                         self._dbg("click Page suivante")
                         self.driver.execute_script("arguments[0].parentElement.click()", nxt_img)
 
-                        # ❶ attendre que l’ancien tableau devienne obsolète,
+                        # ❶ attendre que l'ancien tableau devienne obsolète,
                         #    puis ❷ attendre que le nouveau soit prêt
                         WebDriverWait(self.driver, 10).until(EC.staleness_of(old_tbl))
                         WebDriverWait(self.driver, 15).until(
@@ -1074,7 +1177,7 @@ class SalesforceScraper(threading.Thread):
             return                           # ← il ne faut plus rien après
 
 
-            # même si aucune porte n’a été trouvée, écrire un fichier JSON vide
+            # même si aucune porte n'a été trouvée, écrire un fichier JSON vide
             json_path.write_text(json.dumps(self.doors, ensure_ascii=False, indent=2),
                                 encoding="utf-8")
 
@@ -1085,7 +1188,7 @@ class SalesforceScraper(threading.Thread):
                 self.gui_q.put(("done", str(json_path), str(csv_path), 0))
                 return
 
-            # ➋ construire l’ensemble complet des champs rencontrés
+            # ➋ construire l'ensemble complet des champs rencontrés
             all_keys = set().union(*(rec.keys() for rec in self.doors))
             header   = ["city", "street", "rta"] + sorted(all_keys)
 
@@ -1159,7 +1262,7 @@ class ScraperGUI:
         self.city2rel: Dict[str, int] = {}
         self.city2streets: Dict[str, List[str]] = {}
 
-        # Variables liées à l’UI
+        # Variables liées à l'UI
         self.user_var   = tk.StringVar()
         self.pwd_var    = tk.StringVar()
         self.user_var   = tk.StringVar(value="othmane.elfathi@videotron.com")
@@ -1305,11 +1408,11 @@ class ScraperGUI:
             return
         user, pwd = self.user_var.get().strip(), self.pwd_var.get().strip()
         if not user or not pwd:
-            messagebox.showerror("Error", "Entrez nom d’utilisateur et mot de passe.")
+            messagebox.showerror("Error", "Entrez nom d'utilisateur et mot de passe.")
             return
         city = self.city_var.get().strip()
         if not city:
-            messagebox.showerror("Error", "Sélectionnez une ville d’abord.")
+            messagebox.showerror("Error", "Sélectionnez une ville d'abord.")
             return
         street = self.street_var.get().strip().upper() or None
         rta    = self.rta_var.get().strip() or None
@@ -1421,11 +1524,11 @@ class ScraperGUI:
             return
         user, pwd = self.user_var.get().strip(), self.pwd_var.get().strip()
         if not user or not pwd:
-            messagebox.showerror("Error", "Entrez nom d’utilisateur et mot de passe.")
+            messagebox.showerror("Error", "Entrez nom d'utilisateur et mot de passe.")
             return
         city = self.city_var.get().strip()
         if not city:
-            messagebox.showerror("Error", "Sélectionnez une ville d’abord.")
+            messagebox.showerror("Error", "Sélectionnez une ville d'abord.")
             return
         street = self.street_var.get().strip().upper() or None
         rta    = self.rta_var.get().strip() or None
