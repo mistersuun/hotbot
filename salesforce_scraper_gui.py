@@ -637,19 +637,29 @@ class ClicDetailScraper(threading.Thread):
                 self._dbg(f"✓ Loaded JSON with {len(doors_df)} rows")
             else:
                 raise ValueError("Unsupported file type")
-
+            
+            # Debug: Show the first few rows of the input data
+            self._dbg(f"\n📊 Input data preview:")
+            self._dbg(f"Columns: {', '.join(doors_df.columns)}")
+            self._dbg(f"First 5 rows:\n{doors_df.head().to_string()}")
+            
             accts = doors_df["Compte client"].dropna().astype(str).tolist()
             if not accts:
                 self._dbg("❌ No accounts found in input file")
                 self.gui_q.put(("error", "Le fichier ne contient aucun « Compte client »."))
                 return
 
-            self._dbg(f"Found {len(accts)} accounts to process")
+            self._dbg(f"\n📋 Found {len(accts)} accounts to process")
+            self._dbg(f"First 5 accounts: {accts[:5]}")
 
             # split ⇢ Clic+ vs CSR
             clic_accts = [a for a in accts if len(_clean_acc(a)) <= 8]
             csr_accts  = [a for a in accts if len(_clean_acc(a)) >  8]
             self._dbg(f"Split accounts - Clic+: {len(clic_accts)}, CSR: {len(csr_accts)}")
+            if clic_accts:
+                self._dbg(f"First 5 Clic+ accounts: {clic_accts[:5]}")
+            if csr_accts:
+                self._dbg(f"First 5 CSR accounts: {csr_accts[:5]}")
 
             self.driver = build_driver()
             self._dbg("✓ Initialized Chrome driver")
@@ -665,6 +675,8 @@ class ClicDetailScraper(threading.Thread):
                     if info: 
                         self.rows.append(info)
                         self._dbg(f"✓ Added Clic+ data for account {acc}")
+                        self._dbg(f"  • Phone: {info.get('Téléphone', 'N/A')}")
+                        self._dbg(f"  • Email: {info.get('Courriel', 'N/A')}")
                     else:
                         self._dbg(f"❌ Failed to get Clic+ data for account {acc}")
                     self.gui_q.put(("detail_progress", idx, len(accts)))
@@ -679,6 +691,8 @@ class ClicDetailScraper(threading.Thread):
                     if info: 
                         self.rows.append(info)
                         self._dbg(f"✓ Added CSR data for account {acc}")
+                        self._dbg(f"  • Phone: {info.get('Téléphone', 'N/A')}")
+                        self._dbg(f"  • Email: {info.get('Courriel', 'N/A')}")
                     else:
                         self._dbg(f"❌ Failed to get CSR data for account {acc}")
                     self.gui_q.put(("detail_progress", idx, len(accts)))
@@ -691,10 +705,20 @@ class ClicDetailScraper(threading.Thread):
             self._dbg(f"\n🔄 Starting merge process with {len(self.rows)} results")
             specs_df = pd.DataFrame(self.rows)
             
+            # Debug: Show the specs data
+            self._dbg(f"\n📊 Specs data preview:")
+            self._dbg(f"Columns: {', '.join(specs_df.columns)}")
+            self._dbg(f"First 5 rows:\n{specs_df.head().to_string()}")
+            
             # Normalize account numbers for matching
             doors_df["acct_digits"] = doors_df["Compte client"].str.replace(r"\D", "", regex=True)
             specs_df["acct_digits"] = specs_df["Compte client"].str.replace(r"\D", "", regex=True)
             self._dbg("✓ Normalized account numbers for matching")
+            
+            # Debug: Show the normalized account numbers
+            self._dbg(f"\n📊 Normalized account numbers:")
+            self._dbg(f"Doors accounts: {doors_df['acct_digits'].head().tolist()}")
+            self._dbg(f"Specs accounts: {specs_df['acct_digits'].head().tolist()}")
             
             # Ensure we have the required columns
             if "Téléphone" not in specs_df.columns:
@@ -713,6 +737,11 @@ class ClicDetailScraper(threading.Thread):
                 validate="many_to_one"
             )
             self._dbg(f"✓ Merged data - {len(merged)} rows")
+            
+            # Debug: Show the merged data
+            self._dbg(f"\n📊 Merged data preview:")
+            self._dbg(f"Columns: {', '.join(merged.columns)}")
+            self._dbg(f"First 5 rows:\n{merged.head().to_string()}")
 
             # Fill missing values with N/A
             merged["Téléphone"] = merged["Téléphone"].fillna("N/A")
@@ -722,9 +751,13 @@ class ClicDetailScraper(threading.Thread):
             # optional: report still-missing numbers
             miss = merged[merged["Téléphone"] == "N/A"]
             if not miss.empty:
-                miss_path = self.dest_dir / "missing_after_merge.csv"
-                miss.to_csv(miss_path, index=False, encoding="utf-8")
-                self._dbg(f"⚠ {len(miss)} accounts missing phone numbers → {miss_path.name}")
+                miss_path = self.dest_dir / "missing_after_merge.csv"  # Changed to use dest_dir
+                try:
+                    miss.to_csv(miss_path, index=False, encoding="utf-8")
+                    self._dbg(f"⚠ {len(miss)} accounts missing phone numbers → {miss_path.name}")
+                except Exception as e:
+                    self._dbg(f"⚠ Could not save missing accounts file: {e}")
+                    # Continue with the process even if we can't save the missing accounts file
 
             # ── 4) build the 8-column template --------------------------------
             get = lambda col: merged[col] if col in merged.columns else ""
@@ -739,19 +772,28 @@ class ClicDetailScraper(threading.Thread):
                 "SERVICE AVANT DEBRANCHEMENT": get("Services avant débranchement")
             })
             self._dbg("✓ Built output template")
+            
+            # Debug: Show the final output data
+            self._dbg(f"\n📊 Final output preview:")
+            self._dbg(f"Columns: {', '.join(output.columns)}")
+            self._dbg(f"First 5 rows:\n{output.head().to_string()}")
 
             # ── 5) export ------------------------------------------------------
             ts     = datetime.now().strftime("%Y%m%d-%H%M%S")
             prefix = _slug(self.path.stem.replace("doors_", ""))
             out_xlsx = self.dest_dir / f"specifics_{prefix}_{ts}.xlsx"
 
-            with pd.ExcelWriter(out_xlsx, engine="openpyxl") as wr:
-                output.to_excel(wr, index=False)
-            self._dbg(f"✓ Exported to Excel: {out_xlsx}")
-
-            self.gui_q.put(("detail_done", str(out_xlsx), len(output)))
-            open_folder(self.dest_dir)
-            self._dbg("✓ Process complete!")
+            self._dbg(f"\n💾 Exporting to Excel: {out_xlsx}")
+            try:
+                with pd.ExcelWriter(out_xlsx, engine="openpyxl") as wr:
+                    output.to_excel(wr, index=False)
+                self._dbg(f"✓ Successfully exported to Excel")
+                self.gui_q.put(("detail_done", str(out_xlsx), len(output)))
+                open_folder(self.dest_dir)
+                self._dbg("✓ Process complete!")
+            except Exception as e:
+                self._dbg(f"❌ Failed to export Excel: {e}")
+                raise
 
         except Exception as e:
             self._dbg("ERROR:\n" + traceback.format_exc())
@@ -1289,6 +1331,16 @@ class ScraperGUI:
         self.root.after(100, self._poll_queue)
         self.root.mainloop()
 
+    def _log(self, txt: str):
+        """Enhanced logging with timestamp and auto-scroll"""
+        ts = datetime.now().strftime("[%H:%M:%S] ")
+        self.log.configure(state="normal")
+        self.log.insert("end", ts + txt + "\n")
+        self.log.see("end")  # Auto-scroll to bottom
+        self.log.configure(state="disabled")
+        # Force update of the GUI
+        self.root.update_idletasks()
+
     def _build_widgets(self):
         pad = {"padx": 8, "pady": 3}
 
@@ -1302,7 +1354,7 @@ class ScraperGUI:
         ctk.CTkLabel(cred_f, text="SF Password:").grid(row=0, column=2, **pad, sticky="e")
         ctk.CTkEntry(cred_f, textvariable=self.pwd_var, show="*").grid(row=0, column=3, **pad, sticky="w")
 
-        # — Clic+ Identifiants —  ← NEW
+        # — Clic+ Identifiants —
         clic_f = ctk.CTkFrame(self.root)
         clic_f.pack(pady=4, fill="x")
         for c in range(4):
@@ -1388,7 +1440,8 @@ class ScraperGUI:
 
         # clear any old state
         self.destination_folder = Path(dst)
-        self._log(f"▶ Full: doors → numbers into {dst}")
+        self._log(f"▶ Starting Full Completion process in {dst}")
+        self._log("Step 1: Getting doors from Salesforce...")
 
         # step 1: run the SalesforceScraper
         self.pause_evt.clear()
@@ -1497,6 +1550,13 @@ class ScraperGUI:
                                 initialdir=downloads_dir())
         if not dst_dir:
             return
+
+        # Reset UI
+        self.prog.set(0)
+        self.log.configure(state="normal")
+        self.log.delete("1.0","end")
+        self.log.configure(state="disabled")
+
         self.detail_scraper = ClicDetailScraper(
             Path(doors_fp),
             self.gui_q,
@@ -1506,17 +1566,10 @@ class ScraperGUI:
             clic_pwd=self.clic_pwd_var.get().strip(),
             csr_code=self.employee_code.get().strip(),
         )
-        self._log(f"▶ Specifics : {doors_fp} → {dst_dir}")
+        self._log(f"▶ Starting numbers scraping from {doors_fp}")
         self.detail_scraper.start()
-        self.pause_btn .configure(state="normal")
-        self.stop_btn  .configure(state="normal")
-
-    def _log(self, txt: str):
-        ts = datetime.now().strftime("[%H:%M:%S] ")
-        self.log.configure(state="normal")
-        self.log.insert("end", ts + txt + "\n")
-        self.log.see("end")
-        self.log.configure(state="disabled")
+        self.pause_btn.configure(state="normal")
+        self.stop_btn.configure(state="normal")
 
     def _start(self):
         if self.worker and self.worker.is_alive():
@@ -1553,11 +1606,12 @@ class ScraperGUI:
             user, pwd, city, street, rta,
             self.gui_q, self.pause_evt, dest_dir=self.dest_dir,
         )
+        self._log(f"▶ Starting doors scraping for {city}" + (f" - {street}" if street else ""))
         self.worker.start()
 
-        self.start_btn.configure(state="disabled")
+        self.get_doors_btn.configure(state="disabled")
         self.pause_btn.configure(state="normal")
-        self.stop_btn .configure(state="normal")
+        self.stop_btn.configure(state="normal")
 
     def _toggle_pause(self):
         if not self.worker:
@@ -1565,18 +1619,18 @@ class ScraperGUI:
         if self.pause_evt.is_set():
             self.pause_evt.clear()
             self.pause_btn.configure(text="Pause")
-            self._log("▶ Reprise")
+            self._log("▶ Resuming...")
         else:
             self.pause_evt.set()
             self.pause_btn.configure(text="Resume")
-            self._log("⏸ Pause demandée")
+            self._log("⏸ Paused")
 
     def _stop_worker(self):
         if self.worker and self.worker.is_alive():
             self.worker.stop()
         if hasattr(self, 'detail_scraper') and self.detail_scraper.is_alive():
             self.detail_scraper.stop()
-        self._log("⏹ Arrêt demandé…")
+        self._log("⏹ Stopping...")
         self.pause_evt.clear()
 
     def _poll_queue(self):
@@ -1584,13 +1638,30 @@ class ScraperGUI:
             while True:
                 tag, *payload = self.gui_q.get_nowait()
 
-                if tag == "done":
+                if tag == "log":
+                    # Direct log message from worker
+                    self._log(payload[0])
+                elif tag == "progress":
+                    page_no, range_text, doors, pct = payload
+                    self.page_lbl.configure(text=f"Page: {page_no} {range_text}")
+                    self.door_lbl.configure(text=f"Doors: {doors}")
+                    if pct is not None:
+                        self.prog.set(pct)
+                elif tag == "detail_progress":
+                    idx, total = payload
+                    pct = idx / total
+                    self.prog.set(pct)
+                    self._log(f"Progress: {idx}/{total} accounts processed ({pct:.1%})")
+                elif tag == "done":
                     json_path, csv_path, cnt = payload
-                    self._log(f"✓ Doors done: {cnt:,} records")
+                    self._log(f"✓ Doors scraping complete: {cnt:,} records")
+                    self._log(f"  • JSON: {json_path}")
+                    self._log(f"  • CSV: {csv_path}")
                     # if we're in full‐mode, immediately launch the numbers‐scraper:
                     if getattr(self, "full_mode", False):
                         # detect the doors file we just got:
                         doors_fp = Path(csv_path if csv_path.endswith(".csv") else json_path)
+                        self._log(f"\n▶ Starting Step 2: Getting numbers from {doors_fp.name}")
                         # fire up the ClicDetailScraper with the same dest folder
                         self.detail_scraper = ClicDetailScraper(
                             doors_fp,
@@ -1601,7 +1672,6 @@ class ScraperGUI:
                             clic_pwd=self.clic_pwd_var.get().strip(),
                             csr_code=self.employee_code.get().strip()
                         )
-                        self._log(f"▶ Full: now getting numbers from {doors_fp.name}")
                         self.detail_scraper.start()
                         # clear the flag so we only chain once
                         self.full_mode = False
@@ -1611,24 +1681,33 @@ class ScraperGUI:
 
                 elif tag == "detail_done":
                     csv_path, nb = payload
-                    self._log(f"✓ Numbers done: {nb} comptes")
+                    self._log(f"\n✓ Numbers scraping complete: {nb} accounts processed")
+                    self._log(f"  • Output: {csv_path}")
                     # full‐mode or normal, wrap up the UI:
                     self._reset_buttons()
                     messagebox.showinfo(
                         "Full Completion",
                         f"All done!\nDoors + Numbers in:\n{self.destination_folder}"
                     )
+                elif tag == "error":
+                    self._log(f"❌ ERROR: {payload[0]}")
+                    messagebox.showerror("Error", payload[0])
+                    self._reset_buttons()
+                elif tag == "mfa_wait":
+                    self._log("⏳ Waiting for MFA completion...")
+                    messagebox.showinfo("MFA Required", "Please complete MFA in the browser window.")
 
-                # … the rest of your existing handlers …
         except queue.Empty:
             pass
 
         self.root.after(150, self._poll_queue)
 
     def _reset_buttons(self):
-        self.start_btn.configure(state="normal")
+        self.get_doors_btn.configure(state="normal")
+        self.get_numbers_btn.configure(state="normal")
+        self.full_btn.configure(state="normal")
         self.pause_btn.configure(state="disabled")
-        self.stop_btn .configure(state="disabled")
+        self.stop_btn.configure(state="disabled")
         self.prog.set(1)
 
     def _on_close(self):
