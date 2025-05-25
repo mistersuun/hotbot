@@ -260,6 +260,22 @@ class ClicDetailScraper(threading.Thread):
     def _dbg(self, txt: str):
         self.gui_q.put(("log", txt))
 
+    def _with_retries(self, description: str, func, *args, **kwargs):
+        """Helper method for retrying operations with logging"""
+        max_retries = 3
+        for attempt in range(max_retries):
+            try:
+                self._dbg(f"  Attempting {description} (try {attempt + 1}/{max_retries})")
+                result = func(*args, **kwargs)
+                self._dbg(f"  ✓ {description} successful")
+                return result
+            except Exception as e:
+                if attempt == max_retries - 1:
+                    self._dbg(f"  ❌ {description} failed after {max_retries} attempts: {e}")
+                    raise
+                self._dbg(f"  ⚠ {description} failed (attempt {attempt + 1}), retrying...")
+                time.sleep(1)
+
     @staticmethod
     def _accounts_from_file(fp: Path) -> list[str]:
         if fp.suffix == ".json":
@@ -751,13 +767,16 @@ class ClicDetailScraper(threading.Thread):
             # optional: report still-missing numbers
             miss = merged[merged["Téléphone"] == "N/A"]
             if not miss.empty:
-                miss_path = self.dest_dir / "missing_after_merge.csv"  # Changed to use dest_dir
                 try:
+                    ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+                    miss_path = self.dest_dir / f"missing_after_merge_{ts}.csv"
                     miss.to_csv(miss_path, index=False, encoding="utf-8")
                     self._dbg(f"⚠ {len(miss)} accounts missing phone numbers → {miss_path.name}")
                 except Exception as e:
                     self._dbg(f"⚠ Could not save missing accounts file: {e}")
-                    # Continue with the process even if we can't save the missing accounts file
+                    self._dbg(f"⚠ {len(miss)} accounts missing phone numbers (file not saved)")
+            else:
+                self._dbg("✓ All accounts have phone numbers!")
 
             # ── 4) build the 8-column template --------------------------------
             get = lambda col: merged[col] if col in merged.columns else ""
@@ -784,19 +803,34 @@ class ClicDetailScraper(threading.Thread):
             out_xlsx = self.dest_dir / f"specifics_{prefix}_{ts}.xlsx"
 
             self._dbg(f"\n💾 Exporting to Excel: {out_xlsx}")
-            try:
-                with pd.ExcelWriter(out_xlsx, engine="openpyxl") as wr:
-                    output.to_excel(wr, index=False)
-                self._dbg(f"✓ Successfully exported to Excel")
-                self.gui_q.put(("detail_done", str(out_xlsx), len(output)))
-                open_folder(self.dest_dir)
-                self._dbg("✓ Process complete!")
-            except Exception as e:
-                self._dbg(f"❌ Failed to export Excel: {e}")
-                raise
+            with pd.ExcelWriter(out_xlsx, engine="openpyxl") as wr:
+                output.to_excel(wr, index=False)
+            self._dbg(f"✓ Successfully exported to Excel")
+
+            self.gui_q.put(("detail_done", str(out_xlsx), len(output)))
+            open_folder(self.dest_dir)
+            self._dbg("✓ Process complete!")
 
         except Exception as e:
             self._dbg("ERROR:\n" + traceback.format_exc())
+            
+            # ALWAYS try to generate the Excel file even if there's an error
+            try:
+                if hasattr(self, 'rows') and self.rows:
+                    self._dbg("⚠ Attempting to save partial results...")
+                    specs_df = pd.DataFrame(self.rows)
+                    ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+                    prefix = _slug(self.path.stem.replace("doors_", ""))
+                    out_xlsx = self.dest_dir / f"specifics_partial_{prefix}_{ts}.xlsx"
+                    
+                    # Create a simple output with just the scraped data
+                    with pd.ExcelWriter(out_xlsx, engine="openpyxl") as wr:
+                        specs_df.to_excel(wr, index=False)
+                    self._dbg(f"✓ Saved partial results to: {out_xlsx}")
+                    self.gui_q.put(("detail_done", str(out_xlsx), len(specs_df)))
+            except Exception as save_error:
+                self._dbg(f"❌ Failed to save partial results: {save_error}")
+            
             self.gui_q.put(("error", str(e)))
 
         finally:
