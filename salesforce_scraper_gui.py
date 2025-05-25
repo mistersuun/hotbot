@@ -816,20 +816,80 @@ class ClicDetailScraper(threading.Thread):
             
             # ALWAYS try to generate the Excel file even if there's an error
             try:
+                self._dbg("⚠ Attempting to save results with template format...")
+                
+                # Read the original doors file again
+                if self.path.suffix.lower() == ".csv":
+                    doors_df = pd.read_csv(self.path, encoding="utf-8", dtype={"Compte client": str})
+                else:
+                    doors_df = pd.DataFrame(json.loads(self.path.read_text("utf-8")))
+                    doors_df["Compte client"] = doors_df["Compte client"].astype(str)
+                
+                # If we have any scraped data, merge it
                 if hasattr(self, 'rows') and self.rows:
-                    self._dbg("⚠ Attempting to save partial results...")
                     specs_df = pd.DataFrame(self.rows)
-                    ts = datetime.now().strftime("%Y%m%d-%H%M%S")
-                    prefix = _slug(self.path.stem.replace("doors_", ""))
-                    out_xlsx = self.dest_dir / f"specifics_partial_{prefix}_{ts}.xlsx"
                     
-                    # Create a simple output with just the scraped data
-                    with pd.ExcelWriter(out_xlsx, engine="openpyxl") as wr:
-                        specs_df.to_excel(wr, index=False)
-                    self._dbg(f"✓ Saved partial results to: {out_xlsx}")
-                    self.gui_q.put(("detail_done", str(out_xlsx), len(specs_df)))
+                    # Normalize account numbers for matching
+                    doors_df["acct_digits"] = doors_df["Compte client"].str.replace(r"\D", "", regex=True)
+                    specs_df["acct_digits"] = specs_df["Compte client"].str.replace(r"\D", "", regex=True)
+                    
+                    # Ensure required columns exist
+                    if "Téléphone" not in specs_df.columns:
+                        specs_df["Téléphone"] = "N/A"
+                    if "Courriel" not in specs_df.columns:
+                        specs_df["Courriel"] = "N/A"
+                    
+                    # Merge the data
+                    merged = pd.merge(
+                        doors_df,
+                        specs_df[["acct_digits", "Téléphone", "Courriel"]],
+                        on="acct_digits",
+                        how="left"
+                    )
+                    
+                    # Fill missing values
+                    merged["Téléphone"] = merged["Téléphone"].fillna("N/A")
+                    merged["Courriel"] = merged["Courriel"].fillna("N/A")
+                else:
+                    # No scraped data, use original doors data with N/A for phone/email
+                    merged = doors_df.copy()
+                    merged["Téléphone"] = "N/A"
+                    merged["Courriel"] = "N/A"
+                
+                # Build the EXACT template format
+                get = lambda col: merged[col] if col in merged.columns else "N/A"
+                output = pd.DataFrame({
+                    "ADRESSE":                     get("Résidence"),
+                    "CLIENT":                      get("Client"),
+                    "NUMÉRO DE TÉLÉPHONE":         merged["Téléphone"],
+                    "COURRIEL":                    merged["Courriel"],
+                    "NUMÉRO DE COMPTE":            merged["Compte client"],
+                    "SERVICES ACTUELS":            get("Services actuels"),
+                    "DERNIER STATUT":              get("Dernier statut"),
+                    "SERVICE AVANT DEBRANCHEMENT": get("Services avant débranchement")
+                })
+                
+                # Replace any remaining NaN with "N/A"
+                output = output.fillna("N/A")
+                
+                ts = datetime.now().strftime("%Y%m%d-%H%M%S")
+                prefix = _slug(self.path.stem.replace("doors_", ""))
+                out_xlsx = self.dest_dir / f"specifics_{prefix}_{ts}.xlsx"
+                
+                with pd.ExcelWriter(out_xlsx, engine="openpyxl") as wr:
+                    output.to_excel(wr, index=False)
+                
+                scraped_count = len(self.rows) if hasattr(self, 'rows') and self.rows else 0
+                self._dbg(f"✓ Saved template-formatted results to: {out_xlsx}")
+                self._dbg(f"  • Total rows: {len(output)}")
+                self._dbg(f"  • Successfully scraped: {scraped_count}")
+                self._dbg(f"  • Missing data filled with N/A")
+                
+                self.gui_q.put(("detail_done", str(out_xlsx), len(output)))
+                
             except Exception as save_error:
-                self._dbg(f"❌ Failed to save partial results: {save_error}")
+                self._dbg(f"❌ Failed to save results: {save_error}")
+                self._dbg(f"❌ Full error: {traceback.format_exc()}")
             
             self.gui_q.put(("error", str(e)))
 
